@@ -8,4 +8,6 @@ Django Hackathon Starter
 ## Contributors
 
 * David Leonard
-* Eswari Swarna 
+* Eswari Swarna
+* Marco Quezada 
+* Wan Kim Mok
