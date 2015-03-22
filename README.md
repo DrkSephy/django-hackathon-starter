@@ -18,6 +18,20 @@ In order to run this project, do the following:
     # Run the server
     python manage.py runserver
 
+## Front End dependencies
+
+This project relies on Bower for all front end libraries, to avoid pushing up large libraries such as `jQuery` and `Bootstrap`. To install `bower`, you will need to install `npm`, which now comes bundled with `node.js`. To install `npm`, simply install [node as follows](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager). 
+
+First, install `bower`:
+
+    npm install -g bower
+
+Then:
+
+    bower install
+
+This will download and extract all the packages listed within `bower.json`. **Under no circumstance should any front-end libraries manually be pushed up to the repository.**
+
 Two routes have currently been set up, which are located at:
 
     # First test route
