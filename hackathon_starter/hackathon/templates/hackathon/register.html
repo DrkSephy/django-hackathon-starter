@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Django Hackathon Starter</title>
+    </head>
+
+    <body>
+        <h1>Register with Django Hackathon Starter</h1>
+
+        {% if registered %}
+        Django Hackathon says: <strong>thank you for registering!</strong>
+        <a href="/hackathon/">Return to the homepage.</a><br />
+        {% else %}
+        Django Hackathon says: <strong>register here!</strong><br />
+
+        <form id="user_form" method="post" action="/hackathon/register/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <!-- Display each form. The as_p method wraps each element in a paragraph
+                 (<p>) element. This ensures each element appears on a new line,
+                 making everything look neater. -->
+            {{ user_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Register" />
+        </form>
+        {% endif %}
+    </body>
+</html>
