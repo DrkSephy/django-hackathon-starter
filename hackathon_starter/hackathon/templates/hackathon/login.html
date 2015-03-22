@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Django Hackathon Starter</title>
+    </head>
+
+    <body>
+        <h1>Login to Django Hackathon Starter</h1>
+
+        <form id="login_form" method="post" action="/hackathon/login/">
+            {% csrf_token %}
+            Username: <input type="text" name="username" value="" size="50" />
+            <br />
+            Password: <input type="password" name="password" value="" size="50" />
+            <br />
+
+            <input type="submit" value="submit" />
+        </form>
+
+    </body>
+</html>
