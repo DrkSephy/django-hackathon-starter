@@ -1,0 +1,7 @@
+syntax: glob
+
+.DS_Store
+db.sqlite3
+*.pyc
+bower_components/
+migrations/
