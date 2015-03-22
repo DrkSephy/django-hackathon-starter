@@ -3,4 +3,4 @@ django-bower==5.0.2
 requests==2.6.0
 six==1.9.0
 wsgiref==0.1.2
-django-openid-auth==0.5
+django_openid==2.2.1
