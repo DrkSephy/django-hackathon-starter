@@ -10,8 +10,15 @@
     <body>
         <h1>Api Example</h1>
         <strong>{{ boldmessage }}</strong><br />
-
-        <!-- New line -->
     </body>
+
+{% if user.is_authenticated %}
+<a href="/hackathon/logout/">Logout</a><br />
+{% else %}
+<a href="/hackathon/register/">Register Here</a><br />
+<a href="/hackathon/login/">Login</a><br />
+{% endif %}
+
+
 
 </html>
