@@ -49,7 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_openid_consumer.SessionConsumer',
+    #'django_openid_consumer.SessionConsumer',
 )
 
 ROOT_URLCONF = 'hackathon_starter.urls'
