@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'hackathon',
     'bootstrapform',
-    'django_openid',
+    # 'django_openid',
 )
 
 MIDDLEWARE_CLASSES = (
