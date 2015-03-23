@@ -5,6 +5,8 @@ Django Hackathon Starter
 
 > Django Hackathon Starter aims to be a project which will aggegrate data from several APIs, producing a RESTful API which can be consumed by a client (also intended to be built). 
 
+Our deployment can be found [here](http://django-hackathon-starter.herokuapp.com/hackathon/).
+
 ## Running this project
 
 In order to run this project, do the following:
