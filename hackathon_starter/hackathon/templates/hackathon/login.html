@@ -3,17 +3,30 @@
     {% include 'hackathon/base.html' %}
 
     <body>
-        <h1>Login to Django Hackathon Starter</h1>
+        <h2 class="form-signin-heading">Login to Django Hackathon Starter</h2>
 
-        <form id="login_form" method="post" action="/hackathon/login/">
-            {% csrf_token %}
-            Username: <input type="text" name="username" value="" size="50" />
-            <br />
-            Password: <input type="password" name="password" value="" size="50" />
-            <br />
+        <div class='container text-center'>
+              <h2 class="form-signin-heading">Sign Up</h2>
+              <br>
+              <form class="form-horizontal" id="login_form" method="post" action="/hackathon/login/">
+                {% csrf_token %}
+                {% load bootstrap %} 
 
-            <input type="submit" value="submit" />
-        </form>
+                <table>
+                  <tr>
+                     
+                      <td class="container text-center">Username: <input type="text" name="username" value="" size="50" /></td>
+                  </tr>
 
+                  <tr>
+                     
+                      <td class="container text-center">Password: <input type="password" name="password" value="" size="50" /></td>
+                  </tr>
+
+                </table>
+                <button class="btn btn-lg btn-primary" type="submit">Login</button>
+                <input type="hidden" name="submit" value="submit" />
+              </form>
+        </div>
     </body>
 </html>
