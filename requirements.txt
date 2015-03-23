@@ -1,4 +1,6 @@
 Django==1.7.6
+django-bootstrap-form==3.2
+django-bootstrap-forms==0.1
 django-bower==5.0.2
 requests==2.6.0
 six==1.9.0
