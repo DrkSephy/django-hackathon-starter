@@ -12,6 +12,10 @@ def index(request):
 def test(request):
 	return HttpResponse('meow')
 
+def api_examples(request):
+    context = {'title': 'API Examples Page'}
+    return render(request, 'hackathon/api_examples.html', context)
+
 def register(request):
 
     # A boolean value for telling the template whether the registration was successful.
