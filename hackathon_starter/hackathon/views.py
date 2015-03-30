@@ -118,8 +118,8 @@ def steam(request):
 
 def github(request):
     userData = getUserData()
-    repositories = getUserRepositories()
-    print repositories
+    #repositories = getUserRepositories()
+    #print repositories
     return render(request, 'hackathon/github.html', { 'data': userData })
 
 def tumblr(request):
