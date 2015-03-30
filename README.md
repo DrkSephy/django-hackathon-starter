@@ -42,6 +42,11 @@ Two routes have currently been set up, which are located at:
     # Second test route
     http://127.0.0.1:8000/hackathon/test
 
+
+## Testing
+
+This project aims to be as close to 100% tested as possible. For a good guide to testing using Python and `Mock`, `Nosetests` and `Unittests` libraries, please [read here](http://docs.python-guide.org/en/latest/writing/tests/). 
+
 ## Contributors
 
 * David Leonard
