@@ -115,3 +115,7 @@ def steam(request):
     game = gamesPulling(steamID, key)
     return render(request,'hackathon/steam.html', {"game": game })
 
+def github(request):
+    context = {'title': 'Github Example'}
+    return render(request, 'hackathon/github.html', context)
+
