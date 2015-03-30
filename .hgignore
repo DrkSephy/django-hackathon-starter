@@ -5,3 +5,4 @@ db.sqlite3
 *.pyc
 bower_components/
 migrations/
+*.coverage
