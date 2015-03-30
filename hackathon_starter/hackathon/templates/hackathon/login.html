@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    {% include 'hackathon/base.html' %}
+
+    <body>
+
+        <div class='container text-center'>
+              <h2 class="form-signin-heading">Login</h2>
+              <br>
+              <form class="form-horizontal" id="login_form" method="post" action="/hackathon/login/">
+                {% csrf_token %}
+                {% load bootstrap %} 
+
+                <table>
+                  <tr>
+                     
+                      <td class="container text-center">Username: <input type="text" name="username" value="" size="50" /></td>
+                  </tr>
+
+                  <tr>
+                     
+                      <td class="container text-center">Password: <input type="password" name="password" value="" size="50" /></td>
+                  </tr>
+
+                </table>
+                <button class="btn btn-lg btn-primary" type="submit">Login</button>
+                <input type="hidden" name="submit" value="submit" />
+              </form>
+        </div>
+    </body>
+</html>
