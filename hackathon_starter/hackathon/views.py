@@ -5,7 +5,7 @@ from django.template import RequestContext, loader
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from scripts.steam import gamesPulling, steamIDPulling 
-from scripts.github import getUserData
+from scripts.github import getUserData, getUserRepositories
 
 
 def index(request):
@@ -118,6 +118,8 @@ def steam(request):
 
 def github(request):
     userData = getUserData()
+    #repositories = getUserRepositories()
+    #print repositories
     return render(request, 'hackathon/github.html', { 'data': userData })
 
 def tumblr(request):
