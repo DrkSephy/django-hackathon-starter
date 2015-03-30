@@ -117,8 +117,6 @@ def steam(request):
     return render(request,'hackathon/steam.html', {"game": game })
 
 def github(request):
-    data = getUserData()
-    print data
-    context = {'title': 'Github Example'}
-    return render(request, 'hackathon/github.html', context)
+    userData = getUserData()
+    return render(request, 'hackathon/github.html', { 'data': userData })
 
