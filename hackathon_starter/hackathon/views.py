@@ -4,7 +4,9 @@ from django.contrib.auth import logout
 from django.template import RequestContext, loader
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
-from scripts.SteamAPI import * 
+from scripts.steam import gamesPulling, steamIDPulling 
+
+
 def index(request):
 	context = {'hello': 'world'}
 	return render(request, 'hackathon/index.html', context)
@@ -105,11 +107,11 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect('/hackathon/')
 
-def SteamAPI(request):
+def steam(request):
     #Should link to test of Steam API example.
     key = '231E98D442E52B87110816C3D5114A1D'
     SteamUN = "Marorin"
-    steamID = steamIDpulling(SteamUN, key)
-    game = gamespulling(steamID, key)
-    return render(request,'hackathon/SteamAPI.html',{"game": game})
+    steamID = steamIDPulling(SteamUN, key)
+    game = gamesPulling(steamID, key)
+    return render(request,'hackathon/steam.html', {"game": game })
 
