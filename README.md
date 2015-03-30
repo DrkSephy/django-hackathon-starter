@@ -45,7 +45,32 @@ Two routes have currently been set up, which are located at:
 
 ## Testing
 
-This project aims to be as close to 100% tested as possible. For a good guide to testing using Python and `Mock`, `Nosetests` and `Unittests` libraries, please [read here](http://docs.python-guide.org/en/latest/writing/tests/). 
+This project aims to be as close to 100% tested as possible. For a good guide to testing using Python and `Mock`, `Nosetests` and `Unittests` libraries, please [read here](http://docs.python-guide.org/en/latest/writing/tests/).
+
+To run the tests:
+
+    hackthon-starter $ nosetests --with-coverage --cover-package=hackathon/
+
+You will see an output as shown below:
+
+    Name                                   Stmts   Miss  Cover   Missing
+    --------------------------------------------------------------------
+    hackathon/__init__.py                      0      0   100%
+    hackathon/admin.py                         3      3     0%   1-5
+    hackathon/forms.py                         9      9     0%   1-11
+    hackathon/migrations/0001_initial.py       6      6     0%   2-14
+    hackathon/migrations/__init__.py           0      0   100%
+    hackathon/models.py                        6      6     0%   1-11
+    hackathon/scripts/__init__.py              0      0   100%
+    hackathon/scripts/samplescript.py          5      5     0%   3-10
+    hackathon/scripts/steam.py                17     17     0%   1-24
+    hackathon/tests.py                         1      0   100%
+    hackathon/urls.py                          3      3     0%   1-5
+    hackathon/views.py                        52     52     0%   1-120
+    --------------------------------------------------------------------
+    TOTAL                                    102    101     1%
+    ----------------------------------------------------------------------
+    Ran 0 tests in 0.194s
 
 ## Contributors
 
