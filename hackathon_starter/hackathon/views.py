@@ -5,6 +5,7 @@ from django.template import RequestContext, loader
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from scripts.steam import gamesPulling, steamIDPulling 
+from scripts.github import getUserData
 
 
 def index(request):
@@ -116,8 +117,8 @@ def steam(request):
     return render(request,'hackathon/steam.html', {"game": game })
 
 def github(request):
-    context = {'title': 'Github Example'}
-    return render(request, 'hackathon/github.html', context)
+    userData = getUserData()
+    return render(request, 'hackathon/github.html', { 'data': userData })
 
 def tumblr(request):
     context = {'title': 'Tumblr Example'}
