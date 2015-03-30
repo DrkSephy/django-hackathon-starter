@@ -1,4 +1,5 @@
 Django==1.7.6
+coverage==4.0a5
 django-bootstrap-form==3.2
 django-bootstrap-forms==0.1
 django-bower==5.0.2
