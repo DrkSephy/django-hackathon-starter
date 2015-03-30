@@ -124,3 +124,7 @@ def tumblr(request):
     context = {'title': 'Tumblr Example'}
     return render(request, 'hackathon/tumblr.html', context)
 
+def linkedin(request):
+    context = {'title': 'linkedin Example'}
+    return render(request, 'hackathon/linkedin.html', context)
+
