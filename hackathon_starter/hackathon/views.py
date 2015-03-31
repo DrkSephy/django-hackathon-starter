@@ -5,7 +5,7 @@ from django.template import RequestContext, loader
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from scripts.steam import gamesPulling, steamIDPulling 
-from scripts.github import getUserData, getUserRepositories, getTopContributedRepositories
+from scripts.github import getUserData, getUserRepositories, getTopContributedRepositories, filterCommits
 
 
 def index(request):
@@ -120,7 +120,7 @@ def github(request):
     userData = getUserData()
     repositories = getUserRepositories()
     list = getTopContributedRepositories(repositories)
-    # print repositories
+    filtered = filterCommits(list)
     return render(request, 'hackathon/github.html', { 'data': userData })
 
 def tumblr(request):
