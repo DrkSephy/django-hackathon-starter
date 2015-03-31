@@ -14,6 +14,8 @@ API_BASE_URL = 'https://api.github.com/'
 API_USERS_URL = API_BASE_URL + 'users/DrkSephy' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
 
 def getUserData():
+	'''Get generic Github User data.'''
+
 	req = requests.get(API_USERS_URL)
 	jsonList = []
 	jsonList.append(json.loads(req.content))
@@ -34,6 +36,8 @@ def getUserData():
 	
 
 def getUserRepositories():
+	'''Get a list of all repositories owned by a User.'''
+
 	# Which page number of data are we looking at?
 	pageNumber = 1
 
@@ -61,6 +65,8 @@ def getUserRepositories():
 	return repositories
 
 def getTopContributedRepositories(repos):
+	'''Get a list of all commits for each repository owned.'''
+
 	jsonList = []
 	for repo in repos:
 		# print repo
@@ -83,6 +89,8 @@ def getTopContributedRepositories(repos):
 	return parsedData
 
 def filterCommits(data):
+	'''Returns the top 10 committed repositories.'''
+
 	maxCommits = []
 	for i in range(1, 10):
 		maxCommitedRepo = max(data, key=lambda x:x['total'])
@@ -93,6 +101,8 @@ def filterCommits(data):
 	
 	
 def getStarGazerCount():
+	'''Get Stargazer counts for all repositories.'''
+
 	# Which page number of data are we looking at?
 	pageNumber = 1
 
@@ -123,6 +133,8 @@ def getStarGazerCount():
 	return stargazers
 
 def filterStarGazerCount(data):
+	'''Return top 10 starred repositories.'''
+	
 	maxStars= []
 	for i in range(1, 10):
 		maxStarGazers = max(data, key=lambda x:x['stargazers_count'])
