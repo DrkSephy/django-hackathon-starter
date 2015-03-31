@@ -6,8 +6,8 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from scripts.steam import gamesPulling, steamIDPulling 
 from scripts.github import *
-from scripts.tumblr import getUserInfo as tumblrUserInfo
-from scripts.tumblr import getBlogInfo as tumblrBlogInfo
+from scripts.tumblr import *
+
 
 
 def index(request):
@@ -144,8 +144,9 @@ def github(request):
     return render(request, 'hackathon/github.html', { 'data': allData })
 
 def tumblr(request):
-    meta, response, blog = tumblrBlogInfo('david')
-    context = {'title': 'Tumblr Example', 'blogData': blog}
+    meta, response, blog = getBlogInfo('twitterthecomic')
+    tagged_blog = getTaggedInfo("obama")
+    context = {'title': 'Tumblr Example', 'blogData': blog, 'blogTag': tagged_blog}
     return render(request, 'hackathon/tumblr.html', context)
 
 def linkedin(request):

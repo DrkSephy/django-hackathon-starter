@@ -1,6 +1,8 @@
 import requests
 import simplejson as json
 import time 
+import collections
+import urllib
 
 blog_uri		= "http://api.tumblr.com/v2/blog/"
 user_uri		= "api.tumblr.com/v2/user/"
@@ -21,4 +23,15 @@ def getBlogInfo(user):
 	response = jsonlist['response']
 	blog = response['blog']
 	blog['updated'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(blog['updated']))
+
 	return meta, response, blog
+
+def getTaggedInfo(tag):
+	tagged_uri = "http://api.tumblr.com/v2/tagged?tag="+tag+"&api_key="+consumer_key+"&limit=2"
+	req = requests.get(tagged_uri)
+	jsonlist = json.loads(req.content)
+	
+	meta = jsonlist['meta']
+	response = jsonlist['response'][0]
+	
+	return response
