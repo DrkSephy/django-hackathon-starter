@@ -13,12 +13,6 @@ import simplejson as json
 API_BASE_URL = 'https://api.github.com/'
 API_USERS_URL = API_BASE_URL + 'users/DrkSephy' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
 
-# Endpoint to get statistics in a repository
-# https://api.github.com/repos/DrkSephy/WaterEmblem/stats/contributors
-# https://api.github.com/repos/:user/:repo/stats/contributors
-# 'https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
-
-
 def getUserData():
 	req = requests.get(API_USERS_URL)
 	jsonList = []
@@ -74,28 +68,19 @@ def getTopContributedRepositories(repos):
 		jsonList.append(json.loads(req.content))
 
 	parsedData = []
+	# Keep track of which JSON set we are processing to get the repo name
+	indexNumber = -1
 	for item in jsonList:
+		indexNumber += 1
 		commits = {}
 		for data in item:
 			if data['author']['login'] == 'DrkSephy':
 				commits['author'] = data['author']['login']
 				commits['total'] = data['total']
+				commits['repo_name'] = repos[indexNumber]
 				parsedData.append(commits)
 
-	print parsedData
-			
-	'''
-	data = {}
-	if datum['author']['login'] == 'DrkSephy':
-		data['author'] = datum['author']['login']
-		data['total'] = datum['total']
-		parsedData.append(data)
-	'''
-
-
-	#print len(jsonList)
-	#print parsedData
-		
+	return parsedData
 	
 
 
