@@ -2,8 +2,20 @@
 <html>
 <body>
 	{% include 'hackathon/base.html' %}
-	<h1> {{ title }} </h1> 
-	{{ blogData }}
+	<div class="col-lg-12">
+		<h1> {{ title }} : User Blog Info </h1> 
+		<br>
+		<div class="table-responsive">
+			<table class="table">
+				{% for i,v in blogData.items %}
+				<tr>
+					<th>{{i}}</th>
+					<td>{{v}}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
 </body>
 
 </html>

@@ -125,7 +125,8 @@ def github(request):
     return render(request, 'hackathon/github.html', { 'data': userData })
 
 def tumblr(request):
-    context = {'title': 'Tumblr Example', 'blogData': tumblrBlogInfo('lingsling')}
+    meta, response, blog = tumblrBlogInfo('david')
+    context = {'title': 'Tumblr Example', 'blogData': blog}
     return render(request, 'hackathon/tumblr.html', context)
 
 def linkedin(request):
