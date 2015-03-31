@@ -132,11 +132,14 @@ def github(request):
     stargazers = getStarGazerCount()
     # Return list of top 10 stargazed repositories
     filteredStargazers = filterStarGazerCount(stargazers)
+    # Get list of forked repositories
+    forkedRepos = getForkedRepositories()
     
     # Store data into a dictionary for rendering
     allData['userData'] = userData
     allData['filteredData'] = filtered
     allData['filteredStargazers'] = filteredStargazers
+    allData['forkedRepos'] = forkedRepos
 
     return render(request, 'hackathon/github.html', { 'data': allData })
 

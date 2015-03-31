@@ -37,52 +37,74 @@
         </div>
     </div>
 
-        <div class="col-xs-6">
-            <h2> Top Contributed Repositories </h2>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped tablesorter">
-                    <thead>
-                    <tr>
-                    <th class="header"> Repository <i class="icon-sort"></i></th>
-                    <th class="header"> Total <i class="icon-sort"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
+    <div class="col-xs-4">
+        <h2> Top Contributed Repositories </h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Repository <i class="icon-sort"></i></th>
+                <th class="header"> Total <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
 
-                {% for key in data.filteredData %}
-                    <tr>
-                        <td>{{ key.repo_name }}</td>
-                        <td>{{ key.total }}</td>
-                    </tr>
-                {% endfor %}
+            {% for key in data.filteredData %}
+                <tr>
+                    <td>{{ key.repo_name }}</td>
+                    <td>{{ key.total }}</td>
+                </tr>
+            {% endfor %}
 
-                </tbody>
-                </table>
-            </div>
+            </tbody>
+            </table>
         </div>
-        <div class="col-xs-6">
-            <h2> Top Starred Repositories </h2>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped tablesorter">
-                    <thead>
-                    <tr>
-                    <th class="header"> Repository <i class="icon-sort"></i></th>
-                    <th class="header"> Count <i class="icon-sort"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
+    </div>
+    <div class="col-xs-4">
+        <h2> Top Starred Repositories </h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Repository <i class="icon-sort"></i></th>
+                <th class="header"> Count <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
 
-                {% for key in data.filteredStargazers %}
-                    <tr>
-                        <td>{{ key.name }}</td>
-                        <td>{{ key.stargazers_count }}</td>
-                    </tr>
-                {% endfor %}
+            {% for key in data.filteredStargazers %}
+                <tr>
+                    <td>{{ key.name }}</td>
+                    <td>{{ key.stargazers_count }}</td>
+                </tr>
+            {% endfor %}
 
-                </tbody>
-                </table>
-            </div>
+            </tbody>
+            </table>
         </div>
+    </div>
+
+    <div class="col-xs-4">
+        <h2> Contributions </h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Repository <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for key in data.forkedRepos %}
+                <tr>
+                    <td>{{ key.name }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+    </div>
 
 </body>
 </html>
