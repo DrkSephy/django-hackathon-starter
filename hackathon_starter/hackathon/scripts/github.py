@@ -126,7 +126,7 @@ def filterStarGazerCount(data):
 	maxStars= []
 	for i in range(1, 10):
 		maxStarGazers = max(data, key=lambda x:x['stargazers_count'])
-		maxCommits.append(maxStarGazers)
+		maxStars.append(maxStarGazers)
 		index = data.index(maxStarGazers)
 		data.pop(index)
 	return maxStars
