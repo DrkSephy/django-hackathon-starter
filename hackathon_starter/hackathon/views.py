@@ -128,12 +128,17 @@ def github(request):
     list = getTopContributedRepositories(repositories)
     # Get a list of the top 10 most committed repositories
     filtered = filterCommits(list)
+    # Get list of all stargazer counts for all repositories
+    stargazers = getStarGazerCount()
+    # Return list of top 10 stargazed repositories
+    filteredStargazers = filterStarGazerCount(stargazers)
+    
     # Store data into a dictionary for rendering
     allData['userData'] = userData
     allData['filteredData'] = filtered
     allData['filteredStargazers'] = filteredStargazers
 
-    return render(request, 'hackathon/github.html', { 'data': userData })
+    return render(request, 'hackathon/github.html', { 'data': allData })
 
 def tumblr(request):
     meta, response, blog = tumblrBlogInfo('david')
