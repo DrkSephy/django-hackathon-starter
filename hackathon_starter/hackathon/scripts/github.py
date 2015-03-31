@@ -16,6 +16,8 @@ API_USERS_URL = API_BASE_URL + 'users/DrkSephy' + '?client_id=2404a1e21aebd902f6
 # Endpoint to get statistics in a repository
 # https://api.github.com/repos/DrkSephy/WaterEmblem/stats/contributors
 # https://api.github.com/repos/:user/:repo/stats/contributors
+# 'https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
+
 
 def getUserData():
 	req = requests.get(API_USERS_URL)
@@ -57,24 +59,43 @@ def getUserRepositories():
 		elif len(json.loads(req.content)) >= 30:
 			pageNumber += 1
 
-	print jsonList
+	# Loop over our data and extract all of the repository names
+	for data in jsonList:
+		for datum in data:
+			repositories.append(datum['name'])
 
-	'''
-	while True:
-		req = requests.get(API_USERS_URL + '/repos' + '?page=' + str(pageNumber) + '&client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23')
-		#jsonList.append(json.loads(req.content))
-		for data in req.content:
-			for datum in data:
-				if len(datum) < 30:
-					print 'hello'
-					break
-				elif len(datum) >= 30:
-					pageNumber += 1
-					urls.append(API_USERS_URL + '/repos' + '?page=' + str(pageNumber) + '&client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23')
-	'''
-	#print urls
-	
 	return repositories
 
+def getTopContributedRepositories(repos):
+	jsonList = []
+	for repo in repos:
+		# print repo
+		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23')
+		jsonList.append(json.loads(req.content))
+
+	parsedData = []
+	for item in jsonList:
+		commits = {}
+		for data in item:
+			if data['author']['login'] == 'DrkSephy':
+				commits['author'] = data['author']['login']
+				commits['total'] = data['total']
+				parsedData.append(commits)
+
+	print parsedData
+			
+	'''
+	data = {}
+	if datum['author']['login'] == 'DrkSephy':
+		data['author'] = datum['author']['login']
+		data['total'] = datum['total']
+		parsedData.append(data)
+	'''
+
+
+	#print len(jsonList)
+	#print parsedData
+		
 	
-	
+
+
