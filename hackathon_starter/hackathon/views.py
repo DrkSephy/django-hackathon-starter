@@ -117,11 +117,20 @@ def steam(request):
     return render(request,'hackathon/steam.html', {"game": game })
 
 def github(request):
+    allData = {}
+    # Get generic user data
     userData = getUserData()
+    # Get a list of all the user's repositories
     repositories = getUserRepositories()
+    # Get a list of all commit statistics for all repositories
     list = getTopContributedRepositories(repositories)
+    # Get a list of the top 10 most committed repositories
     filtered = filterCommits(list)
-    return render(request, 'hackathon/github.html', { 'data': userData })
+    # Store data into a dictionary for rendering
+    allData['userData'] = userData
+    allData['filteredData'] = filtered
+    
+    return render(request, 'hackathon/github.html', { 'data': allData })
 
 def tumblr(request):
     context = {'title': 'Tumblr Example'}

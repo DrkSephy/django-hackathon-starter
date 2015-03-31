@@ -5,7 +5,6 @@ for interacting with Github data.
 
 import requests
 import simplejson as json
-import heapq
 
 ########################
 # GITHUB API CONSTANTS #
@@ -85,7 +84,7 @@ def getTopContributedRepositories(repos):
 
 def filterCommits(data):
 	maxCommits = []
-	for i in range(1, 5):
+	for i in range(1, 10):
 		maxCommitedRepo = max(data, key=lambda x:x['total'])
 		maxCommits.append(maxCommitedRepo)
 		index = data.index(maxCommitedRepo)
