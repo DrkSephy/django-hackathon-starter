@@ -2,7 +2,24 @@
 <html>
 <body>
 	{% include 'hackathon/base.html' %}
-	<h1> {{ title }} </h1> 
+	<h1>user information</h1>
+	<table>
+	<tr>
+	<th>First name</th>
+	<th>lastname</th>
+	<th>email</th>
+	<th>connection</th>
+	</tr>
+	{% for key in userinfo %}
+    <tr>
+    <td>{{ key.firstname }}</td>
+    <td>{{ key.lastname}}</td>
+    <td>{{ key.email }}</td>
+    <td>{{ key.connectionss }}</td>
+    </tr>
+    {% endfor %}
+
+     </table>
 </body>
 </html>
 
