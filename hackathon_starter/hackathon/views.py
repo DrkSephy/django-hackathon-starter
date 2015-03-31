@@ -5,7 +5,7 @@ from django.template import RequestContext, loader
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from scripts.steam import gamesPulling, steamIDPulling 
-from scripts.github import getUserData, getUserRepositories, getTopContributedRepositories, filterCommits, getStarGazerCount
+from scripts.github import *
 
 
 def index(request):
