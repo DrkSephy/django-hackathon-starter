@@ -149,6 +149,7 @@ def tumblr(request):
     return render(request, 'hackathon/tumblr.html', context)
 
 def linkedin(request):
-    context = {'title': 'linkedin Example'}
+    userinfo = getUserInfo()
+    context = {'title': 'linkedin Example','userdata': userinfo}
     return render(request, 'hackathon/linkedin.html', context)
 
