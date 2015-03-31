@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from scripts.steam import gamesPulling, steamIDPulling 
 from scripts.github import getUserData, getUserRepositories, getTopContributedRepositories, filterCommits
+from scripts.tumblr import getUserInfo as tumblrUserInfo
+from scripts.tumblr import getBlogInfo as tumblrBlogInfo
 
 
 def index(request):
@@ -117,12 +119,10 @@ def steam(request):
     return render(request,'hackathon/steam.html', {"game": game })
 
 def github(request):
-    allData = {}
-    # Get generic user data
     userData = getUserData()
-    # Get a list of all the user's repositories
+    #Get a list of all the user's repositories
     repositories = getUserRepositories()
-    # Get a list of all commit statistics for all repositories
+    #Get a list of all commit statistics for all repositories
     list = getTopContributedRepositories(repositories)
     # Get a list of the top 10 most committed repositories
     filtered = filterCommits(list)
@@ -130,10 +130,11 @@ def github(request):
     allData['userData'] = userData
     allData['filteredData'] = filtered
     
-    return render(request, 'hackathon/github.html', { 'data': allData })
+    return render(request, 'hackathon/github.html', { 'data': userData })
 
 def tumblr(request):
-    context = {'title': 'Tumblr Example'}
+    meta, response, blog = tumblrBlogInfo('david')
+    context = {'title': 'Tumblr Example', 'blogData': blog}
     return render(request, 'hackathon/tumblr.html', context)
 
 def linkedin(request):
