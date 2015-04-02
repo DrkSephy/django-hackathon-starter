@@ -49,7 +49,7 @@ This project aims to be as close to 100% tested as possible. For a good guide to
 
 To run the tests:
 
-    hackthon-starter $ nosetests unittests/ --cover-package=scripts/ --with-coverage
+    hackthon-starter $ python manage.py test hackathon/unittests/
 
 You will see an output as shown below:
 
@@ -58,19 +58,25 @@ You will see an output as shown below:
     hackathon/__init__.py                      0      0   100%
     hackathon/admin.py                         3      3     0%   1-5
     hackathon/forms.py                         9      9     0%   1-11
-    hackathon/migrations/0001_initial.py       6      6     0%   2-14
+    hackathon/migrations/0001_initial.py       6      0   100%
     hackathon/migrations/__init__.py           0      0   100%
     hackathon/models.py                        6      6     0%   1-11
     hackathon/scripts/__init__.py              0      0   100%
-    hackathon/scripts/samplescript.py          5      5     0%   3-10
-    hackathon/scripts/steam.py                17     17     0%   1-24
+    hackathon/scripts/github.py              106     96     9%   17-34, 41-64, 69-97, 102-121, 126-132, 139-165, 169-175
+    hackathon/scripts/linkedin.py             19     19     0%   1-24
+    hackathon/scripts/samplescript.py   NoSource: No source for code: '/Users/DrkSephy/Documents/django-hackathon-starter/hackathon_starter/hackathon/scripts/samplescript.py'.
+    hackathon/scripts/steam.py                15     15     0%   3-29
+    hackathon/scripts/tumblr.py               60     60     0%   1-85
     hackathon/tests.py                         1      0   100%
     hackathon/urls.py                          3      3     0%   1-5
-    hackathon/views.py                        52     52     0%   1-120
+    hackathon/views.py                        76     76     0%   1-157
     --------------------------------------------------------------------
-    TOTAL                                    102    101     1%
+    TOTAL                                    304    287     6%
     ----------------------------------------------------------------------
-    Ran 0 tests in 0.194s
+    Ran 2 tests in 0.002s
+
+    OK
+    Destroying test database for alias 'default'...
 
 ## Code evaluation
 

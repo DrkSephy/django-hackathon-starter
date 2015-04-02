@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'hackathon',
     'bootstrapform',
     # 'django_openid',
+    'django_nose',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -87,6 +88,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the 'foo' and 'bar' apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=hackathon/scripts',
+]
 
 ############
 #   KEYS   #
