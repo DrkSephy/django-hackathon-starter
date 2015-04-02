@@ -15,7 +15,7 @@ API_BASE_URL = 'https://api.github.com/users/DrkSephy'
 
 def getUserData(clientID, clientSecret):
 	'''Get generic Github User data.'''
-	url = API_BASE_URL + clientID + clientSecret
+	url = API_BASE_URL + '?' + clientID + '&' + clientSecret
 	req = requests.get(url)
 	jsonList = []
 	jsonList.append(json.loads(req.content))
@@ -50,7 +50,7 @@ def getUserRepositories(clientID, clientSecret):
 	# IDEA: Repeatedly loop over urls and check if the content has less than 30 entries.
 	# 		If it does, then we have iterated over all the data. Time to parse it. 
 	while True:
-		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&client_id=2404a1e21aebd902f6db&client_secret=3da44769d4b7c9465fa4c812669148a163607c23')
+		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
 		if len(json.loads(req.content)) < 30:
 			break
@@ -78,7 +78,7 @@ def getForkedRepositories(clientID, clientSecret):
 	# IDEA: Repeatedly loop over urls and check if the content has less than 30 entries.
 	# 		If it does, then we have iterated over all the data. Time to parse it. 
 	while True:
-		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&client_id=2404a1e21aebd902f6db&client_secret=3da44769d4b7c9465fa4c812669148a163607c23')
+		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
 		if len(json.loads(req.content)) < 30:
 			break
@@ -103,7 +103,7 @@ def getTopContributedRepositories(repos, clientID, clientSecret):
 	jsonList = []
 	for repo in repos:
 		# print repo
-		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + clientID + clientSecret)
+		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?' + clientID + clientSecret)
 		jsonList.append(json.loads(req.content))
 
 	parsedData = []
@@ -148,7 +148,7 @@ def getStarGazerCount(clientID, clientSecret):
 	# IDEA: Repeatedly loop over urls and check if the content has less than 30 entries.
 	# 		If it does, then we have iterated over all the data. Time to parse it. 
 	while True:
-		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&client_id=2404a1e21aebd902f6db&client_secret=3da44769d4b7c9465fa4c812669148a163607c23')
+		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
 		if len(json.loads(req.content)) < 30:
 			break
