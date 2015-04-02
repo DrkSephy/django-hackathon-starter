@@ -102,7 +102,7 @@ def getTopContributedRepositories(repos, clientID, clientSecret):
 	jsonList = []
 	for repo in repos:
 		# print repo
-		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?' + clientID + clientSecret)
+		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
 
 	parsedData = []
@@ -173,7 +173,6 @@ def filterStarGazerCount(data):
 		index = data.index(maxStarGazers)
 		data.pop(index)
 	return maxStars
-
 
 
 
