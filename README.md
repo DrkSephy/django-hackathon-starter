@@ -49,7 +49,7 @@ This project aims to be as close to 100% tested as possible. For a good guide to
 
 To run the tests:
 
-    hackthon-starter $ nosetests --with-coverage --cover-package=hackathon/
+    hackthon-starter $ nosetests unittests/ --cover-package=scripts/ --with-coverage
 
 You will see an output as shown below:
 
