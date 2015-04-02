@@ -10,13 +10,13 @@ import simplejson as json
 # GITHUB API CONSTANTS #
 ########################
 
-API_BASE_URL = 'https://api.github.com/'
-API_USERS_URL = API_BASE_URL + 'users/DrkSephy' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
+API_BASE_URL = 'https://api.github.com/users/DrkSephy'
+#API_USERS_URL = API_BASE_URL + 'users/DrkSephy' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
 
-def getUserData():
+def getUserData(clientID, clientSecret):
 	'''Get generic Github User data.'''
-
-	req = requests.get(API_USERS_URL)
+	url = API_BASE_URL + clientID + clientSecret
+	req = requests.get(url)
 	jsonList = []
 	jsonList.append(json.loads(req.content))
 	parsedData = []
@@ -35,7 +35,7 @@ def getUserData():
 	return parsedData
 	
 
-def getUserRepositories():
+def getUserRepositories(clientID, clientSecret):
 	'''Get a list of all repositories owned by a User.'''
 
 	# Which page number of data are we looking at?
@@ -64,7 +64,7 @@ def getUserRepositories():
 
 	return repositories
 
-def getForkedRepositories():
+def getForkedRepositories(clientID, clientSecret):
 	'''Get a list of all forked repositories by a user.'''
 	# Which page number of data are we looking at?
 	pageNumber = 1
@@ -97,13 +97,13 @@ def getForkedRepositories():
 
 	return forkedRepositories
 
-def getTopContributedRepositories(repos):
+def getTopContributedRepositories(repos, clientID, clientSecret):
 	'''Get a list of all commits for each repository owned.'''
 
 	jsonList = []
 	for repo in repos:
 		# print repo
-		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23')
+		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + clientID + clientSecret)
 		jsonList.append(json.loads(req.content))
 
 	parsedData = []
@@ -133,7 +133,7 @@ def filterCommits(data):
 	return maxCommits
 	
 	
-def getStarGazerCount():
+def getStarGazerCount(clientID, clientSecret):
 	'''Get Stargazer counts for all repositories.'''
 
 	# Which page number of data are we looking at?

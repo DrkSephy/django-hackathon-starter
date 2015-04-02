@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from scripts.steam import gamesPulling, steamIDPulling 
 from scripts.github import *
 from scripts.tumblr import *
+from django.conf import settings
 
 
 
@@ -121,19 +122,19 @@ def steam(request):
 def github(request):
     allData = {}
     # Get generic user data
-    userData = getUserData()
+    userData = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     # Get a list of all the user's repositories
-    repositories = getUserRepositories()
+    repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     # Get a list of all commit statistics for all repositories
-    list = getTopContributedRepositories(repositories)
+    list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     # Get a list of the top 10 most committed repositories
     filtered = filterCommits(list)
     # Get list of all stargazer counts for all repositories
-    stargazers = getStarGazerCount()
+    stargazers = getStarGazerCount(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     # Return list of top 10 stargazed repositories
     filteredStargazers = filterStarGazerCount(stargazers)
     # Get list of forked repositories
-    forkedRepos = getForkedRepositories()
+    forkedRepos = getForkedRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     
     # Store data into a dictionary for rendering
     allData['userData'] = userData

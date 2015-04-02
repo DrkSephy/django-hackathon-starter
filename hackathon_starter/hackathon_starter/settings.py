@@ -88,3 +88,10 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
+############
+#   KEYS   #
+############
+
+GITHUB_CLIENT_ID = '?client_id=2404a1e21aebd902f6db'
+GITHUB_CLIENT_SECRET = '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
+
