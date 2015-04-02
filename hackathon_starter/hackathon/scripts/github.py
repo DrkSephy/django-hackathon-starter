@@ -11,7 +11,6 @@ import simplejson as json
 ########################
 
 API_BASE_URL = 'https://api.github.com/users/DrkSephy'
-#API_USERS_URL = API_BASE_URL + 'users/DrkSephy' + '?client_id=2404a1e21aebd902f6db' + '&client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
 
 def getUserData(clientID, clientSecret):
 	'''Get generic Github User data.'''
