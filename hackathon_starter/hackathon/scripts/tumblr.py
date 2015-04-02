@@ -5,8 +5,8 @@ import collections
 import urllib
 import re
 from bs4 import BeautifulSoup
-from textblob.sentiments import NaiveBayesAnalyzer
-from textblob import TextBlob
+#from textblob.sentiments import NaiveBayesAnalyzer
+#from textblob import TextBlob
 
 ###starbucks how they feel?
 #google tumblr hackathon ideas
