@@ -10,20 +10,24 @@ class GithubTests(unittest.TestCase):
 		self.API_BASE_URL = 'https://api.github.com/users/DrkSephy'
 		self.clientID = 'client_id=2404a1e21aebd902f6db'
 		self.clientSecret = 'client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
-	#@patch.object(github, 'getUserData')
+
+	
 	def testGetUserData(self):
+		
 		# Client and Secret ID
 		clientID = self.clientID
 		clientSecret = self.clientSecret
+
 		# Construct the URL
-		
 		self.url = self.API_BASE_URL +  '?' + clientID + '&' + clientSecret
+
+		# Instantiate data collection objects
 		jsonList = []
 		parsedData = []
 		userData = {}
+
 		with patch('hackathon.scripts.github.getUserData') as mock_getUserData:
-			print 'hello'
-			# match = {'name': 'test', 'blog': 'test', 'email': 'test', 'public_gists': 'test', 'public_repos': 'test','avatar_url': 'test', 'followers': 'test','following': 'test'}
+			# Mock the return value of this method
 			mock_getUserData.return_value = {'public_repos': 50, 'public_gists': 5, 'name': 'David Leonard', 'blog': 'http://drksephy.github.io', 'avatar_url': 'https://avatars.githubusercontent.com/u/1226900?v=3', 'followers': 52, 'following': 7, 'email': 'DrkSephy1025@gmail.com'}
 			jsonList.append(mock_getUserData.return_value)
 			for data in jsonList:
@@ -36,5 +40,4 @@ class GithubTests(unittest.TestCase):
 				userData['followers'] = mock_getUserData.return_value['followers']
 				userData['following'] = mock_getUserData.return_value['following']
 			parsedData.append(userData)
-			print parsedData
 			self.assertEqual(getUserData(clientID, clientSecret), parsedData)
