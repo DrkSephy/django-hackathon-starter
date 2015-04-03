@@ -1,7 +1,7 @@
 import unittest
 from mock import Mock, patch, MagicMock
 from django.conf import settings
-from hackathon.scripts.github import getUserData, getUserRepositories, getForkedRepositories, getTopContributedRepositories, getStarGazerCount
+from hackathon.scripts.github import getUserData, getUserRepositories, getForkedRepositories, getTopContributedRepositories, getStarGazerCount, filterStarGazerCount
 
 
 class GithubTests(unittest.TestCase):
@@ -167,3 +167,17 @@ class GithubTests(unittest.TestCase):
 														{'stargazers_count': 0, 'name': 'tv-show-tracker'}, {'stargazers_count': 0, 'name': 'vitanao'}, {'stargazers_count': 0, 'name': 'WaterEmblem'}, {'stargazers_count': 0, 'name': 'webauth-ssh-authentication'}, {'stargazers_count': 0, 'name': 'webauth-via-ssh'}, {'stargazers_count': 0, 'name': 'WebRing'}, {'stargazers_count': 0, 'name': 'yabe'}]	
 		
 		self.assertEqual(getStarGazerCount(clientID, clientSecret), stargazers)
+
+
+
+	def testfilterStarGazerCount(self):
+		'''Test for github.py filterStarGazerCount'''
+		maxStars = []
+		data = [{'stargazers_count': 0, 'name': 'ACM-Game-Presentation'}, {'stargazers_count': 1, 'name': 'ACM-Portfolio-Presentation'}, {'stargazers_count': 2, 'name': 'angular-nhl'}, {'stargazers_count': 0, 'name': 'async'}, {'stargazers_count': 0, 'name': 'd3-sandbox'}, {'stargazers_count': 3, 'name': 'Deep-Learning'}, {'stargazers_count': 0, 'name': 'Django-Hackathon-Starter'}, {'stargazers_count': 0, 'name': 'drksephy.github.io'}, {'stargazers_count': 0, 'name': 'el-gamal-attack'}, {'stargazers_count': 0, 'name': 'FizzBuzz-Test-1'}, {'stargazers_count': 0, 'name': 'flux-reactJS'}, {'stargazers_count': 0, 'name': 'fractals'}, {'stargazers_count': 0, 'name': 'git-api'}, {'stargazers_count': 1, 'name': 'git-technetium'}, {'stargazers_count': 0, 'name': 'hackathon-starter'}, {'stargazers_count': 0, 'name': 'hackcity'}, {'stargazers_count': 0, 'name': 'hackcity.github.io'}, {'stargazers_count': 0, 'name': 'historicalWeather'}, {'stargazers_count': 0, 'name': 'I4330'}, {'stargazers_count': 1, 'name': 'integrated-chinese'}, {'stargazers_count': 0, 'name': 'jsrecipes'}, {'stargazers_count': 0, 'name': 'learn-angularJS'}, {'stargazers_count': 1, 'name': 'legionJS'}, {'stargazers_count': 0, 'name': 'lehman-hackathon'}, {'stargazers_count': 0, 'name': 'mean-sandbox'}, {'stargazers_count': 0, 'name': 'mean-stack-talk'}, {'stargazers_count': 2, 'name': 'NOAA-Projects'}, {'stargazers_count': 0, 'name': 'node'}, {'stargazers_count': 0, 'name': 'nodeapps'}, {'stargazers_count': 1, 'name': 'pascal-compiler'}, {'stargazers_count': 0, 'name': 'pascal-js'}, {'stargazers_count': 0, 'name': 'Project-Euler'}, {'stargazers_count': 0, 'name': 'python-imp-interpreter'}, {'stargazers_count': 0, 'name': 'rst2pdf'}, {'stargazers_count': 0, 'name': 'rust-by-example'}, {'stargazers_count': 1, 'name': 'rust-sandbox'}, {'stargazers_count': 0, 'name': 'satellizer'}, {'stargazers_count': 0, 'name': 'smw-asm'}, {'stargazers_count': 2, 'name': 'swift-sandbox'}, {'stargazers_count': 1, 'name': 'Tales-of-Kratos'}, {'stargazers_count': 0, 'name': 'theano-sandbox'}, {'stargazers_count': 0, 'name': 'todo'}, {'stargazers_count': 0, 'name': 'TV-Show-Premieres'}, {'stargazers_count': 0, 'name': 'tv-show-tracker'}, {'stargazers_count': 0, 'name': 'vitanao'}, {'stargazers_count': 0, 'name': 'WaterEmblem'}, {'stargazers_count': 0, 'name': 'webauth-ssh-authentication'}, {'stargazers_count': 0, 'name': 'webauth-via-ssh'}, {'stargazers_count': 0, 'name': 'WebRing'}, {'stargazers_count': 0, 'name': 'yabe'}]
+		with patch('hackathon.scripts.github.filterStarGazerCount') as mock_filterStarGazerCount:
+			mock_filterStarGazerCount.return_value = [{'stargazers_count': 3, 'name': 'Deep-Learning'}, {'stargazers_count': 2, 'name': 'angular-nhl'}, {'stargazers_count': 2, 'name': 'NOAA-Projects'}, {'stargazers_count': 2, 'name': 'swift-sandbox'}, {'stargazers_count': 1, 'name': 'ACM-Portfolio-Presentation'}, {'stargazers_count': 1, 'name': 'git-technetium'}, {'stargazers_count': 1, 'name': 'integrated-chinese'}, {'stargazers_count': 1, 'name': 'legionJS'}, {'stargazers_count': 1, 'name': 'pascal-compiler'}]
+			maxStars = [{'stargazers_count': 3, 'name': 'Deep-Learning'}, {'stargazers_count': 2, 'name': 'angular-nhl'}, {'stargazers_count': 2, 'name': 'NOAA-Projects'}, {'stargazers_count': 2, 'name': 'swift-sandbox'}, {'stargazers_count': 1, 'name': 'ACM-Portfolio-Presentation'}, {'stargazers_count': 1, 'name': 'git-technetium'}, {'stargazers_count': 1, 'name': 'integrated-chinese'}, {'stargazers_count': 1, 'name': 'legionJS'}, {'stargazers_count': 1, 'name': 'pascal-compiler'}]
+			self.assertEqual(filterStarGazerCount(data), maxStars )
+
+
+
