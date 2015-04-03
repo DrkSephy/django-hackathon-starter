@@ -1,7 +1,7 @@
 import unittest
 from mock import Mock, patch, MagicMock
 from django.conf import settings
-from hackathon.scripts.github import getUserData, getUserRepositories, getForkedRepositories
+from hackathon.scripts.github import getUserData, getUserRepositories, getForkedRepositories, getTopContributedRepositories
 
 
 class GithubTests(unittest.TestCase):
@@ -95,6 +95,50 @@ class GithubTests(unittest.TestCase):
 
 		forkedRepositories = [{'name': 'async'}, {'name': 'FizzBuzz-Test-1'}, {'name': 'hackathon-starter'}, {'name': 'historicalWeather'}, {'name': 'jsrecipes'}, {'name': 'node'}, {'name': 'rst2pdf'}, {'name': 'rust-by-example'}, {'name': 'satellizer'}, {'name': 'vitanao'}, {'name': 'WaterEmblem'}, {'name': 'webauth-via-ssh'}]
 		self.assertEqual(getForkedRepositories(clientID, clientSecret), forkedRepositories)
+
+	def testGetTopContributedRepositories(self):
+		'''Test for github.py testGetTopContributedRepositories'''
+		
+		# Client and Secret ID
+		clientID = self.clientID
+		clientSecret = self.clientSecret
+		repos = ['async']
+
+		jsonList = []
+		for repo in repos:
+			with patch('hackathon.scripts.github.getTopContributedRepositories') as mock_getTopContributedRepositories:
+				mock_getTopContributedRepositories.return_value = [{'total': 85, 'repo_name': 'ACM-Game-Presentation', 'author': 'DrkSephy'}, 
+																	{'total': 16, 'repo_name': 'ACM-Portfolio-Presentation', 'author': 'DrkSephy'}, 
+																	{'total': 17, 'repo_name': 'angular-nhl', 'author': 'DrkSephy'}, 
+																	{'total': 1, 'repo_name': 'async', 'author': 'DrkSephy'}, 
+																	{'total': 55, 'repo_name': 'd3-sandbox', 'author': 'DrkSephy'}, 
+																	{'total': 7, 'repo_name': 'Deep-Learning', 'author': 'DrkSephy'}, 
+																	{'total': 11, 'repo_name': 'Django-Hackathon-Starter', 'author': 'DrkSephy'}, 
+																	{'total': 433, 'repo_name': 'drksephy.github.io', 'author': 'DrkSephy'}, 
+																	{'total': 3, 'repo_name': 'el-gamal-attack', 'author': 'DrkSephy'}, 
+																	{'total': 1, 'repo_name': 'FizzBuzz-Test-1', 'author': 'DrkSephy'}, 
+																	{'total': 44, 'repo_name': 'flux-reactJS', 'author': 'DrkSephy'}, 
+																	{'total': 4, 'repo_name': 'fractals', 'author': 'DrkSephy'}]
+				jsonList.append(mock_getTopContributedRepositories.return_value)
+
+
+		parsedData = []
+		indexNumber = -1
+		for entry in jsonList:
+			indexNumber += 1
+			commits = {}
+			for item in entry:
+				if item['author'] == 'DrkSephy':
+					commits['author'] = item['author']
+					commits['total'] = item['total']
+					commits['repo_name'] = item['repo_name']
+					parsedData.append(commits)
+
+		parsedData = [{'total': 1, 'repo_name': 'async', 'author': 'DrkSephy'}]
+
+		
+		self.assertEqual(getTopContributedRepositories(repos, clientID, clientSecret), parsedData)
+
 
 
 
