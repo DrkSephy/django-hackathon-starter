@@ -161,7 +161,7 @@ def getStarGazerCount(clientID, clientSecret):
 			starData['stargazers_count'] = datum['stargazers_count']
 			starData['name'] = datum['name']
 			stargazers.append(starData)
-
+			
 	return stargazers
 
 def filterStarGazerCount(data):
