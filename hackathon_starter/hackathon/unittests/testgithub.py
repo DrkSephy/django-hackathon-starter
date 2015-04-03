@@ -1,7 +1,7 @@
 import unittest
 from mock import Mock, patch, MagicMock
 from django.conf import settings
-from hackathon.scripts.github import getUserData, getUserRepositories
+from hackathon.scripts.github import getUserData, getUserRepositories, getForkedRepositories
 
 
 class GithubTests(unittest.TestCase):
@@ -72,6 +72,29 @@ class GithubTests(unittest.TestCase):
 
 		self.assertEqual(getUserRepositories(clientID, clientSecret), repositories)
 
+
+	def testGetForkedRepositories(self):
+		'''Test for github.py getForkedRepositories'''
+
+		# Client and Secret ID
+		clientID = self.clientID
+		clientSecret = self.clientSecret
+		
+		pageNumber = 1
+		jsonList = []
+		forkedRepositories = []
+
+		while True:
+			with patch('hackathon.scripts.github.getUserRepositories') as mock_getForkedRepositories:
+				mock_getForkedRepositories.return_value = { "id": 22388667, "name": "ACM-Game-Presentation" }	
+				jsonList.append(mock_getForkedRepositories.return_value)
+				if len(mock_getForkedRepositories.return_value) < 30:
+					break
+				elif len(mock_getForkedRepositories.return_value) >= 30:
+					pageNumber += 1
+
+		forkedRepositories = [{'name': 'async'}, {'name': 'FizzBuzz-Test-1'}, {'name': 'hackathon-starter'}, {'name': 'historicalWeather'}, {'name': 'jsrecipes'}, {'name': 'node'}, {'name': 'rst2pdf'}, {'name': 'rust-by-example'}, {'name': 'satellizer'}, {'name': 'vitanao'}, {'name': 'WaterEmblem'}, {'name': 'webauth-via-ssh'}]
+		self.assertEqual(getForkedRepositories(clientID, clientSecret), forkedRepositories)
 
 
 
