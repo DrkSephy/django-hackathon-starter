@@ -129,6 +129,7 @@ def github(request):
     list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     # Get a list of the top 10 most committed repositories
     filtered = filterCommits(list)
+    print filtered
     # Get list of all stargazer counts for all repositories
     stargazers = getStarGazerCount(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     # Return list of top 10 stargazed repositories
