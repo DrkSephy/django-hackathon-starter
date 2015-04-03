@@ -60,7 +60,7 @@ def getUserRepositories(clientID, clientSecret):
 	for data in jsonList:
 		for datum in data:
 			repositories.append(datum['name'])
-
+			
 	return repositories
 
 def getForkedRepositories(clientID, clientSecret):

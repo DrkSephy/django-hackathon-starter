@@ -1,7 +1,7 @@
 import unittest
 from mock import Mock, patch, MagicMock
 from django.conf import settings
-from hackathon.scripts.github import getUserData 
+from hackathon.scripts.github import getUserData, getUserRepositories
 
 
 class GithubTests(unittest.TestCase):
@@ -13,7 +13,8 @@ class GithubTests(unittest.TestCase):
 
 	
 	def testGetUserData(self):
-		
+		'''Test for github.py getUserData method'''
+
 		# Client and Secret ID
 		clientID = self.clientID
 		clientSecret = self.clientSecret
@@ -41,3 +42,36 @@ class GithubTests(unittest.TestCase):
 				userData['following'] = mock_getUserData.return_value['following']
 			parsedData.append(userData)
 			self.assertEqual(getUserData(clientID, clientSecret), parsedData)
+
+	def testGetUserRepositories(self):
+		'''Test for github.py getUserRepositories'''
+
+		# Client and Secret ID
+		clientID = self.clientID
+		clientSecret = self.clientSecret
+
+		pageNumber = 1
+		jsonList = []
+		repositories = []
+		while True:
+			with patch('hackathon.scripts.github.getUserRepositories') as mock_getUserRepositories:
+				mock_getUserRepositories.return_value = { "id": 22388667, "name": "ACM-Game-Presentation" }	
+				jsonList.append(mock_getUserRepositories.return_value)
+				if len(mock_getUserRepositories.return_value) < 30:
+					break
+				elif len(mock_getUserRepositories.return_value) >= 30:
+					pageNumber += 1
+
+
+		repositories = ['ACM-Game-Presentation', 'ACM-Portfolio-Presentation', 'angular-nhl', 'async', 'd3-sandbox', 'Deep-Learning', 'Django-Hackathon-Starter', 
+						'drksephy.github.io', 'el-gamal-attack', 'FizzBuzz-Test-1', 'flux-reactJS', 'fractals', 'git-api', 'git-technetium', 'hackathon-starter',
+						'hackcity', 'hackcity.github.io', 'historicalWeather', 'I4330', 'integrated-chinese', 'jsrecipes', 'learn-angularJS', 'legionJS', 'lehman-hackathon', 
+						'mean-sandbox', 'mean-stack-talk', 'NOAA-Projects', 'node', 'nodeapps', 'pascal-compiler', 'pascal-js', 'Project-Euler', 'python-imp-interpreter', 
+						'rst2pdf', 'rust-by-example', 'rust-sandbox', 'satellizer', 'smw-asm', 'swift-sandbox', 'Tales-of-Kratos', 'theano-sandbox', 'todo', 'TV-Show-Premieres', 
+						'tv-show-tracker', 'vitanao', 'WaterEmblem', 'webauth-ssh-authentication', 'webauth-via-ssh', 'WebRing', 'yabe']
+
+		self.assertEqual(getUserRepositories(clientID, clientSecret), repositories)
+
+
+
+
