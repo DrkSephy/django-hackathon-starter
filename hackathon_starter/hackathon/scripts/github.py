@@ -37,17 +37,12 @@ def getUserData(clientID, clientSecret):
 def getUserRepositories(clientID, clientSecret):
 	'''Get a list of all repositories owned by a User.'''
 
-	# Which page number of data are we looking at?
 	pageNumber = 1
 
-	# List of all our json
-	jsonList = []
 
-	# List of all repositories
+	jsonList = []
 	repositories = []
 
-	# IDEA: Repeatedly loop over urls and check if the content has less than 30 entries.
-	# 		If it does, then we have iterated over all the data. Time to parse it. 
 	while True:
 		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
@@ -56,7 +51,7 @@ def getUserRepositories(clientID, clientSecret):
 		elif len(json.loads(req.content)) >= 30:
 			pageNumber += 1
 
-	# Loop over our data and extract all of the repository names
+	
 	for data in jsonList:
 		for datum in data:
 			repositories.append(datum['name'])
@@ -65,17 +60,15 @@ def getUserRepositories(clientID, clientSecret):
 
 def getForkedRepositories(clientID, clientSecret):
 	'''Get a list of all forked repositories by a user.'''
-	# Which page number of data are we looking at?
+	
 	pageNumber = 1
 
-	# List of all our json
+	
 	jsonList = []
 
-	# List of all repositories
+	
 	forkedRepositories = []
-
-	# IDEA: Repeatedly loop over urls and check if the content has less than 30 entries.
-	# 		If it does, then we have iterated over all the data. Time to parse it. 
+ 
 	while True:
 		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
@@ -84,12 +77,11 @@ def getForkedRepositories(clientID, clientSecret):
 		elif len(json.loads(req.content)) >= 30:
 			pageNumber += 1
 
-	# Loop over our data and extract all of the repository names
+
 	forkedRepos = {}
 	for data in jsonList:
 		for datum in data:
 			if datum['fork'] == True:
-				#print datum['name']
 				forkedRepos['name'] = datum['name']
 				forkedRepositories.append(forkedRepos)
 				forkedRepos = {}
@@ -101,12 +93,11 @@ def getTopContributedRepositories(repos, clientID, clientSecret):
 
 	jsonList = []
 	for repo in repos:
-		# print repo
 		req = requests.get('https://api.github.com/repos/DrkSephy/' + repo + '/stats/contributors' + '?' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
 
 	parsedData = []
-	# Keep track of which JSON set we are processing to get the repo name
+
 	indexNumber = -1
 	for item in jsonList:
 		indexNumber += 1
@@ -134,18 +125,10 @@ def filterCommits(data):
 	
 def getStarGazerCount(clientID, clientSecret):
 	'''Get Stargazer counts for all repositories.'''
-
-	# Which page number of data are we looking at?
+	
 	pageNumber = 1
-
-	# List of all our json
 	jsonList = []
-
-	# List of all repositories
 	stargazers = []
-
-	# IDEA: Repeatedly loop over urls and check if the content has less than 30 entries.
-	# 		If it does, then we have iterated over all the data. Time to parse it. 
 	while True:
 		req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&' + clientID + '&' + clientSecret)
 		jsonList.append(json.loads(req.content))
@@ -154,7 +137,7 @@ def getStarGazerCount(clientID, clientSecret):
 		elif len(json.loads(req.content)) >= 30:
 			pageNumber += 1
 
-	# Loop over our data and extract all of the repository names
+
 	for data in jsonList:
 		for datum in data:
 			starData = {}
