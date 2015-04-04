@@ -94,8 +94,11 @@ def github(request):
     return render(request, 'hackathon/github.html', { 'data': allData })
 
 def tumblr(request):
-    meta, response, blog = getBlogInfo('twitterthecomic')
+    #get blogger twitterthecomic's blog information
+    blog = getBlogInfo('twitterthecomic')
+    #get tags that was tagged along starbucks
     tagged_blog = getTaggedInfo("starbucks")
+    #get blog information tagged with starbucks
     blogontag = getTaggedBlog("starbucks")
     context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag}
     return render(request, 'hackathon/tumblr.html', context)

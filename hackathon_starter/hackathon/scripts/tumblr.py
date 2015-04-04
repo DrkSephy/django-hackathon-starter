@@ -1,39 +1,41 @@
 import requests
 import simplejson as json
 import time 
-import collections
 import urllib
 import re
 from bs4 import BeautifulSoup
-#from textblob.sentiments import NaiveBayesAnalyzer
-#from textblob import TextBlob
+import urlparse
+import oauth2
 
-###starbucks how they feel?
-#google tumblr hackathon ideas
-#sentian analysis
 blog_uri		= "http://api.tumblr.com/v2/blog/"
 user_uri		= "api.tumblr.com/v2/user/"
 consumer_key    = "KrSbAc9cYLmIgVAn1D21FjRR97QWsutNMxkPDFBxo8CMWtMk4M"
 consumer_secret = "lKWMtL2Lj8zr5pY51PVqT8ugeoG0DjrdgoFewM0QTSyJ12jP8d"
-oauth_token		= "b2osMdhLljOo5aVBjd47kU7gm08NSTqZnZa1b6gC8MmpZX8h0H"
-oauth_secret	= "jHsrI4qM5h4CbUre90SZRAG6snguY22tB1NdujgAZwFh8VD1B1"
+
+#https://www.tumblr.com/oauth/authorize?oauth_token=R9HvkeqKgPAXjor9V92Zg5BvxMm3kwx0kaGnawVHIU5h6dmOL0
 
 def getUserInfo():
+	''' Return user's information. '''
 	return "getUserInfo()"
 
 def getBlogInfo(user):
+	''' Return blogger's blog information.  '''
+
 	blog_info = blog_uri + user +".tumblr.com/info?api_key="+consumer_key
 	req = requests.get(blog_info)
 	jsonlist = json.loads(req.content)
+	print jsonlist
 	
 	meta = jsonlist['meta']
 	response = jsonlist['response']
 	blog = response['blog']
 	blog['updated'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(blog['updated']))
 
-	return meta, response, blog
+	return blog
 
 def getTaggedInfo(tag):
+	''' Return tags related to blog with certain tag. '''
+
 	tagged_uri = "http://api.tumblr.com/v2/tagged?tag="+tag+"&api_key="+consumer_key+"&limit=20"
 	req = requests.get(tagged_uri)
 	jsonlist = json.loads(req.content)
@@ -55,6 +57,8 @@ def getTaggedInfo(tag):
 	return tags
 
 def getTaggedBlog(tag):
+	''' Return the tagged blogs's captions or post.'''
+	
 	tagged_uri = "http://api.tumblr.com/v2/tagged?tag="+tag+"&api_key="+consumer_key+"&limit=2"
 	req = requests.get(tagged_uri)
 	jsonlist = json.loads(req.content)
