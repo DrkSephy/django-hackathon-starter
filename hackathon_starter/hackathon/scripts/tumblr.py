@@ -9,18 +9,17 @@ import oauth2
 
 blog_uri		= "http://api.tumblr.com/v2/blog/"
 user_uri		= "api.tumblr.com/v2/user/"
-consumer_key    = "KrSbAc9cYLmIgVAn1D21FjRR97QWsutNMxkPDFBxo8CMWtMk4M"
-consumer_secret = "lKWMtL2Lj8zr5pY51PVqT8ugeoG0DjrdgoFewM0QTSyJ12jP8d"
 
 #https://www.tumblr.com/oauth/authorize?oauth_token=R9HvkeqKgPAXjor9V92Zg5BvxMm3kwx0kaGnawVHIU5h6dmOL0
-
+"""
 def getUserInfo():
 	''' Return user's information. '''
 	return "getUserInfo()"
+"""
 
-def getBlogInfo(user):
+def getBlogInfo(user, consumer_key):
 	''' Return blogger's blog information.  '''
-
+	print consumer_key
 	blog_info = blog_uri + user +".tumblr.com/info?api_key="+consumer_key
 	req = requests.get(blog_info)
 	jsonlist = json.loads(req.content)
@@ -33,7 +32,7 @@ def getBlogInfo(user):
 
 	return blog
 
-def getTaggedInfo(tag):
+def getTaggedInfo(tag, consumer_key):
 	''' Return tags related to blog with certain tag. '''
 
 	tagged_uri = "http://api.tumblr.com/v2/tagged?tag="+tag+"&api_key="+consumer_key+"&limit=20"
@@ -56,7 +55,7 @@ def getTaggedInfo(tag):
 
 	return tags
 
-def getTaggedBlog(tag):
+def getTaggedBlog(tag, consumer_key):
 	''' Return the tagged blogs's captions or post.'''
 	
 	tagged_uri = "http://api.tumblr.com/v2/tagged?tag="+tag+"&api_key="+consumer_key+"&limit=2"
