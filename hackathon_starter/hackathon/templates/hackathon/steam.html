@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+<table>
+  <tr><th>Game ID</th><th>Game Name</th><th>Minutes Played</th></tr>
+  {% for game in game %}
+    {% comment %}  each game object is a dictionary with "appid", "name " and "playtime_forever" keys {% endcomment %}
+    <tr><td>{{ game.appid }}</td><td>{{game.name}} </td><td>{{ game.playtime_forever }}</td></tr>
+{% endfor %}
+</table>
+</body>
+</html>
