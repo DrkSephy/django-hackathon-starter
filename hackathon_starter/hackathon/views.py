@@ -9,7 +9,7 @@ from scripts.github import *
 from scripts.tumblr import *
 from django.conf import settings
 
-
+getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 
 def index(request):
     context = {'hello': 'world'}
@@ -19,7 +19,7 @@ def test(request):
     return HttpResponse('meow')
 
 def api_examples(request):
-    obtain_oauth_verifier = simpleoauthurl(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
+    obtain_oauth_verifier = getTumblr.get_authorize_url()#simpleoauthurl(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
     context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier}
     return render(request, 'hackathon/api_examples.html', context)
 
@@ -97,15 +97,18 @@ def github(request):
 def tumblr(request):
     ''' Tumblr api calls '''
     #retrieve verifier via url link
-    oauth_verifier = request.GET.getlist('oauth_verifier')
-    #get blogger twitterthecomic's blog information
-    blog = getBlogInfo('twitterthecomic', settings.TUMBLR_CONSUMER_KEY)
-    #get tags that was tagged along starbucks
-    tagged_blog = getTaggedInfo("starbucks", settings.TUMBLR_CONSUMER_KEY)
-    #get blog information tagged with starbucks
-    blogontag = getTaggedBlog("starbucks", settings.TUMBLR_CONSUMER_KEY)
-    context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag}
-    return render(request, 'hackathon/tumblr.html', context)
+    if not request.GET.items():
+        return HttpResponseRedirect('/hackathon/api/')
+    else:
+        getTumblr.get_access_token_url(request.GET.get('oauth_verifier'))
+        #get blogger twitterthecomic's blog information
+        blog = getTumblr.getBlogInfo('twitterthecomic')
+        #get tags that was tagged along starbucks
+        tagged_blog = getTumblr.getTaggedInfo("starbucks")
+        #get blog information tagged with starbucks
+        blogontag = getTumblr.getTaggedBlog("starbucks")
+        context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag}
+        return render(request, 'hackathon/tumblr.html', context)
 
 def linkedin(request):
     userinfo = getUserInfo()
