@@ -8,22 +8,39 @@ import urlparse
 import oauth2
 
 blog_uri		= "http://api.tumblr.com/v2/blog/"
-user_uri		= "api.tumblr.com/v2/user/"
+user_uri		= "http://api.tumblr.com/v2/user/info"
+request_token_url   = 'http://www.tumblr.com/oauth/request_token'
+authorize_url       = 'http://www.tumblr.com/oauth/authorize'
+access_token_url    = 'http://www.tumblr.com/oauth/access_token'
 
-#https://www.tumblr.com/oauth/authorize?oauth_token=R9HvkeqKgPAXjor9V92Zg5BvxMm3kwx0kaGnawVHIU5h6dmOL0
-"""
-def getUserInfo():
+def simpleoauthurl(consumer_key, consumer_secret):
+	#set consumer
+	consumer = oauth2.Consumer(consumer_key, consumer_secret)
+
+	#getting token
+	client = oauth2.Client(consumer)
+	resp, content = client.request(request_token_url, "GET")
+	if int(resp['status']) != 200:
+		raise Exception("Invalid response %s." % resp['status'])
+
+	#parse content into dictionary
+	request_token = dict(urlparse.parse_qsl(content))
+	oauth_key = request_token['oauth_token']
+	oauth_secret = request_token['oauth_token_secret']
+
+	return authorize_url+"?oauth_token="+oauth_key+"&redirect_uri=http%3A%2F%2Flocalhost%3A8000/hackathon/tumblr"
+
+
+def getUserInfo(oauth_verifier):
 	''' Return user's information. '''
 	return "getUserInfo()"
-"""
+
 
 def getBlogInfo(user, consumer_key):
 	''' Return blogger's blog information.  '''
-	print consumer_key
 	blog_info = blog_uri + user +".tumblr.com/info?api_key="+consumer_key
 	req = requests.get(blog_info)
 	jsonlist = json.loads(req.content)
-	print jsonlist
 	
 	meta = jsonlist['meta']
 	response = jsonlist['response']
@@ -68,7 +85,7 @@ def getTaggedBlog(tag, consumer_key):
 	tagtext = []
 
 	for blog in body:
-		print "####"
+		#print "####"
 		for data in blog:
 			#post
 			if data == "body":

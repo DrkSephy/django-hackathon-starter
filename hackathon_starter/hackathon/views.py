@@ -19,7 +19,8 @@ def test(request):
     return HttpResponse('meow')
 
 def api_examples(request):
-    context = {'title': 'API Examples Page'}
+    obtain_oauth_verifier = simpleoauthurl(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
+    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier}
     return render(request, 'hackathon/api_examples.html', context)
 
 def register(request):
@@ -95,6 +96,8 @@ def github(request):
 
 def tumblr(request):
     ''' Tumblr api calls '''
+    #retrieve verifier via url link
+    oauth_verifier = request.GET.getlist('oauth_verifier')
     #get blogger twitterthecomic's blog information
     blog = getBlogInfo('twitterthecomic', settings.TUMBLR_CONSUMER_KEY)
     #get tags that was tagged along starbucks
