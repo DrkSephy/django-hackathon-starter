@@ -1,34 +1,31 @@
 import unittest
 from mock import Mock, patch, MagicMock
-from hackathon.scripts.tumblr import getBlogInfo
-import time
+from hackathon.scripts.tumblr import *
+import oauth2
+import urlparse
+from django.conf import settings
 
-class TumblrTests(unittest.TestCase):
+class TestTumblr(unittest.TestCase):
+
 	def setUp(self):
-		self.blog_uri 			= 'http://api.tumblr.com/v2/blog/'
-		self.consumer_key 		= 'KrSbAc9cYLmIgVAn1D21FjRR97QWsutNMxkPDFBxo8CMWtMk4M'
-		self.consumer_secret 	= 'lKWMtL2Lj8zr5pY51PVqT8ugeoG0DjrdgoFewM0QTSyJ12jP8d'
-		self.user				= 'twitterthecomic'
+		self.consumer_key = 'KrSbAc9cYLmIgVAn1D21FjRR97QWsutNMxkPDFBxo8CMWtMk4M'
+		self.consumer_secret = 'lKWMtL2Lj8zr5pY51PVqT8ugeoG0DjrdgoFewM0QTSyJ12jP8d'
+		self.consumer = oauth2.Consumer(key=self.consumer_key, secret=self.consumer_secret)
+		self.tumblrclient = TumblrOauthClient(self.consumer_key, self.consumer_secret, 'QBXdeeMKAnLzDbIG7dDNewTzRYyQoHZLbcn3bAFTCEFF5EXurl')
+		self.authorize = self.tumblrclient.get_authorize_url()
 
-	def testGetBlogInfo(self):
-		'''Test for tumblr.py getBlogInfo method '''
-		consumer_key = self.consumer_key
-		consumer_secret = self.consumer_secret
-		user = self.user
+		
+	def test_init(self):
+		self.assertEqual(self.consumer.key, self.consumer_key)
+		self.assertEqual(self.consumer.secret, self.consumer_secret)
 
-		# Construct url for blog info
-		self.blog_info = self.blog_uri + user + ".tumblr.com/info?api_key="+ consumer_key
-
-		with patch('hackathon.scripts.tumblr.getBlogInfo') as mock_getBlogInfo:
-			# Mock the return value of this method
-			mock_getBlogInfo.return_value = {'meta': {'status': 200, 'msg': 'OK'}, 
-			'response': {'blog': {'ask_anon': False, 'submission_page_title': 'Submit A Tweet', 
-			'updated': 1413846741, 'description': 'Comics based on the greatest tweets of our generation. \nOrganized by <a href="https://twitter.com/VectorBelly">@VectorBelly</a>.', 
-			'title': 'Twitter: The Comic', 'url': 'http://twitterthecomic.tumblr.com/', 'ask_page_title': 'Submit A Tweet', 
-			'share_likes': False, 'posts': 146, 'is_nsfw': False, 'ask': False, 'name': 'twitterthecomic'}}}
-			jsonlist = mock_getBlogInfo.return_value
-			self.meta = jsonlist['meta']
-			self.response = jsonlist['response']
-			self.blog = self.response['blog']
-			self.blog['blog'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.blog['updated']))
-			self.assertEqual(getBlogInfo(user),self.blog)
+	def test_get_authorize_url(self):
+		self.client = oauth2.Client(self.consumer)
+		self.assertEqual(self.client.consumer, self.consumer)
+		with patch('hackathon.scripts.tumblr.TumblrOauthClient.get_authorize_url') as mock_get_authorize_url:
+			mock_get_authorize_url.return_value = "oauth_token=QBXdeeMKAnLzDbIG7dDNewTzRYyQoHZLbcn3bAFTCEFF5EXurl&oauth_token_secret=u10SuRl2nzS8vFK4K7UPQexAvbIFBFrZBjA79XDlgoXFxv9ZhO&oauth_callback_confirmed=true"
+			self.request_token = dict(urlparse.parse_qsl(mock_get_authorize_url.return_value))
+			self.oauth_token = self.request_token['oauth_token']
+			self.oauth_token_secret = self.request_token['oauth_token_secret']		
+			link = "http://www.tumblr.com/oauth/authorize?oauth_token="+self.oauth_token+"&redirect_uri=http%3A%2F%2Flocalhost%3A8000/hackathon/tumblr"
+			self.assertEqual(self.authorize,link )

@@ -6,38 +6,44 @@ import re
 from bs4 import BeautifulSoup
 import urlparse
 import oauth2
-from django.conf import settings
+
+request_token_url   = 'http://www.tumblr.com/oauth/request_token'
+authorize_url       = 'http://www.tumblr.com/oauth/authorize'
+access_token_url    = 'http://www.tumblr.com/oauth/access_token'
+user_uri			= "http://api.tumblr.com/v2/user/info"
+blog_uri			= "http://api.tumblr.com/v2/blog/"
 
 class TumblrOauthClient(object):
-	request_token_url   = 'http://www.tumblr.com/oauth/request_token'
-	authorize_url       = 'http://www.tumblr.com/oauth/authorize'
-	access_token_url    = 'http://www.tumblr.com/oauth/access_token'
-	user_uri			= "http://api.tumblr.com/v2/user/info"
-	blog_uri			= "http://api.tumblr.com/v2/blog/"
-	
-	def __init__(self, consumer_key, consumer_secret, oauth_token='', oauth_token_secret='', oauth_verifier='', token=''):
+
+	token = None
+	oauth_token_secret = None
+	oauth_verifier = None
+
+
+	def __init__(self, consumer_key, consumer_secret, oauth_token =''):
 		self.consumer_key = consumer_key
-		self.cosnumer_secret = consumer_secret
+		self.consumer_secret = consumer_secret
 		self.consumer = oauth2.Consumer(consumer_key, consumer_secret)
-		self.token = token
 		self.oauth_token = oauth_token
-		self.oauth_token_secret = oauth_token_secret
-		self.oauth_verifier = oauth_verifier
+
 
 	def get_authorize_url(self):
 		client = oauth2.Client(self.consumer)
-		resp, content = client.request(self.request_token_url, "GET")
+		resp, content = client.request(request_token_url, "GET")
 
-		if int(resp['status']) != 200:
-			raise Exception("Invalid response %s." % resp['status'])
+		#if int(resp['status']) != 200:
+		#	raise Exception("Invalid response %s." % resp['status'])
 
 		#parse content
-		request_token = dict(urlparse.parse_qsl(content))
-		self.oauth_token = request_token['oauth_token']
-		self.oauth_token_secret = request_token['oauth_token_secret']
+		if not self.oauth_token:
+			request_token = dict(urlparse.parse_qsl(content))
+			self.oauth_token = request_token['oauth_token'] #'QBXdeeMKAnLzDbIG7dDNewTzRYyQoHZLbcn3bAFTCEFF5EXurl'
+			self.oauth_token_secret = request_token['oauth_token_secret']#'u10SuRl2nzS8vFK4K7UPQexAvbIFBFrZBjA79XDlgoXFxv9ZhO'
 
-		#print authorize_url+"?oauth_token="+oauth_key+"&redirect_uri=http%3A%2F%2Flocalhost%3A8000/hackathon/tumblr"
-		return self.authorize_url+"?oauth_token="+self.oauth_token+"&redirect_uri=http%3A%2F%2Flocalhost%3A8000/hackathon/tumblr"
+		link = authorize_url+"?oauth_token="+self.oauth_token+"&redirect_uri=http%3A%2F%2Flocalhost%3A8000/hackathon/tumblr"
+		return link
+
+#"""
 
 	def get_access_token_url(self, oauth_verifier):
 		#print "verifier"
@@ -46,7 +52,7 @@ class TumblrOauthClient(object):
 		token.set_verifier(self.oauth_verifier)
 
 		client = oauth2.Client(self.consumer, token)
-		resp, content = client.request(self.access_token_url,"POST")
+		resp, content = client.request(access_token_url,"POST")
 
 		#print resp['status']
 
@@ -55,13 +61,13 @@ class TumblrOauthClient(object):
 
 		#set verified token
 		self.token = oauth2.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
-		
+
 	
 	def getUserInfo(self):
 		''' Returns users information. '''
 		client = oauth2.Client(self.consumer, self.token)
 		#print client
-		resp, content = client.request(self.user_uri, "POST")
+		resp, content = client.request(user_uri, "POST")
 		if int(resp['status']) != 200:
 			raise Exception("Invalid response %s." % resp['status'])
 
@@ -74,7 +80,7 @@ class TumblrOauthClient(object):
 
 	def getBlogInfo(self, user):
 		''' Returns blogger's blog information '''
-		blog_info = self.blog_uri + user + ".tumblr.com/info?api_key="+self.consumer_key
+		blog_info = blog_uri + user + ".tumblr.com/info?api_key="+self.consumer_key
 		req = requests.get(blog_info)
 		
 		if int(req.status_code) != 200:
@@ -141,3 +147,4 @@ class TumblrOauthClient(object):
 						tagtext.append(text)
 		
 		return tagtext
+#"""
