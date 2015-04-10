@@ -13,7 +13,4 @@ urlpatterns = patterns('',
     url(r'^github/$', views.github, name='github'),
     url(r'^tumblr/$', views.tumblr, name='tumblr'),
     url(r'^linkedin/$', views.linkedin, name='linkedin'),
-    url(r'^twitter_login/?$', views.twitter_login),
-    url(r'^twitter_logout/?$', views.twitter_logout),
-    url(r'^twitter_login/authenticated/?$', views.twitter_authenticated),
 )
