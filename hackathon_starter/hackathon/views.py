@@ -1,6 +1,5 @@
 # Django
 from django.shortcuts import render
-from hackathon.forms import UserForm
 from django.contrib.auth import logout
 from django.template import RequestContext, loader
 from django.contrib.auth import authenticate, login
@@ -9,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 # Scripts
 from scripts.steam import gamesPulling, steamIDPulling 
@@ -17,6 +17,13 @@ from scripts.tumblr import *
 
 # Python
 import oauth2 as oauth
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+
+# Models
+from snippets.models import Snippet
+from snippets.serializers import SnippetSerializer
+from hackathon.forms import UserForm
 
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
