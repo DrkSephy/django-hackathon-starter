@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'bootstrapform',
     # 'django_openid',
     'django_nose',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
