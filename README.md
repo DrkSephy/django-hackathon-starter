@@ -29,12 +29,14 @@ First, install `bower`:
     npm install -g bower
 
 Then:
+
     # In the same directory as requirements.txt
     bower install
 
 This will download and extract all the packages listed within `bower.json`. **Under no circumstance should any front-end libraries manually be pushed up to the repository.**
 
 Then:
+
     # move bower_components into static folder
     mv bower_components/ hackathon_starter/hackathon/static
 
