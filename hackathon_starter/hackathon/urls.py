@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url(r'^steam/$', views.steam, name='steam'),
     url(r'^github/$', views.github, name='github'),
     url(r'^tumblr/$', views.tumblr, name='tumblr'),
-    url(r'^linkedin/$', views.linkedin, name='linkedin')
+    url(r'^linkedin/$', views.linkedin, name='linkedin'),
+    url(r'^snippets/$', views.snippet_list, name='snippets'),
 )

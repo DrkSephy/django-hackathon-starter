@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'bootstrapform',
     # 'django_openid',
     'django_nose',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -106,4 +107,6 @@ GITHUB_CLIENT_ID = 'client_id=2404a1e21aebd902f6db'
 GITHUB_CLIENT_SECRET = 'client_secret=3da44769d4b7c9465fa4c812669148a163607c23'
 TUMBLR_CONSUMER_KEY = 'KrSbAc9cYLmIgVAn1D21FjRR97QWsutNMxkPDFBxo8CMWtMk4M'
 TUMBLR_CONSUMER_SECRET ='lKWMtL2Lj8zr5pY51PVqT8ugeoG0DjrdgoFewM0QTSyJ12jP8d'
+TWITTER_TOKEN = 'F05dgLAzHEOalb4K2xDQ8Umm8'
+TWITTER_SECRET = 'Yy3a74Z7gvyhxRruJsvUtUl8uK8iv6qKkVqbZSijUxK71Z1qTY'
 

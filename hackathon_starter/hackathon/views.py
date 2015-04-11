@@ -1,13 +1,30 @@
+# Django
 from django.shortcuts import render
-from hackathon.forms import UserForm
 from django.contrib.auth import logout
 from django.template import RequestContext, loader
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
+# Scripts
 from scripts.steam import gamesPulling, steamIDPulling 
 from scripts.github import *
 from scripts.tumblr import *
-from django.conf import settings
+
+# Python
+import oauth2 as oauth
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+
+# Models
+from hackathon.models import Snippet
+from hackathon.serializers import SnippetSerializer
+from hackathon.forms import UserForm
+
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 
@@ -114,4 +131,23 @@ def linkedin(request):
     userinfo = getUserInfo()
     context = {'title': 'linkedin Example','userdata': userinfo}
     return render(request, 'hackathon/linkedin.html', context)
+
+class JSONResponse(HttpResponse):
+    """
+    An HttpResponse that renders its content into JSON.
+    """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+@csrf_exempt
+def snippet_list(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        snippets = Snippet.objects.all()
+        serializer = SnippetSerializer(snippets, many=True)
+        return JSONResponse(serializer.data)
 
