@@ -69,6 +69,13 @@ The list will appear empty at first, since the database model `Snippets` will be
 
 The above will open the Django shell, and allow you to create objects and save them to the database. If you then navigate to the URL above, you will see the JSON output of the database model, `Snippet`. 
 
+## AngularJS Client
+
+As of `April 11th, 2015`, there is now a sample AngularJS client which pulls data from the Django sample API endpoint: `http://127.0.0.1:8000/hackathon/snippets/`. To test it, do the following:
+
+* Within the `public/` directory, run `python -m SimpleHTTPServer 80`. You may need `sudo` on your respective Operating System.
+* Navigate to: `http://localhost/#/snippets`. Here you will see whatever content was stored within the database model, `Snippet`. If nothing shows up, go back to the `RESTful endpoints` step to populate your database with some `Snippet` objects. 
+
 ## Contributors
 
 * David Leonard
