@@ -29,10 +29,22 @@ First, install `bower`:
     npm install -g bower
 
 Then:
-
+    # In the same directory as requirements.txt
     bower install
 
 This will download and extract all the packages listed within `bower.json`. **Under no circumstance should any front-end libraries manually be pushed up to the repository.**
+
+Then:
+    # move bower_components into static folder
+    mv bower_components/ hackathon_starter/hackathon/static
+
+To install the front-end dependencies for the AngularJS client, do the following:
+
+    cd public
+    bower install
+    # Rename bower_components folder to vendor
+    mv bower_components/ vendor/
+
 
 ## Testing
 
@@ -44,7 +56,7 @@ To run the tests:
 
 ## Code evaluation
 
-In order to write clean code with a consistent style guide, we'll be using `Pylint` to maintain our code. Pylint will display a ton of messages regarding things that should be fixed. A sample output from running `pylint views.py` is shown below:
+In order to write clean code with a consistent style guide, we'll be using `Pylint` to maintain our code. Pylint will display a ton of messages regarding things that should be fixed. 
 
 
 ## RESTful endpoints
