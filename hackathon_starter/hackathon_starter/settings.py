@@ -41,10 +41,12 @@ INSTALLED_APPS = (
     # 'django_openid',
     'django_nose',
     'rest_framework',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -98,6 +100,8 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=hackathon/scripts',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ############
 #   KEYS   #
