@@ -1,6 +1,6 @@
 'use strict';
 
-restApp.factory('githubUser', function($http) {
+restApp.factory('githubUserFactory', function($http) {
     return {
         get: function() {
             return $http({
