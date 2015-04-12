@@ -14,8 +14,9 @@ from django.http import JsonResponse
 # Scripts
 from scripts.steam import gamesPulling, steamIDPulling 
 from scripts.github import *
-from scripts.tumblr import *
+from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
+from scripts.instagram import InstagramOauthClient
 
 # Python
 import oauth2 as oauth
@@ -29,6 +30,7 @@ from hackathon.forms import UserForm
 
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
+getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
 
 def index(request):
     context = {'hello': 'world'}
@@ -47,11 +49,13 @@ def twilio(request):
 ##################
 
 def api_examples(request):
-    obtain_oauth_verifier = getTumblr.get_authorize_url()
-    #simpleoauthurl(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
-    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier}
+    instagram_url =getInstagram.get_authorize_url()
+    if not getTumblr.accessed:
+        obtain_oauth_verifier = getTumblr.authorize_url()
+    else:
+        obtain_oauth_verifier = '/hackathon/tumblr'
+    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url}
     return render(request, 'hackathon/api_examples.html', context)
-
 
 #################
 #   STEAM API   #
@@ -113,19 +117,35 @@ def githubResume(request):
 def tumblr(request):
     ''' Tumblr api calls '''
     #retrieve verifier via url link
-    if not request.GET.items():
-        return HttpResponseRedirect('/hackathon/api/')
-    else:
-        getTumblr.get_access_token_url(request.GET.get('oauth_verifier'))
-        #get blogger twitterthecomic's blog information
-        blog = getTumblr.getBlogInfo('twitterthecomic')
-        #get tags that was tagged along starbucks
-        tagged_blog = getTumblr.getTaggedInfo("starbucks")
-        #get blog information tagged with starbucks
-        blogontag = getTumblr.getTaggedBlog("starbucks")
-        context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag}
-        return render(request, 'hackathon/tumblr.html', context)
+    #if not request.GET.items():
+    #    return HttpResponseRedirect('/hackathon/api/')
+    if not getTumblr.accessed:
+        oauth_verifier = request.GET.get('oauth_verifier')
+        getTumblr.access_token_url(oauth_verifier)
+    #get blogger twitterthecomic's blog information
+    blog = getTumblr.getBlogInfo('twitterthecomic')
+    #get tags that was tagged along starbucks
+    tagged_blog = getTumblr.getTaggedInfo("starbucks")
+    #get blog information tagged with starbucks
+    blogontag = getTumblr.getTaggedBlog("starbucks")
+    #get user's information
+    userinfo, total_blog = getTumblr.getUserInfo()
+    context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag, 'userinfo': userinfo, 'total_blog':total_blog}
+    return render(request, 'hackathon/tumblr.html', context)
 
+
+####################
+#   INSTAGRAM API  #
+####################
+
+def instagram(request):
+    search_tag = 'kitten'
+    code = request.GET['code']
+    getInstagram.get_access_token(code)
+    #return tagged objects
+    tagged_media = getInstagram.get_tagged_media(search_tag)
+    context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
+    return render(request, 'hackathon/instagram.html', context)
 
 ##################
 #  LINKED IN API #
@@ -209,3 +229,4 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/hackathon/')
+

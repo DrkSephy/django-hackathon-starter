@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     url(r'^linkedin/$', views.linkedin, name='linkedin'),
     url(r'^snippets/$', views.snippet_list, name='snippets'),
     url(r'^twilio/$', views.twilio, name='twilio'),
+    url(r'^instagram/$', views.instagram, name='instagram'),
 )
