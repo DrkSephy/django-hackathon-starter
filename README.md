@@ -90,6 +90,35 @@ As of `April 11th, 2015`, there is now a sample AngularJS client which pulls dat
 * Within the `public/` directory, run `python -m SimpleHTTPServer 80`. You may need `sudo` on your respective Operating System.
 * Navigate to: `http://localhost/#/snippets`. Here you will see whatever content was stored within the database model, `Snippet`. If nothing shows up, go back to the `RESTful endpoints` step to populate your database with some `Snippet` objects. 
 
+## Ionic Client
+
+As of `April 11th, 2015`, there is now a sample Ionic application which works on iOS. This application pulls data from the Django sample API endpoint: `http://127.0.0.1:8000/hackathon/snippets/`. In order to successfully run this project, you must do the following:
+
+    # Make sure django-hackathon-starter is running
+    python manage.py runserver
+
+    # Install cordova and ionic
+    # On a Mac, you'll need to use sudo
+    npm install -g cordova ionic 
+
+    cd ionic
+
+    # Add support for the iOS platform
+    ionic platform add ios
+
+    # Build the project
+    ionic build ios
+
+Running the final command, `ionic build ios` will generate an `.xcodeproj` file within `platforms/ionic`. You can open it and then run it, which you should then see a list of all the `Snippet` objects from the Django Hackathon Starter database. 
+
+You can also test the project in the browser by doing the following:
+
+    cd ionic
+    ionic serve 
+
+Running `ionic serve` will automatically open up your web browser and run the application.
+
+
 ## Contributors
 
 * David Leonard
