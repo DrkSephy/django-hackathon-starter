@@ -21,7 +21,7 @@ var restApp = angular.module('restApp', [
             data: {
                 pageTitle: 'Github User Data'
             }
-        });
+        })
 
         .state('githubTopContributions', {
             url: '/githubTopContributions',
