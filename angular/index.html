@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en-us" data-ng-app="restApp" data-ng-controller="appController">
+    <head>
+        <meta charset="utf-8">
+
+        <title data-ng-bind="pageTitle + ' | RestAPP'">RestAPP</title>
+
+        <script src="vendor/angular/angular.js"></script>
+        <script src="vendor/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/appController.js"></script>
+        <script src="scripts/controllers/restAppController.js"></script>
+        <script src="scripts/factories/restAppFactory.js"></script>
+    </head>
+
+    <body>
+        <div data-ui-view></div>
+    </body>
+</html>
