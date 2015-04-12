@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^snippets/$', views.snippet_list, name='snippets'),
     url(r'^twilio/$', views.twilio, name='twilio'),
     url(r'^instagram/$', views.instagram, name='instagram'),
+    url(r'^instagram_login/$', views.instagram_login, name='instagram_login'),
 )
