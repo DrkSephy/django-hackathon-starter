@@ -88,7 +88,9 @@ def githubTopRepositories(request):
     parsedData['committed'] = filtered
     return JsonResponse({ 'data': parsedData })
 
-def github(request):
+def githubResume(request):
+    '''A sample application which pulls various Github data to form a Resume of sorts'''
+    
     allData = {}
     userData = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
@@ -101,7 +103,6 @@ def github(request):
     allData['filteredData'] = filtered
     allData['filteredStargazers'] = filteredStargazers
     allData['forkedRepos'] = forkedRepos
-    # return JsonResponse({'data': allData});
     return render(request, 'hackathon/github.html', { 'data': allData })
 
 
