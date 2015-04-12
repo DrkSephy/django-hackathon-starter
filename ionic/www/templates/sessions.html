@@ -1,0 +1,11 @@
+<ion-view title="Sessions">
+  <ion-nav-buttons side="left">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+      <ion-list>
+          <ion-item ng-repeat="session in sessions" 
+                    href="#/app/sessions/{{session.id}}">{{session}}</ion-item>
+      </ion-list>
+  </ion-content>
+</ion-view>
