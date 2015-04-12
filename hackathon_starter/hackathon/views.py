@@ -36,9 +36,17 @@ def index(request):
     context = {'hello': 'world'}
     return render(request, 'hackathon/index.html', context)
 
+##################
+#   Twilio API   #
+##################
+
 def twilio(request):
     sendSMS('Meow', '+13473282978', '+13473781813')
     return render(request, 'hackathon/twilio.html')
+
+##################
+#  API Examples  #
+##################
 
 def api_examples(request):
     instagram_url =getInstagram.get_authorize_url()
@@ -48,6 +56,134 @@ def api_examples(request):
         obtain_oauth_verifier = '/hackathon/tumblr'
     context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url}
     return render(request, 'hackathon/api_examples.html', context)
+
+#################
+#   STEAM API   #
+#################
+
+def steam(request):
+    #Should link to test of Steam API example.
+    key = '231E98D442E52B87110816C3D5114A1D'
+    SteamUN = "Marorin"
+    steamID = steamIDPulling(SteamUN, key)
+    game = gamesPulling(steamID, key)
+    return render(request,'hackathon/steam.html', {"game": game })
+
+
+#################
+#   GITHUB API  #
+#################
+
+
+def githubUser(request):
+    '''Returns JSON response about a specific Github User'''
+
+    parsedData = {}
+    parsedData['userData'] = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    return JsonResponse({ 'data': parsedData })
+
+def githubTopRepositories(request):
+    '''Returns JSON response of a User's Top Committed repositories'''
+
+    parsedData = {}
+    repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    filtered = filterCommits(list)
+    parsedData['committed'] = filtered
+    return JsonResponse({ 'data': parsedData })
+
+def githubResume(request):
+    '''A sample application which pulls various Github data to form a Resume of sorts'''
+    
+    allData = {}
+    userData = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    filtered = filterCommits(list)
+    stargazers = getStarGazerCount(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    filteredStargazers = filterStarGazerCount(stargazers)
+    forkedRepos = getForkedRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    allData['userData'] = userData
+    allData['filteredData'] = filtered
+    allData['filteredStargazers'] = filteredStargazers
+    allData['forkedRepos'] = forkedRepos
+    return render(request, 'hackathon/github.html', { 'data': allData })
+
+
+#################
+#   TUMBLR API  #
+#################
+
+def tumblr(request):
+    ''' Tumblr api calls '''
+    #retrieve verifier via url link
+    #if not request.GET.items():
+    #    return HttpResponseRedirect('/hackathon/api/')
+    if not getTumblr.accessed:
+        oauth_verifier = request.GET.get('oauth_verifier')
+        getTumblr.access_token_url(oauth_verifier)
+    #get blogger twitterthecomic's blog information
+    blog = getTumblr.getBlogInfo('twitterthecomic')
+    #get tags that was tagged along starbucks
+    tagged_blog = getTumblr.getTaggedInfo("starbucks")
+    #get blog information tagged with starbucks
+    blogontag = getTumblr.getTaggedBlog("starbucks")
+    #get user's information
+    userinfo, total_blog = getTumblr.getUserInfo()
+    context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag, 'userinfo': userinfo, 'total_blog':total_blog}
+    return render(request, 'hackathon/tumblr.html', context)
+
+
+####################
+#   INSTAGRAM API  #
+####################
+
+def instagram(request):
+    search_tag = 'kitten'
+    code = request.GET['code']
+    getInstagram.get_access_token(code)
+    #return tagged objects
+    tagged_media = getInstagram.get_tagged_media(search_tag)
+    context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
+    return render(request, 'hackathon/instagram.html', context)
+
+##################
+#  LINKED IN API #
+##################
+
+def linkedin(request):
+    userinfo = getUserInfo()
+    context = {'title': 'linkedin Example','userdata': userinfo}
+    return render(request, 'hackathon/linkedin.html', context)
+
+
+#########################
+# Snippet RESTful Model #
+#########################
+
+class JSONResponse(HttpResponse):
+    """
+    An HttpResponse that renders its content into JSON.
+    """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+@csrf_exempt
+def snippet_list(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        snippets = Snippet.objects.all()
+        serializer = SnippetSerializer(snippets, many=True)
+        return JSONResponse(serializer.data)
+
+
+######################
+# Registration Views #
+######################
 
 def register(request):
     registered = False
@@ -69,8 +205,6 @@ def register(request):
             {'user_form': user_form, 'registered': registered} )
 
 def user_login(request):
-
-    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -95,80 +229,4 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/hackathon/')
-
-def steam(request):
-    #Should link to test of Steam API example.
-    key = '231E98D442E52B87110816C3D5114A1D'
-    SteamUN = "Marorin"
-    steamID = steamIDPulling(SteamUN, key)
-    game = gamesPulling(steamID, key)
-    return render(request,'hackathon/steam.html', {"game": game })
-
-def github(request):
-    allData = {}
-    userData = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    filtered = filterCommits(list)
-    stargazers = getStarGazerCount(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    filteredStargazers = filterStarGazerCount(stargazers)
-    forkedRepos = getForkedRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    allData['userData'] = userData
-    allData['filteredData'] = filtered
-    allData['filteredStargazers'] = filteredStargazers
-    allData['forkedRepos'] = forkedRepos
-
-    return render(request, 'hackathon/github.html', { 'data': allData })
-
-def tumblr(request):
-    ''' Tumblr api calls '''
-    #retrieve verifier via url link
-    #if not request.GET.items():
-    #    return HttpResponseRedirect('/hackathon/api/')
-    if not getTumblr.accessed:
-        oauth_verifier = request.GET.get('oauth_verifier')
-        getTumblr.access_token_url(oauth_verifier)
-    #get blogger twitterthecomic's blog information
-    blog = getTumblr.getBlogInfo('twitterthecomic')
-    #get tags that was tagged along starbucks
-    tagged_blog = getTumblr.getTaggedInfo("starbucks")
-    #get blog information tagged with starbucks
-    blogontag = getTumblr.getTaggedBlog("starbucks")
-    #get user's information
-    userinfo, total_blog = getTumblr.getUserInfo()
-    context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag, 'userinfo': userinfo, 'total_blog':total_blog}
-    return render(request, 'hackathon/tumblr.html', context)
-
-def instagram(request):
-    search_tag = 'kitten'
-    code = request.GET['code']
-    getInstagram.get_access_token(code)
-    #return tagged objects
-    tagged_media = getInstagram.get_tagged_media(search_tag)
-    context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
-    return render(request, 'hackathon/instagram.html', context)
-
-def linkedin(request):
-    userinfo = getUserInfo()
-    context = {'title': 'linkedin Example','userdata': userinfo}
-    return render(request, 'hackathon/linkedin.html', context)
-
-class JSONResponse(HttpResponse):
-    """
-    An HttpResponse that renders its content into JSON.
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
-@csrf_exempt
-def snippet_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        snippets = Snippet.objects.all()
-        serializer = SnippetSerializer(snippets, many=True)
-        return JSONResponse(serializer.data)
 

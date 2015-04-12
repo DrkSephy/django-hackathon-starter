@@ -10,7 +10,25 @@ var restApp = angular.module('restApp', [
             templateUrl: 'partials/snippets.partial.html',
             controller: 'restAppController',
             data: {
-                pageTitle: 'Sample API data'
+                pageTitle: 'Sample API Data'
+            }
+        })
+
+        .state('githubUser', {
+            url: '/githubUser',
+            templateUrl: 'partials/githubUser.partial.html',
+            controller: 'githubUserController',
+            data: {
+                pageTitle: 'Github User Data'
+            }
+        })
+
+        .state('githubTopContributions', {
+            url: '/githubTopContributions',
+            templateUrl: 'partials/githubTopContributions.partial.html',
+            controller: 'githubTopContributionsController',
+            data: {
+                pageTitle: 'Top Contributions on Github'
             }
         });
 });
