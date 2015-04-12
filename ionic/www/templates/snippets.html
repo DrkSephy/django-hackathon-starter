@@ -4,7 +4,9 @@
   </ion-nav-buttons>
   <ion-content class="has-header">
       <ion-list>
-          <ion-item ng-repeat="snippet in snippets" >{{snippet}}</ion-item>
+          <ion-item ng-repeat="snippet in snippets" >ID: {{ snippet.id }}, Code: {{ snippet.code }} </ion-item>
+          
+          
       </ion-list>
   </ion-content>
 </ion-view>
