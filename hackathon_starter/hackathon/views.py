@@ -70,6 +70,14 @@ def steam(request):
 #   GITHUB API  #
 #################
 
+
+def githubUser(request):
+    '''Returns information about a specific Github User'''
+    
+    parsedData = {}
+    parsedData['userData'] = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    return JsonResponse({ 'data': parsedData })
+
 def github(request):
     allData = {}
     userData = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
