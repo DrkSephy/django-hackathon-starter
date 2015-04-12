@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from scripts.steam import gamesPulling, steamIDPulling 
 from scripts.github import *
 from scripts.tumblr import *
+from scripts.twilioapi import *
 
 # Python
 import oauth2 as oauth
@@ -33,8 +34,9 @@ def index(request):
     context = {'hello': 'world'}
     return render(request, 'hackathon/index.html', context)
 
-def test(request):
-    return HttpResponse('meow')
+def twilio(request):
+    sendSMS('Meow', '+13473282978', '+13473781813')
+    return render(request, 'hackathon/twilio.html')
 
 def api_examples(request):
     obtain_oauth_verifier = getTumblr.get_authorize_url()#simpleoauthurl(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
