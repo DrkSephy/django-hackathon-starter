@@ -1,11 +1,15 @@
-<ion-view title="Sessions">
+<ion-view title="Github User Data">
   <ion-nav-buttons side="left">
       <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
-      <ion-list>
-          <ion-item ng-repeat="session in sessions" 
-                    href="#/app/sessions/{{session.id}}">{{session}}</ion-item>
-      </ion-list>
+    <ion-list>
+    	<ion-item ng-repeat="session in sessions.data.userData">Public Repos: {{session.public_repos}}</ion-item>
+    	<ion-item ng-repeat="session in sessions.data.userData">Public Gists: {{session.public_gists}}</ion-item>
+    	<ion-item ng-repeat="session in sessions.data.userData">Blog URL: {{session.blog}}</ion-item>
+    	<ion-item ng-repeat="session in sessions.data.userData">Followers: {{session.followers}}</ion-item>
+    	<ion-item ng-repeat="session in sessions.data.userData">Following: {{session.following}}</ion-item>
+    	<ion-item ng-repeat="session in sessions.data.userData">E-mail: {{session.email}}</ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>
