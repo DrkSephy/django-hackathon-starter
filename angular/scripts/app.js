@@ -22,4 +22,13 @@ var restApp = angular.module('restApp', [
                 pageTitle: 'Github User Data'
             }
         });
+
+        .state('githubTopContributions', {
+            url: '/githubTopContributions',
+            templateUrl: 'partials/githubTopContributions.partial.html',
+            controller: 'githubTopContributionsController',
+            data: {
+                pageTitle: 'Top Contributions on Github'
+            }
+        });
 });
