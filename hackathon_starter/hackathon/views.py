@@ -16,6 +16,7 @@ from scripts.steam import gamesPulling, steamIDPulling
 from scripts.github import *
 from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
+from scripts.instagram import InstagramOauthClient
 
 # Python
 import oauth2 as oauth
@@ -29,6 +30,7 @@ from hackathon.forms import UserForm
 
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
+getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
 
 def index(request):
     context = {'hello': 'world'}
@@ -39,11 +41,12 @@ def twilio(request):
     return render(request, 'hackathon/twilio.html')
 
 def api_examples(request):
+    instagram_url =getInstagram.get_authorize_url()
     if not getTumblr.accessed:
         obtain_oauth_verifier = getTumblr.authorize_url()
     else:
         obtain_oauth_verifier = '/hackathon/tumblr'
-    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier}
+    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url}
     return render(request, 'hackathon/api_examples.html', context)
 
 def register(request):
@@ -135,6 +138,15 @@ def tumblr(request):
     userinfo, total_blog = getTumblr.getUserInfo()
     context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag, 'userinfo': userinfo, 'total_blog':total_blog}
     return render(request, 'hackathon/tumblr.html', context)
+
+def instagram(request):
+    search_tag = 'kitten'
+    code = request.GET['code']
+    getInstagram.get_access_token(code)
+    #return tagged objects
+    tagged_media = getInstagram.get_tagged_media(search_tag)
+    context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
+    return render(request, 'hackathon/instagram.html', context)
 
 def linkedin(request):
     userinfo = getUserInfo()
