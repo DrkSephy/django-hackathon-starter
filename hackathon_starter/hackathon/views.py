@@ -72,10 +72,20 @@ def steam(request):
 
 
 def githubUser(request):
-    '''Returns information about a specific Github User'''
-    
+    '''Returns JSON response about a specific Github User'''
+
     parsedData = {}
     parsedData['userData'] = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    return JsonResponse({ 'data': parsedData })
+
+def githubTopRepositories(request):
+    '''Returns JSON response of a User's Top Committed repositories'''
+
+    parsedData = {}
+    repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    filtered = filterCommits(list)
+    parsedData['committed'] = filtered
     return JsonResponse({ 'data': parsedData })
 
 def github(request):
