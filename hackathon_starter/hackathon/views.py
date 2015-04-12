@@ -24,7 +24,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet
+from hackathon.models import Snippet, Profile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -139,11 +139,31 @@ def tumblr(request):
 ####################
 
 def instagram(request):
-    search_tag = 'kitten'
     code = request.GET['code']
     getInstagram.get_access_token(code)
+
+    if request.user not in User.objects.all():
+        try:  
+            user = User.objects.get(username=getInstagram.user_data['username'] )
+        except User.DoesNotExist:
+            username = getInstagram.user_data['username']
+            new_user = User.objects.create_user(username, username+'@example.com', 'password')
+            new_user.save()
+            profile = Profile()
+            profile.user = new_user
+            profile.oauth_token = getInstagram.client_id
+            profile.oauth_secret = getInstagram.client_secret
+            profile.save()
+
+        user = authenticate(username=getInstagram.user_data['username'], password='password')
+        login(request, user)
+
+    search_tag = 'kitten'
     #return tagged objects
     tagged_media = getInstagram.get_tagged_media(search_tag)
+    #user =  getInstagram.user_data['username']
+    #print User.objects.get(username=user)
+
     context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
     return render(request, 'hackathon/instagram.html', context)
 
@@ -230,3 +250,7 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/hackathon/')
 
+
+def instagram_login(request):
+    instagram_url =getInstagram.get_authorize_url()
+    return HttpResponseRedirect(instagram_url)
