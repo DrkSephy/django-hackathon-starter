@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    {% include 'hackathon/base.html' %}
+    <style>
+      .form-signin {
+        max-width: 550px;
+        padding: 15px;
+        margin: 0 auto;
+      }    
+    </style>
+
+    <body>
+      <div class="container text-center">
+        <form class="form-signin" id="login_form" method="post" action="/hackathon/login/">
+          {% csrf_token %}
+          {% load bootstrap %}
+          <h2 class="form-signin-heading">Login</h2>
+          <br>
+          <input type="text" name="username" class="form-control" placeholder="Username" value="" required autofocus>
+          <br>
+          <input type="password" name="password" class="form-control" placeholder="Password" value=""required>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          <input type="hidden" name="submit" value="submit" />
+        </form>
+      </div>
+
+      <div class="form-signin">
+        <a class="btn btn-block btn-social btn-facebook">
+          <i class="fa fa-facebook"></i>
+          Sign in with Facebook
+        </a>          
+        <a class="btn btn-block btn-social btn-twitter" href="http://127.0.0.1:8000/hackathon/twitter_login/">
+          <i class="fa fa-twitter"></i>
+          Sign in with Twitter
+        </a>
+        <a class="btn btn-block btn-social btn-instagram">
+          <i class="fa fa-instagram"></i>
+          Sign in with Instagram
+        </a>
+        <a class="btn btn-block btn-social btn-google-plus">
+          <i class="fa fa-google-plus"></i>
+          Sign in with Google
+        </a>          
+      </div>
+    </body>
+</html>
