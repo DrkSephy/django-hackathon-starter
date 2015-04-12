@@ -36,6 +36,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
+  .state('app.githubUser', {
+    url: "/githubUser",
+    views: {
+        'menuContent': {
+            templateUrl: "templates/githubUser.html",
+            controller: 'githubUserCtrl'
+        }
+    }
+  })
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/sessions');
 });

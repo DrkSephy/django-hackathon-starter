@@ -9,16 +9,8 @@ angular.module('starter.controllers', ['starter.services'])
     console.log($scope.sessions);
 })
 
-.controller('SessionCtrl', function($scope, $stateParams, Session) {
-    $scope.session = Session.get({sessionId: $stateParams.sessionId});
-});
-
-
-/* 
-
-.controller('SessionsCtrl', function($scope, Session) {
-    $scope.sessions = Session.get();
+.controller('githubUserCtrl', function($scope, githubUser) {
+    $scope.sessions = githubUser.get();
     console.log($scope.sessions);
 })
 
-*/
