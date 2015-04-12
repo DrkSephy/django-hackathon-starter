@@ -39,7 +39,8 @@ def twilio(request):
     return render(request, 'hackathon/twilio.html')
 
 def api_examples(request):
-    obtain_oauth_verifier = getTumblr.get_authorize_url()#simpleoauthurl(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
+    obtain_oauth_verifier = getTumblr.get_authorize_url()
+    #simpleoauthurl(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
     context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier}
     return render(request, 'hackathon/api_examples.html', context)
 
