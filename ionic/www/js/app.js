@@ -26,12 +26,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   })
 
   
-  .state('app.sessions', {
-    url: "/sessions",
+  .state('app.snippets', {
+    url: "/snippets",
     views: {
         'menuContent': {
-            templateUrl: "templates/sessions.html",
-            controller: 'SessionsCtrl'
+            templateUrl: "templates/snippets.html",
+            controller: 'SnippetsCtrl'
         }
     }
   })
@@ -47,5 +47,5 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   })
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/sessions');
+  $urlRouterProvider.otherwise('/app/snippets');
 });

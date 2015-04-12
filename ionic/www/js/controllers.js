@@ -4,9 +4,8 @@ angular.module('starter.controllers', ['starter.services'])
 
 })
 
-.controller('SessionsCtrl', function($scope, Session) {
-    $scope.sessions = Session.query();
-    console.log($scope.sessions);
+.controller('SnippetsCtrl', function($scope, Snippets) {
+    $scope.snippets = Snippets.query();
 })
 
 .controller('githubUserCtrl', function($scope, githubUser) {

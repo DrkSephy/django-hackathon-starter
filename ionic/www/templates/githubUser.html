@@ -4,6 +4,7 @@
   </ion-nav-buttons>
   <ion-content class="has-header">
     <ion-list>
+    	<ion-item ng-repeat="session in sessions.data.userData">Name: {{session.name}}</ion-item>
     	<ion-item ng-repeat="session in sessions.data.userData">Public Repos: {{session.public_repos}}</ion-item>
     	<ion-item ng-repeat="session in sessions.data.userData">Public Gists: {{session.public_gists}}</ion-item>
     	<ion-item ng-repeat="session in sessions.data.userData">Blog URL: {{session.blog}}</ion-item>
