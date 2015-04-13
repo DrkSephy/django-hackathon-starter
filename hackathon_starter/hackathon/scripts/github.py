@@ -1,5 +1,5 @@
 '''
-Module github.py contains a handful of methods
+github.py contains a handful of methods
 for interacting with Github data.
 '''
 

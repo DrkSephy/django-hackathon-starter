@@ -119,6 +119,15 @@ You can also test the project in the browser by doing the following:
 Running `ionic serve` will automatically open up your web browser and run the application.
 
 
+## Building the documentation
+
+In order to build the documentation for this project:
+
+    $ cd hackathon_starter
+    $ make html
+
+The output is stored within `_build/html`. Open up `index.html` to view the documentation.
+
 ## Contributors
 
 * David Leonard
