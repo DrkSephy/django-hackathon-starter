@@ -25,3 +25,14 @@ for name in gameName:
 		gameNames.append(tag.text)
 
 print gameNames
+
+discount = soup.findAll('div', {'class': 'col search_discount'})
+
+# Get all game discounts 
+gameDiscounts = []
+for discountedGame in discount:
+	span = discountedGame.findAll('span')
+	for tag in span:
+		gameDiscounts.append(tag.text)
+
+print gameDiscounts
