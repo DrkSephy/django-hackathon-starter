@@ -36,3 +36,14 @@ for discountedGame in discount:
 		gameDiscounts.append(tag.text)
 
 print gameDiscounts
+
+price = soup.findAll('div', {'class': 'col search_price discounted'})
+
+prices = []
+# Get all discounted prices
+for value in price:
+	br = value.findAll('br')
+	for tag in br:
+		prices.append(tag.text.strip('\t'))
+
+print prices
