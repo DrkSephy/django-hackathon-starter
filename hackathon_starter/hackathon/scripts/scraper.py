@@ -14,3 +14,14 @@ for date in releaseDate:
 	releaseDates.append(date.text)
 
 print releaseDates
+
+gameName = soup.findAll('div', {'class': 'col search_name ellipsis'})
+
+# Get all game names
+gameNames = []
+for name in gameName:
+	span = name.findAll('span', {'class': 'title'})
+	for tag in span:
+		gameNames.append(tag.text)
+
+print gameNames
