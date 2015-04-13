@@ -23,6 +23,15 @@ var restApp = angular.module('restApp', [
             }
         })
 
+        .state('steamSales', {
+            url: '/steamSales',
+            templateUrl: 'partials/steamSales.partial.html',
+            controller: 'steamSalesController',
+            data: {
+                pageTitle: 'Latest Steam Sales'
+            }
+        })
+
         .state('githubTopContributions', {
             url: '/githubTopContributions',
             templateUrl: 'partials/githubTopContributions.partial.html',
