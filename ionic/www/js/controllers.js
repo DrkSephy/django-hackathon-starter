@@ -12,3 +12,7 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.githubUserData = githubUser.get();
 })
 
+.controller('instagramUserCtrl', function($scope, instagramUser){
+	$scope.instagramUserData = instagramUser.get();
+})
+
