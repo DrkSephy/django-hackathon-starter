@@ -22,7 +22,7 @@ In order to run this project, do the following:
 
 ## Front End dependencies
 
-This project relies on Bower for all front end libraries, to avoid pushing up large libraries such as `jQuery` and `Bootstrap`. To install `bower`, you will need to install `npm`, which now comes bundled with `node.js`. To install `npm`, simply install [node as follows](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager). 
+This project relies on Bower for all front end libraries, to avoid pushing up large libraries such as `jQuery` and `Bootstrap`. **Under no circumstance should any front-end libraries manually be pushed up to the repository.** To install `bower`, you will need to install `npm`, which now comes bundled with `node.js`. To install `npm`, simply install [node as follows](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager). 
 
 First, install `bower`:
 
@@ -33,7 +33,7 @@ Then:
     # In the same directory as requirements.txt
     bower install
 
-This will download and extract all the packages listed within `bower.json`. **Under no circumstance should any front-end libraries manually be pushed up to the repository.**
+This will download and extract all the packages listed within `bower.json`. 
 
 Then:
 
@@ -63,7 +63,7 @@ In order to write clean code with a consistent style guide, we'll be using `Pyli
 
 ## RESTful endpoints
 
-Using the `Django REST framework, the current RESTful endpoints exist:
+Using the `Django REST framework`, the current RESTful endpoints exist:
 
     http://127.0.0.1:8000/hackathon/snippets/
 
@@ -83,12 +83,25 @@ The list will appear empty at first, since the database model `Snippets` will be
 
 The above will open the Django shell, and allow you to create objects and save them to the database. If you then navigate to the URL above, you will see the JSON output of the database model, `Snippet`. 
 
+## Django JSON Response Endpoints
+
+As of `Django 1.7x`, there is a new method called `JsonResponse` which allows the user to send JSON data to a URL which makes it available to be consumed by any client. The following endpoints exist:
+
+* `http://127.0.0.1:8000/hackathon/steamDiscountedGames/`: JSON output containing steam discounts data
+* `http://127.0.0.1:8000/hackathon/instagramUser/`: JSON output containing data from an Instagram user through OAuth
+* `http://127.0.0.1:8000/hackathon/githubUser/`: JSON output containing data from a Github User
+
 ## AngularJS Client
 
 As of `April 11th, 2015`, there is now a sample AngularJS client which pulls data from the Django sample API endpoint: `http://127.0.0.1:8000/hackathon/snippets/`. To test it, do the following:
 
 * Within the `public/` directory, run `python -m SimpleHTTPServer 80`. You may need `sudo` on your respective Operating System.
 * Navigate to: `http://localhost/#/snippets`. Here you will see whatever content was stored within the database model, `Snippet`. If nothing shows up, go back to the `RESTful endpoints` step to populate your database with some `Snippet` objects. 
+
+The following other links are available on the AngularJS Client:
+
+* `http://localhost/#/githubUser`: Pulls JSON response for Github data from Django 
+* `http://localhost/#/steamSales`: Pulls JSON response for Steam sales data from Django
 
 ## Ionic Client
 
