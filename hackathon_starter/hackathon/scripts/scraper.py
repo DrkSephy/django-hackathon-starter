@@ -5,8 +5,8 @@ import itertools
 req = requests.get('http://store.steampowered.com/search/?specials=1#sort_by=_ASC&sort_order=ASC&specials=1&page=1')
 content = req.text
 soup = BeautifulSoup(content)
-allData = [id: {} for id in range(0, 25)]
-print allData
+allData = {id: {} for id in range(0, 25)}
+
 
 # Get all divs of a specific class
 releaseDate = soup.findAll('div', {'class': 'col search_released'})
@@ -63,6 +63,7 @@ for value in price:
 
 # print prices
 
-#print allData
-
+# Print all the data
+for i in allData:
+	print allData[i]
 
