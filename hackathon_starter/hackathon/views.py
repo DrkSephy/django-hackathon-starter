@@ -168,7 +168,9 @@ def instagram(request):
             profile = Profile()
             profile.user = new_user
             profile.oauth_token = getInstagram.client_id
-            profile.oauth_secret = getInstagram.client_secret
+            #since instagram doesnt have oauth_secret value, using this field to temp set in access token
+            # for JSON response
+            profile.oauth_secret = getInstagram.access_token 
             profile.save()
 
         user = authenticate(username=getInstagram.user_data['username'], password='password')
@@ -179,6 +181,15 @@ def instagram(request):
     tagged_media = getInstagram.get_tagged_media(search_tag)
     context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
     return render(request, 'hackathon/instagram.html', context)
+
+def instagramUser(request):
+    '''Returns JSON response about a specific Instagram'''
+
+    user_id = User.objects.get(username='mk200789').id
+    access_token = Profile.objects.get(user=user_id).oauth_secret
+    parsedData = getInstagram.get_user_info(access_token)
+    return JsonResponse({ 'data': parsedData })
+
 
 ##################
 #  LINKED IN API #
@@ -242,9 +253,7 @@ def user_login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-
         user = authenticate(username=username, password=password)
-
 
         if user:
             if user.is_active:
