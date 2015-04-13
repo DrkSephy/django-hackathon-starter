@@ -16,6 +16,26 @@ Github
 .. automodule:: github
 	:members:
 
+Instagram
+=========
+.. automodule:: instagram
+	:members:
+
+Steam
+=====
+.. automodule:: steam
+	:members:
+
+Tumblr
+======
+.. automodule:: tumblr
+	:members:
+
+Twilio
+======
+.. automodule:: twilioapi
+	:members:
+
 
 Indices and tables
 ==================
