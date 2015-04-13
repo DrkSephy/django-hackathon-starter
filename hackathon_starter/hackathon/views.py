@@ -54,6 +54,7 @@ def api_examples(request):
         obtain_oauth_verifier = getTumblr.authorize_url()
     else:
         obtain_oauth_verifier = '/hackathon/tumblr'
+    #obtain_oauth_verifier = getTumblr.authorize_url()
     context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url}
     return render(request, 'hackathon/api_examples.html', context)
 
@@ -116,21 +117,36 @@ def githubResume(request):
 
 def tumblr(request):
     ''' Tumblr api calls '''
-    #retrieve verifier via url link
-    #if not request.GET.items():
-    #    return HttpResponseRedirect('/hackathon/api/')
     if not getTumblr.accessed:
         oauth_verifier = request.GET.get('oauth_verifier')
         getTumblr.access_token_url(oauth_verifier)
+    if request.user not in User.objects.all():
+        try:
+            user_info, total_blog = getTumblr.getUserInfo()
+            username = str(user_info['name'])+ "2"
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user_info, total_blog = getTumblr.getUserInfo()
+            username = str(user_info['name'])+ "2"
+            new_user = User.objects.create_user(username, username+'@example.com','password')
+            new_user.save()
+            profile =Profile()
+            profile.user = new_user
+            profile.oauth_token = getTumblr.oauth_token
+            profile.oauth_secret = getTumblr.oauth_token_secret
+            profile.save()
+
+        user = authenticate(username=username, password='password')
+        login(request, user)
+
     #get blogger twitterthecomic's blog information
     blog = getTumblr.getBlogInfo('twitterthecomic')
     #get tags that was tagged along starbucks
     tagged_blog = getTumblr.getTaggedInfo("starbucks")
     #get blog information tagged with starbucks
     blogontag = getTumblr.getTaggedBlog("starbucks")
-    #get user's information
-    userinfo, total_blog = getTumblr.getUserInfo()
-    context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag, 'userinfo': userinfo, 'total_blog':total_blog}
+
+    context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag}
     return render(request, 'hackathon/tumblr.html', context)
 
 
@@ -161,9 +177,6 @@ def instagram(request):
     search_tag = 'kitten'
     #return tagged objects
     tagged_media = getInstagram.get_tagged_media(search_tag)
-    #user =  getInstagram.user_data['username']
-    #print User.objects.get(username=user)
-
     context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
     return render(request, 'hackathon/instagram.html', context)
 
@@ -254,3 +267,7 @@ def user_logout(request):
 def instagram_login(request):
     instagram_url =getInstagram.get_authorize_url()
     return HttpResponseRedirect(instagram_url)
+
+def tumblr_login(request):
+    tumblr_url = getTumblr.authorize_url()
+    return HttpResponseRedirect(tumblr_url)
