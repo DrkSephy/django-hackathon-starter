@@ -16,6 +16,7 @@ class InstagramOauthClient(object):
 		self.client_id 		= client_id
 		self.client_secret 	= client_secret
 
+
 	def get_authorize_url(self):
 		''' Obtains the authorization url. '''
 		auth_url = authorization_url + self.client_id +'&redirect_uri=http://localhost:8000/hackathon/instagram&response_type=code'
@@ -37,7 +38,8 @@ class InstagramOauthClient(object):
 		jsonlist = json.load(content)
 		self.access_token = jsonlist['access_token']
 		self.user_data = jsonlist['user']
-		print self.access_token
+		print self.user_data
+		#print self.access_token
 
 
 	def get_tagged_media(self, tag):
@@ -56,5 +58,11 @@ class InstagramOauthClient(object):
 		print len(data)
 		return data
 
+	def get_user_info(self, access_token):
+		user_info = 'https://api.instagram.com/v1/users/32833691/?access_token='+access_token
+		req = requests.get(user_info)
+		content = json2.loads(req.content)
+		data = content['data']
+		return data
 
 
