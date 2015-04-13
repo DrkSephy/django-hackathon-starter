@@ -62,7 +62,13 @@ def steamDiscounts():
 			prices.append(tag.text.strip('\t'))
 			id += 1
 
+	# Cleanup data
+	newData = []
+	for datum in allData:
+		newData.append(allData[datum])
 	# print prices
-	return allData
+	return newData
+
+
 
 

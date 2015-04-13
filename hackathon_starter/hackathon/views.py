@@ -75,7 +75,7 @@ def steam(request):
 def steamDiscountedGames(request):
     data = steamDiscounts()
     return JsonResponse({ 'data': data })
-    
+
 #################
 #   GITHUB API  #
 #################
