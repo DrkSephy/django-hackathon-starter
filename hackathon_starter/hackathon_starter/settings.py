@@ -41,10 +41,12 @@ INSTALLED_APPS = (
     # 'django_openid',
     'django_nose',
     'rest_framework',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -99,6 +101,8 @@ NOSE_ARGS = [
     '--cover-package=hackathon/scripts',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 ############
 #   KEYS   #
 ############
@@ -109,4 +113,6 @@ TUMBLR_CONSUMER_KEY = 'KrSbAc9cYLmIgVAn1D21FjRR97QWsutNMxkPDFBxo8CMWtMk4M'
 TUMBLR_CONSUMER_SECRET ='lKWMtL2Lj8zr5pY51PVqT8ugeoG0DjrdgoFewM0QTSyJ12jP8d'
 TWITTER_TOKEN = 'F05dgLAzHEOalb4K2xDQ8Umm8'
 TWITTER_SECRET = 'Yy3a74Z7gvyhxRruJsvUtUl8uK8iv6qKkVqbZSijUxK71Z1qTY'
+INSTAGRAM_CLIENT_ID = '77dc10b9e3624e908ce437c0a82da92e'
+INSTAGRAM_CLIENT_SECRET = '8bcf3139857149aaba7acaa61288427f'
 

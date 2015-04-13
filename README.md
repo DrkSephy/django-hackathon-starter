@@ -30,9 +30,23 @@ First, install `bower`:
 
 Then:
 
+    # In the same directory as requirements.txt
     bower install
 
 This will download and extract all the packages listed within `bower.json`. **Under no circumstance should any front-end libraries manually be pushed up to the repository.**
+
+Then:
+
+    # move bower_components into static folder
+    mv bower_components/ hackathon_starter/hackathon/static
+
+To install the front-end dependencies for the AngularJS client, do the following:
+
+    cd public
+    bower install
+    # Rename bower_components folder to vendor
+    mv bower_components/ vendor/
+
 
 ## Testing
 
@@ -44,7 +58,7 @@ To run the tests:
 
 ## Code evaluation
 
-In order to write clean code with a consistent style guide, we'll be using `Pylint` to maintain our code. Pylint will display a ton of messages regarding things that should be fixed. A sample output from running `pylint views.py` is shown below:
+In order to write clean code with a consistent style guide, we'll be using `Pylint` to maintain our code. Pylint will display a ton of messages regarding things that should be fixed. 
 
 
 ## RESTful endpoints
@@ -68,6 +82,51 @@ The list will appear empty at first, since the database model `Snippets` will be
     snippet.save()
 
 The above will open the Django shell, and allow you to create objects and save them to the database. If you then navigate to the URL above, you will see the JSON output of the database model, `Snippet`. 
+
+## AngularJS Client
+
+As of `April 11th, 2015`, there is now a sample AngularJS client which pulls data from the Django sample API endpoint: `http://127.0.0.1:8000/hackathon/snippets/`. To test it, do the following:
+
+* Within the `public/` directory, run `python -m SimpleHTTPServer 80`. You may need `sudo` on your respective Operating System.
+* Navigate to: `http://localhost/#/snippets`. Here you will see whatever content was stored within the database model, `Snippet`. If nothing shows up, go back to the `RESTful endpoints` step to populate your database with some `Snippet` objects. 
+
+## Ionic Client
+
+As of `April 11th, 2015`, there is now a sample Ionic application which works on iOS. This application pulls data from the Django sample API endpoint: `http://127.0.0.1:8000/hackathon/snippets/`. In order to successfully run this project, you must do the following:
+
+    # Make sure django-hackathon-starter is running
+    python manage.py runserver
+
+    # Install cordova and ionic
+    # On a Mac, you'll need to use sudo
+    npm install -g cordova ionic 
+
+    cd ionic
+
+    # Add support for the iOS platform
+    ionic platform add ios
+
+    # Build the project
+    ionic build ios
+
+Running the final command, `ionic build ios` will generate an `.xcodeproj` file within `platforms/ionic`. You can open it and then run it, which you should then see a list of all the `Snippet` objects from the Django Hackathon Starter database. 
+
+You can also test the project in the browser by doing the following:
+
+    cd ionic
+    ionic serve 
+
+Running `ionic serve` will automatically open up your web browser and run the application.
+
+
+## Building the documentation
+
+In order to build the documentation for this project:
+
+    $ cd hackathon_starter
+    $ make html
+
+The output is stored within `_build/html`. Open up `index.html` to view the documentation.
 
 ## Contributors
 
