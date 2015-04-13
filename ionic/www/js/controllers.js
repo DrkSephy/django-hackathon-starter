@@ -16,3 +16,7 @@ angular.module('starter.controllers', ['starter.services'])
 	$scope.instagramUserData = instagramUser.get();
 })
 
+.controller('steamSalesCtrl', function($scope, steamSales){
+	$scope.sales = steamSales.get();
+});
+
