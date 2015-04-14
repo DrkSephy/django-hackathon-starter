@@ -1,0 +1,22 @@
+<ion-view title="Instagram User Data">
+  <ion-nav-buttons side="left">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+
+    	<ion-item ng-repeat="data in instagramUserData">
+    		<div class="col">Username: {{ data.username }}</div>
+			  <div class="col">Full name: {{ data.fullname }}</div>
+        <div class="col">Bio: {{ data.bio }}</div>
+			  <div class="col">Website: {{ data.website }}</div>
+			  <div class="col">Followers: {{ data.counts.followed_by}}</div>
+			  <div class="col">Following: {{ data.counts.follows }}</div>
+			  <div class="col">Media: {{ data.counts.media }}</div>
+    	</ion-item>
+  
+
+      <img collection-repeat="data in instagramUserMediaData.data"
+        ng-src="{{data.images.thumbnail.url}}">
+    
+  </ion-content>
+</ion-view>

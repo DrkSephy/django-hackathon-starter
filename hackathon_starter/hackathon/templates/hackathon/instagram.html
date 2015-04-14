@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+	<h1 class="text-center"> {{ title }}</h1> 
+	<br>
+		<div class="table-responsive">
+			<h2> #{{search_tag}} </h2>
+			<table class="table">
+				{% for i in tagged_media %}
+					<img src="{{i.images.thumbnail.url}}">
+				{% endfor %}		
+			</table>
+		</div>
+	</div>	
+</html>
