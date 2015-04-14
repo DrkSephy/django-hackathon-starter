@@ -12,11 +12,52 @@
         <!-- Bootstrap Core CSS -->
         <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
+        <!-- Styles -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
         <!-- jQuery -->
         <script src="vendor/jquery/dist/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
         <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+
+        <!-- Front-end JavaScript -->
+        <script src="jquery.navgoco.js"></script>
+        <script>
+        $(document).ready(function(){                       
+           
+           //Navigation Menu Slider
+            $('#nav-expander').on('click',function(e){
+              e.preventDefault();
+              $('body').toggleClass('nav-expanded');
+            });
+            $('#nav-close').on('click',function(e){
+              e.preventDefault();
+              $('body').removeClass('nav-expanded');
+            });
+            
+            
+            // Initialize navgoco with default options
+            $(".main-menu").navgoco({
+                caret: '<span class="caret"></span>',
+                accordion: false,
+                openClass: 'open',
+                save: true,
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 300,
+                    easing: 'swing'
+                }
+            });
+      
+              
+          });
+          </script>
 
         <!-- Main application file -->
         <script src="scripts/app.js"></script>
@@ -40,5 +81,18 @@
 
     <body>
         <div data-ui-view></div>
+
+        <div ng-include="'addons/nav.html'"></div>
+        
+        <div class="navbar navbar-inverse navbar-fixed-top">      
+            <!--Include your brand here-->
+            <a class="navbar-brand" href="#">Django-AngularJS</a>
+            <div class="navbar-header pull-right">
+              <a id="nav-expander" class="nav-expander fixed">
+                Apps &nbsp;<i class="fa fa-bars fa-lg white"></i>
+              </a>
+            </div>
+        </div>
+        
     </body>
 </html>

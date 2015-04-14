@@ -5,6 +5,7 @@ var restApp = angular.module('restApp', [
 ])
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
+
         .state('snippets', {
             url: '/snippets',
             templateUrl: 'partials/snippets.partial.html',
