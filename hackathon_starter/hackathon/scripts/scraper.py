@@ -7,6 +7,22 @@ import requests
 import itertools 
 from bs4 import BeautifulSoup
 
+def fetchHTML(url):
+	'''
+	Returns HTML retrived from a url.
+
+	Parameters:
+		url: String
+			- The URL to fetch HTML from
+
+	Returns:
+		html: String
+			- The HTML from a given URL
+	'''
+	req = requests.get(url)
+	html = req.text
+	return html
+
 def steamDiscounts():
 	req = requests.get('http://store.steampowered.com/search/?specials=1#sort_by=_ASC&sort_order=ASC&specials=1&page=1')
 	content = req.text
