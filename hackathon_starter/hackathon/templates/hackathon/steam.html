@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+
+	<h1 class="text-center"> Steam API </h1>
+		<div class="col-lg-12">
+	        <div class="table-responsive">
+	            <table class="table table-bordered table-hover table-striped tablesorter">
+	                <thead>
+	                <tr>
+	                <th class="header"> Game ID <i class="icon-sort"></i></th>
+	                <th class="header"> Game Name <i class="icon-sort"></i></th>
+	                <th class="header"> Minutes Played <i class="icon-sort"></i></th>
+	            </thead>
+	            <tbody>
+
+	            {% for game in game %}
+	                <tr>
+	                    <td>{{ game.appid }}</td>
+	                    <td>{{ game.name }}</td>
+	                    <td>{{ game.playtime_forever }}</td>
+	    			</tr>
+	            {% endfor %}
+
+	            </tbody>
+	            </table>
+	        </div>
+	    </div>
+</body>
+</html>
