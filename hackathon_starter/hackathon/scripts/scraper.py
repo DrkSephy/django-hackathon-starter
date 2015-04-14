@@ -1,10 +1,11 @@
+'''
+scraper.py contains various methods for scraping
+HTML content and packaging into dictionaries.
+'''
+
 import requests
 import itertools 
 from bs4 import BeautifulSoup
-
-
-
-
 
 def steamDiscounts():
 	req = requests.get('http://store.steampowered.com/search/?specials=1#sort_by=_ASC&sort_order=ASC&specials=1&page=1')
