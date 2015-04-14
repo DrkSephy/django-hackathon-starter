@@ -195,7 +195,6 @@ def instagramUser(request):
     parsedData = getInstagram.get_user_info(access_token)
     return JsonResponse({ 'data': parsedData })
 
-
 ##################
 #  LINKED IN API #
 ##################
