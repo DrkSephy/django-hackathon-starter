@@ -188,12 +188,19 @@ def instagram(request):
     return render(request, 'hackathon/instagram.html', context)
 
 def instagramUser(request):
-    '''Returns JSON response about a specific Instagram'''
+    ''' Returns JSON response about a specific Instagram User. '''
 
     user_id = User.objects.get(username='mk200789').id
     access_token = Profile.objects.get(user=user_id).oauth_secret
     parsedData = getInstagram.get_user_info(access_token)
     return JsonResponse({ 'data': parsedData })
+
+def instagramUserMedia(request):
+    ''' Returns JSON response about a specific Instagram User's Media. '''
+    user_id = User.objects.get(username='mk200789').id
+    access_token = Profile.objects.get(user=user_id).oauth_secret
+    parsedData = getInstagram.get_user_media(access_token)
+    return JsonResponse({'data': parsedData })
 
 
 ##################
