@@ -202,6 +202,7 @@ def instagramUserMedia(request):
     parsedData = getInstagram.get_user_media(access_token)
     return JsonResponse({'data': parsedData })
 
+
 ##################
 #  LINKED IN API #
 ##################
