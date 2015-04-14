@@ -9,6 +9,8 @@ import urllib
 import urllib2
 import json
 import simplejson as json2
+import googlemaps
+from django.conf import settings
 
 authorization_url = 'https://api.instagram.com/oauth/authorize/?client_id='
 access_token_url = 'https://api.instagram.com/oauth/access_token'
@@ -141,3 +143,12 @@ class InstagramOauthClient(object):
 		content = json2.loads(req.content)
 		data = content['data']
 		return data
+
+	def search_for_location(self, address, access_token):
+		gmaps = googlemaps.Client(key=settings.GOOGLEMAP_API_KEY)
+		#geocoding and address
+		geocode_result = gmaps.geocode(address)
+		
+		return geocode_result
+
+		

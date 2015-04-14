@@ -202,6 +202,19 @@ def instagramUserMedia(request):
     parsedData = getInstagram.get_user_media(access_token)
     return JsonResponse({'data': parsedData })
 
+def instagramMediaByLocation(request):  
+    if request.method == 'GET':
+        if request.user in User.objects.all():
+            address = request.GET.get('address_field')
+            user_id = User.objects.get(username=request.user).id
+            access_token = Profile.objects.get(user=user_id).oauth_secret
+            geocode_result = getInstagram.search_for_location(address, access_token)
+        else:
+            geocode_result =''
+
+    context = {'title':'Media by location', 'geocode_result':geocode_result}
+    return render(request, 'hackathon/instagram_q.html', context)
+
 
 ##################
 #  LINKED IN API #
