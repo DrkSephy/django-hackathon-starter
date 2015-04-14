@@ -23,6 +23,31 @@ def fetchHTML(url):
 	html = req.text
 	return html
 
+def extractTag(content, tag, className=None):
+	'''
+	Returns data embed within a tag, along
+	with an optional class for filtering.
+
+	Parameters:
+		content: String
+			- The HTML to parse
+		tag: String
+			- The HTML tag to scan for
+		class: String
+			- Optional filter for tag
+
+	Returns:
+		filteredData: List
+			- Content embed within searched tags
+	'''
+	soup = BeautifulSoup(content)
+	data = soup.findAll(tag, { 'class': className })
+	filteredData = []
+	for datum in data:
+		filteredData.append(datum.text)
+	return filteredData
+
+
 def steamDiscounts():
 	req = requests.get('http://store.steampowered.com/search/?specials=1#sort_by=_ASC&sort_order=ASC&specials=1&page=1')
 	content = req.text
