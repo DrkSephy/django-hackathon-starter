@@ -46,6 +46,25 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
+  .state('app.instagramUser',{
+    url: "/instagramUser",
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/instagramUser.html',
+        controller: 'instagramUserCtrl'
+      }
+    }
+  })
+
+  .state('app.steamSales', {
+    url: '/steamSales',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/steamSales.html',
+        controller: 'steamSalesCtrl'
+      }
+    }
+  });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/snippets');
 });

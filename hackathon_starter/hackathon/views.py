@@ -17,6 +17,7 @@ from scripts.github import *
 from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
 from scripts.instagram import InstagramOauthClient
+from scripts.scraper import steamDiscounts
 
 # Python
 import oauth2 as oauth
@@ -70,6 +71,10 @@ def steam(request):
     game = gamesPulling(steamID, key)
     return render(request,'hackathon/steam.html', {"game": game })
 
+
+def steamDiscountedGames(request):
+    data = steamDiscounts()
+    return JsonResponse({ 'data': data })
 
 #################
 #   GITHUB API  #
