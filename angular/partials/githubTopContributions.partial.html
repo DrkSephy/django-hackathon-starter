@@ -1,24 +1,29 @@
-<div class="row text-center">
-	<h1> Github Top Contributed Repositories</h1>
-</div>
+<div class="jumbotron">
+  <div class="container">
 
-<div class="col-lg-12">
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover table-striped tablesorter">
-            <thead>
-                <tr>
-                    <th class="header">Repository Name</th>
-                    <th class="header">Total Commits</th>
-                    <th class="header">Author</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-ng-repeat="data in githubTopContributions.data.committed">
-                        <td>{{ data.repo_name }}</td>
-                        <td>{{ data.total }}</td>
-                        <td>{{ data.author }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row text-center">
+    	<h1> Github Top Contributed Repositories</h1>
     </div>
+
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                    <tr>
+                        <th class="header">Repository Name</th>
+                        <th class="header">Total Commits</th>
+                        <th class="header">Author</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="data in githubTopContributions.data.committed">
+                            <td>{{ data.repo_name }}</td>
+                            <td>{{ data.total }}</td>
+                            <td>{{ data.author }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
 </div>

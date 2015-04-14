@@ -54,7 +54,6 @@ def steamDiscounts():
 	soup = BeautifulSoup(content)
 	allData = {id: {} for id in range(0, 25)}
 
-
 	# Get all divs of a specific class
 	releaseDate = soup.findAll('div', {'class': 'col search_released'})
 
