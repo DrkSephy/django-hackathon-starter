@@ -1,28 +1,33 @@
-<div class="row text-center"> 
-    <h1> Latest Steam Sale Data </h1>
-</div>
-
-<div class="col-lg-12">
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover table-striped tablesorter">
-            <thead>
-                <tr>
-                    <th class="header">Name</th>
-                    <th class="header">Release Date</th>
-                    <th class="header">Discount</th>
-                    <th class="header">Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-ng-repeat="data in steamSales.data ">
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.releaseDates }}</td>
-                        <td>{{ data.discount }} </td>
-                        <td>{{ data.price }}</td>
-                </tr>
-            </tbody>
-        </table>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <div class="container">
+    <div class="row text-center"> 
+        <h1> Latest Steam Sale Data </h1>
     </div>
+
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                    <tr>
+                        <th class="header">Name</th>
+                        <th class="header">Release Date</th>
+                        <th class="header">Discount</th>
+                        <th class="header">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="data in steamSales.data ">
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.releaseDates }}</td>
+                            <td>{{ data.discount }} </td>
+                            <td>{{ data.price }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </div>
 
 

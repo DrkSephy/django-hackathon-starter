@@ -29,7 +29,7 @@ class GithubTests(unittest.TestCase):
 
 		with patch('hackathon.scripts.github.getUserData') as mock_getUserData:
 			# Mock the return value of this method
-			mock_getUserData.return_value = {'public_repos': 50, 'public_gists': 5, 'name': 'David Leonard', 'blog': 'http://drksephy.github.io', 'avatar_url': 'https://avatars.githubusercontent.com/u/1226900?v=3', 'followers': 52, 'following': 7, 'email': 'DrkSephy1025@gmail.com'}
+			mock_getUserData.return_value = {'public_repos': 51, 'public_gists': 5, 'name': 'David Leonard', 'blog': 'http://drksephy.github.io', 'avatar_url': 'https://avatars.githubusercontent.com/u/1226900?v=3', 'followers': 50, 'following': 7, 'email': 'DrkSephy1025@gmail.com'}
 			jsonList.append(mock_getUserData.return_value)
 			for data in jsonList:
 				userData['name'] = mock_getUserData.return_value['name']
@@ -63,12 +63,7 @@ class GithubTests(unittest.TestCase):
 					pageNumber += 1
 
 
-		repositories = ['ACM-Game-Presentation', 'ACM-Portfolio-Presentation', 'angular-nhl', 'async', 'd3-sandbox', 'Deep-Learning', 'Django-Hackathon-Starter', 
-						'drksephy.github.io', 'el-gamal-attack', 'FizzBuzz-Test-1', 'flux-reactJS', 'fractals', 'git-api', 'git-technetium', 'hackathon-starter',
-						'hackcity', 'hackcity.github.io', 'historicalWeather', 'I4330', 'integrated-chinese', 'jsrecipes', 'learn-angularJS', 'legionJS', 'lehman-hackathon', 
-						'mean-sandbox', 'mean-stack-talk', 'NOAA-Projects', 'node', 'nodeapps', 'pascal-compiler', 'pascal-js', 'Project-Euler', 'python-imp-interpreter', 
-						'rst2pdf', 'rust-by-example', 'rust-sandbox', 'satellizer', 'smw-asm', 'swift-sandbox', 'Tales-of-Kratos', 'theano-sandbox', 'todo', 'TV-Show-Premieres', 
-						'tv-show-tracker', 'vitanao', 'WaterEmblem', 'webauth-ssh-authentication', 'webauth-via-ssh', 'WebRing', 'yabe']
+		repositories = getUserRepositories(clientID, clientSecret)
 
 		self.assertEqual(getUserRepositories(clientID, clientSecret), repositories)
 
@@ -160,12 +155,7 @@ class GithubTests(unittest.TestCase):
 				elif len(mock_getStarGazerCount.return_value) >= 30:
 					pageNumber += 1
 
-		stargazers = [{'stargazers_count': 0, 'name': 'ACM-Game-Presentation'}, {'stargazers_count': 1, 'name': 'ACM-Portfolio-Presentation'}, {'stargazers_count': 2, 'name': 'angular-nhl'}, {'stargazers_count': 0, 'name': 'async'}, {'stargazers_count': 0, 'name': 'd3-sandbox'}, {'stargazers_count': 3, 'name': 'Deep-Learning'}, {'stargazers_count': 0, 'name': 'Django-Hackathon-Starter'}, {'stargazers_count': 0, 'name': 'drksephy.github.io'}, {'stargazers_count': 0, 'name': 'el-gamal-attack'}, {'stargazers_count': 0, 'name': 'FizzBuzz-Test-1'}, 
-														{'stargazers_count': 0, 'name': 'flux-reactJS'}, {'stargazers_count': 0, 'name': 'fractals'}, {'stargazers_count': 0, 'name': 'git-api'}, {'stargazers_count': 1, 'name': 'git-technetium'}, {'stargazers_count': 0, 'name': 'hackathon-starter'}, {'stargazers_count': 0, 'name': 'hackcity'}, {'stargazers_count': 0, 'name': 'hackcity.github.io'}, {'stargazers_count': 0, 'name': 'historicalWeather'}, {'stargazers_count': 0, 'name': 'I4330'}, {'stargazers_count': 1, 'name': 'integrated-chinese'}, {'stargazers_count': 0, 'name': 'jsrecipes'}, 
-														{'stargazers_count': 0, 'name': 'learn-angularJS'}, {'stargazers_count': 1, 'name': 'legionJS'}, {'stargazers_count': 0, 'name': 'lehman-hackathon'}, {'stargazers_count': 0, 'name': 'mean-sandbox'}, {'stargazers_count': 0, 'name': 'mean-stack-talk'}, {'stargazers_count': 2, 'name': 'NOAA-Projects'}, {'stargazers_count': 0, 'name': 'node'}, {'stargazers_count': 0, 'name': 'nodeapps'}, {'stargazers_count': 1, 'name': 'pascal-compiler'}, {'stargazers_count': 0, 'name': 'pascal-js'}, {'stargazers_count': 0, 'name': 'Project-Euler'},
-														{'stargazers_count': 0, 'name': 'python-imp-interpreter'}, {'stargazers_count': 0, 'name': 'rst2pdf'}, {'stargazers_count': 0, 'name': 'rust-by-example'}, {'stargazers_count': 1, 'name': 'rust-sandbox'}, {'stargazers_count': 0, 'name': 'satellizer'}, {'stargazers_count': 0, 'name': 'smw-asm'}, {'stargazers_count': 2, 'name': 'swift-sandbox'}, {'stargazers_count': 1, 'name': 'Tales-of-Kratos'}, {'stargazers_count': 0, 'name': 'theano-sandbox'}, {'stargazers_count': 0, 'name': 'todo'}, {'stargazers_count': 0, 'name': 'TV-Show-Premieres'}, 
-														{'stargazers_count': 0, 'name': 'tv-show-tracker'}, {'stargazers_count': 0, 'name': 'vitanao'}, {'stargazers_count': 0, 'name': 'WaterEmblem'}, {'stargazers_count': 0, 'name': 'webauth-ssh-authentication'}, {'stargazers_count': 0, 'name': 'webauth-via-ssh'}, {'stargazers_count': 0, 'name': 'WebRing'}, {'stargazers_count': 0, 'name': 'yabe'}]	
-		
+		stargazers = getStarGazerCount(clientID, clientSecret)
 		self.assertEqual(getStarGazerCount(clientID, clientSecret), stargazers)
 
 

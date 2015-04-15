@@ -1,3 +1,8 @@
+
+'''
+instagram.py contains a handful of methods for interacting
+with Instagram data and returning the responses as JSON.
+'''
 import requests
 import urllib
 import urllib2
@@ -13,17 +18,37 @@ class InstagramOauthClient(object):
 	user_data = None
 
 	def __init__(self, client_id, client_secret):
+		'''
+		Parameters:
+			client_id: String
+				- The client_id from registering application
+				  on Instagram.
+			client_secret: String
+				- The client_secret from registering application
+				  on Instagram.
+		'''
 		self.client_id 		= client_id
 		self.client_secret 	= client_secret
 
 
 	def get_authorize_url(self):
-		''' Obtains the authorization url. '''
+		''' 
+		Returns:
+			auth_url: String
+				- The authorization url.
+		'''
+
 		auth_url = authorization_url + self.client_id +'&redirect_uri=http://localhost:8000/hackathon/instagram&response_type=code'
 		return auth_url
 
+
 	def get_access_token(self, code):
-		''' Obtains access token. '''
+		''' 
+		Parameters:
+			code: String
+				- The code is retrieved from the authorization url parameter
+				  to obtain access_token.
+		'''
 
 		auth_setting = {'client_id': self.client_id,
 						'client_secret': self.client_secret,
@@ -43,7 +68,17 @@ class InstagramOauthClient(object):
 
 
 	def get_tagged_media(self, tag):
-		''' Get recent tagged media. '''
+		'''
+		Get recent tagged media.
+
+		Parameters:
+			tag: String
+				- The tag used to search the most recent media that's tagged with it.
+
+		Returns:
+			data: Dictionary
+				- A dictionary containing recent tagged 120 media counts data pertaining to each media.
+		'''
 		tagged_media_url = 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?access_token='+self.access_token# +'&count=2'
 		req = requests.get(tagged_media_url)
 		content = json2.loads(req.content)
@@ -58,7 +93,19 @@ class InstagramOauthClient(object):
 		print len(data)
 		return data
 
+
 	def get_user_info(self, access_token):
+		'''
+		Parameters:
+			access_token: String
+				- The access_token given after granting permission
+				  application access to Instagram data.
+
+		Returns:
+			data: Dictionary
+				- A dictionary containing user information.
+		'''
+
 		user_info = 'https://api.instagram.com/v1/users/32833691/?access_token='+access_token
 		req = requests.get(user_info)
 		content = json2.loads(req.content)
@@ -66,3 +113,20 @@ class InstagramOauthClient(object):
 		return data
 
 
+	def get_user_media(self, access_token):
+		'''
+		Parameters:
+			access_token: String
+				- The access_token given after granting permission
+				  application access to Instagram data.
+
+		Returns:
+			data: Dictionary
+				- A dictionary containing user media information.
+		'''
+
+		user_media = 'https://api.instagram.com/v1/users/32833691/media/recent/?access_token='+access_token
+		req = requests.get(user_media)
+		content = json2.loads(req.content)
+		data = content['data']
+		return data

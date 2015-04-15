@@ -1,33 +1,39 @@
-<div class="row text-center"> <h1> Github User Data </h1>
-</div>
+<div class="jumbotron">
+  <div class="container">
 
-<div class="col-lg-12">
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover table-striped tablesorter">
-            <thead>
-                <tr>
-                    <th class="header">Public Repos</th>
-                    <th class="header">Public Gists</th>
-                    <th class="header">Name</th>
-                    <th class="header">Blog</th>
-                    <th class="header">Followers</th>
-                    <th class="header">Following</th>
-                    <th class="header">E-mail</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-ng-repeat="data in githubUser.data.userData">
-                        <td>{{ data.public_repos }}</td>
-                        <td>{{ data.public_gists }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.blog }}</td>
-                        <td>{{ data.followers }}</td>
-                        <td>{{ data.following }}</td>
-                        <td>{{ data.email }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row text-center"> 
+        <h1> Github User Data </h1>
     </div>
+
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                    <tr>
+                        <th class="header">Public Repos</th>
+                        <th class="header">Public Gists</th>
+                        <th class="header">Name</th>
+                        <th class="header">Blog</th>
+                        <th class="header">Followers</th>
+                        <th class="header">Following</th>
+                        <th class="header">E-mail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="data in githubUser.data.userData">
+                            <td>{{ data.public_repos }}</td>
+                            <td>{{ data.public_gists }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.blog }}</td>
+                            <td>{{ data.followers }}</td>
+                            <td>{{ data.following }}</td>
+                            <td>{{ data.email }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
 </div>
 
 

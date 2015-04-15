@@ -15,3 +15,7 @@ angular.module('starter.services', ['ngResource'])
 .factory('steamSales', function ($resource){
 	return $resource('http://127.0.0.1:8000/hackathon/steamDiscountedGames/');
 })
+
+.factory('instagramUserMedia', function ($resource){
+	return $resource('http://localhost:8000/hackathon/instagramUserMedia/');
+})
