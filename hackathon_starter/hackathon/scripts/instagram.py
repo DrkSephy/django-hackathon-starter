@@ -11,6 +11,7 @@ import json
 import simplejson as json2
 import googlemaps
 from django.conf import settings
+import re
 
 authorization_url = 'https://api.instagram.com/oauth/authorize/?client_id='
 access_token_url = 'https://api.instagram.com/oauth/access_token'
@@ -149,6 +150,38 @@ class InstagramOauthClient(object):
 		#geocoding and address
 		geocode_result = gmaps.geocode(address)
 		
-		return geocode_result
+		if geocode_result:
+			location = geocode_result[0]['geometry']['location']
+			return location
+
+
+	def search_location_ids(self, latitude, longitude, access_token):
+		search_location = 'https://api.instagram.com/v1/locations/search?lat='+str(latitude)+'&lng='+str(longitude)+'&access_token='+access_token+"&distance=2000"
+		req = requests.get(search_location)
+		content = json2.loads(req.content)
+		data = content
+		list_of_ids =[]
+		if data['meta']['code'] != 200:
+			raise Exception("Invalid response %s." % data['meta']['code'])
+		search_ids = data['data']
+		for data in search_ids:
+			for i in data:
+				if i == 'id':
+					list_of_ids.append(data[i])
+
+		print len(list_of_ids)
+		return list_of_ids
+
+	def search_location_media(self, list_location_ids, access_token):
+		media = []
+		for location in list_location_ids:
+			media_by_location = 'https://api.instagram.com/v1/locations/'+location+'/media/recent?access_token='+access_token
+			req = requests.get(media_by_location)
+			content = json2.loads(req.content)
+			media.append(content['data'])
+		
+		return media
+
+
 
 		

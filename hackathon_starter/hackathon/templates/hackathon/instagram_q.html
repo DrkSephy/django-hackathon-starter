@@ -13,6 +13,17 @@
 		</form>
 	</div>
 	{% if geocode_result %}
-	{{geocode_result}}
+		{{geocode_result.lat}}, {{geocode_result.lng}}
+		
+		{{list_id}}
+		
+		{% for list in media %}
+			{% for user in list %}
+				<img src="{{user.images.thumbnail.url}}">
+			{% endfor %}
+		{% endfor %}
+		
+
 	{% endif %}
+
 </html>
