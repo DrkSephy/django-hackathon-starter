@@ -240,7 +240,8 @@ def twilio(request):
         number = request.POST.get('number')
         message = request.POST.get('message')
         sendSMS(str(message), str(number), '+13473781813')
-        
+        context = {'message': 'Your message has been sent successfully!'}
+        return HttpResponse('Your message has been sent successfully')
     return render(request, 'hackathon/twilio.html')
 
 
