@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+
+    <h1 class="text-center"> Github Resume </h1>
+	<div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Username <i class="icon-sort"></i></th>
+                <th class="header"> Blog <i class="icon-sort"></i></th>
+                <th class="header"> Public Repos <i class="icon-sort"></i></th>
+                <th class="header"> Public Gists <i class="icon-sort"></i></th>
+                <th class="header"> Email <i class="icon-sort"></i></th>
+                <th class="header"> Followers <i class="icon-sort"></i></th>
+                <th class="header"> Following <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for key in data.userData %}
+                <tr>
+                    <td>{{ key.name }}</td>
+                    <td>{{ key.blog }}</td>
+                    <td>{{ key.public_repos }}</td>
+                    <td>{{ key.public_gists }}</td>
+                    <td>{{ key.email }}</td>
+                    <td>{{ key.followers }}</td>
+                    <td>{{ key.following }}</td>
+    			</tr>
+            {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-xs-4">
+        <h2> Top Contributed Repositories </h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Repository <i class="icon-sort"></i></th>
+                <th class="header"> Total <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for key in data.filteredData %}
+                <tr>
+                    <td>{{ key.repo_name }}</td>
+                    <td>{{ key.total }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <h2> Top Starred Repositories </h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Repository <i class="icon-sort"></i></th>
+                <th class="header"> Count <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for key in data.filteredStargazers %}
+                <tr>
+                    <td>{{ key.name }}</td>
+                    <td>{{ key.stargazers_count }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-xs-4">
+        <h2> Contributions </h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Repository <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for key in data.forkedRepos %}
+                <tr>
+                    <td>{{ key.name }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
