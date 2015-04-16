@@ -37,13 +37,6 @@ def index(request):
     context = {'hello': 'world'}
     return render(request, 'hackathon/index.html', context)
 
-##################
-#   Twilio API   #
-##################
-
-def twilio(request):
-    sendSMS('Meow', '+13473282978', '+13473781813')
-    return render(request, 'hackathon/twilio.html')
 
 ##################
 #  API Examples  #
@@ -253,6 +246,22 @@ def snippet_list(request):
         snippets = Snippet.objects.all()
         serializer = SnippetSerializer(snippets, many=True)
         return JSONResponse(serializer.data)
+
+
+##################
+#   Twilio API   #
+##################
+
+def twilio(request):
+    # Test credentials
+    # sendSMS('Meow', '+13473282978', '+13473781813')
+    if request.method == 'POST':
+        number = request.POST.get('number')
+        message = request.POST.get('message')
+        sendSMS(str(message), str(number), '+13473781813')
+        context = {'message': 'Your message has been sent successfully!'}
+        return HttpResponseRedirect('/hackathon/api/')
+    return render(request, 'hackathon/twilio.html')
 
 
 ######################
