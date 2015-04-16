@@ -235,6 +235,7 @@ def snippet_list(request):
 ##################
 
 def twilio(request):
+    # Test credentials
     # sendSMS('Meow', '+13473282978', '+13473781813')
     if request.method == 'POST':
         number = request.POST.get('number')
