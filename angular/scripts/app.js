@@ -40,5 +40,15 @@ var restApp = angular.module('restApp', [
             data: {
                 pageTitle: 'Top Contributions on Github'
             }
+        })
+
+        .state('instagramUser',{
+            url:'/instagramUser',
+            templateUrl: 'partials/instagramUser.partial.html',
+            controller: 'instagramUserController',
+            data : {
+                pageTitle: 'Instagram User Data'
+            }
         });
+
 });
