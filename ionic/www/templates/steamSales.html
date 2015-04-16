@@ -1,0 +1,17 @@
+<ion-view title="Latest Steam Sale Data">
+  <ion-nav-buttons side="left">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    <ion-item ng-repeat="data in sales.data">
+        <div class="col">Name: {{ data.name }}</div>
+        <div class="col">Release Date: {{ data.releaseDates }}</div>
+        <div class="col">Discount: {{ data.discount }}</div>
+        <div class="col">Price: {{ data.price }} </div>
+    </ion-item>
+
+ 
+
+  
+  </ion-content>
+</ion-view>
