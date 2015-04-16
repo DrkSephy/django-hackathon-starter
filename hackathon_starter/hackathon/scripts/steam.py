@@ -51,3 +51,4 @@ def steamlibrarypull(steamID, key):
                 pass
             games[game['name']] = {'price': price, 'appid': game['appid']}
     return games
+print steamlibrarypull(76561197960434622, key)
