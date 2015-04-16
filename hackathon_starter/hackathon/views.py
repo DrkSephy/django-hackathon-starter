@@ -197,20 +197,22 @@ def instagramUserMedia(request):
 
 def instagramMediaByLocation(request):
     if request.method == 'GET':
-        if request.user in User.objects.all():
-            address = request.GET.get('address_field')
-            user_id = User.objects.get(username=request.user).id
-            access_token = Profile.objects.get(user=user_id).oauth_secret
-            #lat, lng = getInstagram.search_for_location(address, access_token)
-            geocode_result = getInstagram.search_for_location(address, access_token)
-            if geocode_result:
-                location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
-                media = getInstagram.search_location_media(location_ids, access_token)
-            else:
-                media = '' 
-                list_id=''
+        if request.GET.items():
+            if request.user in User.objects.all():
+                address = request.GET.get('address_field')
+                user_id = User.objects.get(username=request.user).id
+                access_token = Profile.objects.get(user=user_id).oauth_secret
+                #lat, lng = getInstagram.search_for_location(address, access_token)
+                geocode_result = getInstagram.search_for_location(address, access_token)
+                if geocode_result:
+                    location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
+                    media = getInstagram.search_location_media(location_ids, access_token)
+                    title = address
+        else:
+            title, media,location_ids, geocode_result = 'Media by location', '','', ''
 
-    context = {'title':'Media by location', 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids}
+
+    context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids}
     return render(request, 'hackathon/instagram_q.html', context)
 
 

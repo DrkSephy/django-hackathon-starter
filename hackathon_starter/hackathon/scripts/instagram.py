@@ -11,7 +11,8 @@ import json
 import simplejson as json2
 import googlemaps
 from django.conf import settings
-import re
+from datetime import datetime
+from time import strftime
 
 authorization_url = 'https://api.instagram.com/oauth/authorize/?client_id='
 access_token_url = 'https://api.instagram.com/oauth/access_token'
@@ -156,10 +157,9 @@ class InstagramOauthClient(object):
 
 
 	def search_location_ids(self, latitude, longitude, access_token):
-		search_location = 'https://api.instagram.com/v1/locations/search?lat='+str(latitude)+'&lng='+str(longitude)+'&access_token='+access_token+"&distance=2000"
+		search_location = 'https://api.instagram.com/v1/locations/search?lat='+str(latitude)+'&lng='+str(longitude)+'&access_token='+access_token+"&distance=5000"
 		req = requests.get(search_location)
-		content = json2.loads(req.content)
-		data = content
+		data = json2.loads(req.content)
 		list_of_ids =[]
 		if data['meta']['code'] != 200:
 			raise Exception("Invalid response %s." % data['meta']['code'])
@@ -168,8 +168,6 @@ class InstagramOauthClient(object):
 			for i in data:
 				if i == 'id':
 					list_of_ids.append(data[i])
-
-		print len(list_of_ids)
 		return list_of_ids
 
 	def search_location_media(self, list_location_ids, access_token):
@@ -177,11 +175,23 @@ class InstagramOauthClient(object):
 		for location in list_location_ids:
 			media_by_location = 'https://api.instagram.com/v1/locations/'+location+'/media/recent?access_token='+access_token
 			req = requests.get(media_by_location)
-			content = json2.loads(req.content)
-			media.append(content['data'])
-		
+			content_all = json2.loads(req.content)
+			if content_all['pagination']:
+				temp_media=[]
+				next_url = content_all['pagination']['next_url']
+				req = requests.get(next_url)
+				content = json2.loads(req.content)
+				for i in content['data']:
+					i['created_time'] = datetime.fromtimestamp(int(i['created_time'])).strftime('%Y-%m-%d %H:%M:%S')
+					temp_media.append(i)
+				media += [temp_media]
+			else:
+				for i in content_all['data']:
+					for data in i:
+						if data == 'created_time':
+							i[data]= datetime.fromtimestamp(int(i[data])).strftime('%Y-%m-%d %H:%M:%S')
+				media.append(content_all['data'])
 		return media
 
 
 
-		
