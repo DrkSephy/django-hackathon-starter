@@ -95,7 +95,7 @@ As of `Django 1.7x`, there is a new method called `JsonResponse` which allows th
 
 As of `April 11th, 2015`, there is now a sample AngularJS client which pulls data from the Django sample API endpoint: `http://127.0.0.1:8000/hackathon/snippets/`. To test it, do the following:
 
-* Within the `public/` directory, run `python -m SimpleHTTPServer 80`. You may need `sudo` on your respective Operating System.
+* Within the `angular/` directory, run `python -m SimpleHTTPServer 80`. You may need `sudo` on your respective Operating System.
 * Navigate to: `http://localhost/#/snippets`. Here you will see whatever content was stored within the database model, `Snippet`. If nothing shows up, go back to the `RESTful endpoints` step to populate your database with some `Snippet` objects. 
 
 The following other links are available on the AngularJS Client:
