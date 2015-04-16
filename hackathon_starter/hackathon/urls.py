@@ -22,4 +22,5 @@ urlpatterns = patterns('',
     url(r'^instagramUser/$', views.instagramUser, name='instagramUser'),
     url(r'^instagramUserMedia/$', views.instagramUserMedia, name='instagramUserMedia'),
     url(r'^tumblr_login/$', views.tumblr_login, name='tumblr_login'),
+    url(r'^facebook/$', views.facebook, name='facebook'),
 )
