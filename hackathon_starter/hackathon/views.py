@@ -192,7 +192,7 @@ def instagramUserMedia(request):
     ''' Returns JSON response about a specific Instagram User's Media. '''
     user_id = User.objects.get(username='mk200789').id
     access_token = Profile.objects.get(user=user_id).oauth_secret
-    parsedData = getInstagram.get_user_media(access_token)
+    parsedData = getInstagram.get_user_media(32833691,access_token)
     return JsonResponse({'data': parsedData })
 
 def instagramMediaByLocation(request):

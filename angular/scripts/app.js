@@ -49,6 +49,6 @@ var restApp = angular.module('restApp', [
             data : {
                 pageTitle: 'Instagram User Data'
             }
-        });
+        });   
 
 });

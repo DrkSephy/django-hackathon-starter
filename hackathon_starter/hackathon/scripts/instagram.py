@@ -128,7 +128,7 @@ class InstagramOauthClient(object):
 		return data
 
 
-	def get_user_media(self, access_token):
+	def get_user_media(self, user_id, access_token):
 		'''
 		Parameters:
 			access_token: String
@@ -140,7 +140,8 @@ class InstagramOauthClient(object):
 				- A dictionary containing user media information.
 		'''
 
-		user_media = 'https://api.instagram.com/v1/users/32833691/media/recent/?access_token='+access_token
+		user_media = 'https://api.instagram.com/v1/users/'+str(user_id)+'/media/recent/?access_token='+access_token
+		#user_media = 'https://api.instagram.com/v1/users/32833691/media/recent/?access_token='+access_token
 		req = requests.get(user_media)
 		content = json2.loads(req.content)
 		data = content['data']
