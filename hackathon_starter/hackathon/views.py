@@ -75,8 +75,8 @@ def steamDiscountedGames(request):
 
 def facebook(request):
     '''A sample application that will publish a status update after going into the login process using the Javascript SDK '''
-    your-app-id = '364831617044713'
-    return render(request, 'hackathon/facebook.html','your-app-id': your-app-id)
+    yourappid = '364831617044713'
+    return render(request, 'hackathon/facebook.html', { 'yourappid' : yourappid })
     
 #################
 #   GITHUB API  #
