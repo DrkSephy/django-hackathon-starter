@@ -20,9 +20,13 @@ class HackathonViewsTestCase(TestCase):
 		self.assertEqual(resp.status_code, 200)
 
 	def testQuandlSnp500(self):
-		resp = self.client.get('/hackathon/quandlSnp500')
-		self.assertEqual(resp.status_code, 301)
+		resp = self.client.get('/hackathon/quandlSnp500/')
+		self.assertEqual(resp.status_code, 200)
 
 	def testQuandlNasdaq(self):
-		resp = self.client.get('/hackathon/quandlNasdaq')
-		self.assertEqual(resp.status_code, 301)
+		resp = self.client.get('/hackathon/quandlNasdaq/')
+		self.assertEqual(resp.status_code, 200)
+
+	def testGithubUser(self):
+		resp = self.client.get('/hackathon/githubUser/')
+		self.assertEqual(resp.status_code, 200)
