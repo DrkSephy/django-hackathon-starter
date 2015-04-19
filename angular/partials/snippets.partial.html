@@ -1,0 +1,29 @@
+<div class="jumbotron">
+  <div class="container">
+
+    <div class="row text-center">
+    	<h1> Code Snippets </h1>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                    <tr>
+                        <th class="header">Code</th>
+                        <th class="header">ID</th>
+                        <th class="header">Line Numbers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="data in restData">
+    	                    <td>{{ data.code }}</td>
+    	                    <td>{{ data.id }}</td>
+    	                    <td>{{ data.linenos }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
