@@ -10,3 +10,7 @@ class HackathonViewsTestCase(TestCase):
 	def testSteam(self):
 		resp = self.client.get('/hackathon/steam')
 		self.assertEqual(resp.status_code, 301)
+
+	def testSteamDiscountedGames(self):
+		resp = self.client.get('/hackathon/steamDiscountedGames/')
+		self.assertEqual(resp.status_code, 200)
