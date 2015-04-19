@@ -30,7 +30,14 @@ class HackathonViewsTestCase(TestCase):
 	def testSteamImg(self):
 		resp = self.client.get('/hackathon/steam/')
 		for dict in resp.context:
-			self.assertTrue('name' in dict)
+			if 'img_logo_url' in dict:
+				self.assertTrue('img_logo_url' in dict)
+
+	def testSteamAppID(self):
+		resp = self.client.get('/hackathon/steam/')
+		for dict in resp.context:
+			if 'appid' in dict:
+				self.assertTrue('appid' in dict)
 
 
 	def testQuandlDowJones(self):
