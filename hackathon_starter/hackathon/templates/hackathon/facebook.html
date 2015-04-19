@@ -72,6 +72,23 @@
         'Thanks for logging in, ' + response.name + '!';
     });
   }
+  // Here will be a function that'll create a dialog box to post upon your own wall. 
+  function posttoFeed() {
+    FB.ui({
+     method: 'Feed',
+     name: 'Django-Hackathon-Starter',
+     caption: 'starter dialog box',
+     description: 'This is a wall post brought to you by the Hackathon Starter',
+     message: 'It is alive!'
+    },
+    function(response){
+      if (response && response.post_id){
+        alert('post was published');
+      } else {
+        alert('post was not published');
+      }
+    });
+  }
 </script>
 
 <!--
@@ -82,6 +99,8 @@
 
 <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 </fb:login-button>
+
+<input type="button" onclick="posttoFeed()" value="Post to Feed" />
 
 <div id="status">
 </div>
