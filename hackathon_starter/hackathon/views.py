@@ -247,6 +247,13 @@ def instagramMediaByLocation(request):
     return render(request, 'hackathon/instagram_q.html', context)
 
 
+####################
+#    PAYPAL API    #
+####################
+def paypal(request):
+    context = {'title':'paypal'}
+    return render(request, 'hackathon/paypal.html', context)
+
 ##################
 #  LINKED IN API #
 ##################
