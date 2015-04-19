@@ -12,12 +12,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 # Scripts
-from scripts.steam import gamesPulling, steamIDPulling 
+from scripts.steam import gamespulling, steamidpulling 
 from scripts.github import *
 from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
 from scripts.instagram import InstagramOauthClient
 from scripts.scraper import steamDiscounts
+from scripts.quandl import *
 
 # Python
 import oauth2 as oauth
@@ -81,22 +82,23 @@ def facebook(request):
 #   QUANDL API  #
 #################
 def quandldowjones(request):
-	'''Returns JSON response about the latest dowjones index.'''
+    '''Returns JSON response about the latest dowjones index.'''
     APIKEY = ' fANs6ykrCdAxas7zpMz7'
     parsedData = dowjonesindustrialavg(APIKEY)
     return JsonResponse({'data': parsedData})
 
 def quandlsnp500(request):
-	'''Returns JSON response about the latest SNP 500 index.'''
+    '''Returns JSON response about the latest SNP 500 index.'''
     APIKEY = ' fANs6ykrCdAxas7zpMz7'
     parsedData = snp500indexpull(APIKEY)
     return JsonResponse({'data': parsedData})
 
 def quandlnasdaq(request):
-	'''Returns JSON response about the latest nasdaq index.'''
+    '''Returns JSON response about the latest nasdaq index.'''
     APIKEY = ' fANs6ykrCdAxas7zpMz7'
     parsedData = nasdaqpull(APIKEY)
     return JsonResponse({'data': parsedData})
+
 #################
 #   GITHUB API  #
 #################
