@@ -15,11 +15,17 @@ class HackathonViewsTestCase(TestCase):
 		resp = self.client.get('/hackathon/steamDiscountedGames/')
 		self.assertEqual(resp.status_code, 200)
 
-	def testSteamKeys(self):
+	def testSteamPlaytimeForever(self):
 		resp = self.client.get('/hackathon/steam/')
 		for dict in resp.context:
 			if 'playtime_forever' in dict:
 				self.assertTrue('playtime_forever' in dict)
+
+	def testSteamName(self):
+		resp = self.client.get('/hackathon/steam/')
+		for dict in resp.context:
+			if 'name' in dict:
+				self.assertTrue('name' in dict)
 
 	def testQuandlDowJones(self):
 		resp = self.client.get('/hackathon/quandlDowJones/')
