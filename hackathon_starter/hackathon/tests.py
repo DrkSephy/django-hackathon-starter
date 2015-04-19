@@ -27,6 +27,12 @@ class HackathonViewsTestCase(TestCase):
 			if 'name' in dict:
 				self.assertTrue('name' in dict)
 
+	def testSteamImg(self):
+		resp = self.client.get('/hackathon/steam/')
+		for dict in resp.context:
+			self.assertTrue('name' in dict)
+
+
 	def testQuandlDowJones(self):
 		resp = self.client.get('/hackathon/quandlDowJones/')
 		self.assertEqual(resp.status_code, 200)
