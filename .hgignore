@@ -5,10 +5,10 @@ db.sqlite3
 *.pyc
 bower_components/
 migrations/
-*.coverage
 Thumbs.db
 */vendor
 ionic/platforms
 hackathon_starter/_build
 hackathon_starter/_static
 hackathon_starter/_templates
+.coverage
