@@ -38,3 +38,7 @@ class HackathonViewsTestCase(TestCase):
 	def testGithubResume(self):
 		resp = self.client.get('/hackathon/githubResume/')
 		self.assertEqual(resp.status_code, 200)
+
+	def testTwilio(self):
+		resp = self.client.get('/hackathon/twilio/')
+		self.assertEqual(resp.status_code, 200)
