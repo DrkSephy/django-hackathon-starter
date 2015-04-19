@@ -1,0 +1,21 @@
+{
+  "name": "django-hackathon-starter",
+  "version": "0.0.0",
+  "authors": [
+    "David Leonard <sephirothcloud1025@yahoo.com>"
+  ],
+  "description": "Django boilerplate project for hackathons",
+  "keywords": [
+    "Django",
+    "Python",
+    "API",
+    "RESTful"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3.3.4",
+    "jquery": "~2.1.3",
+    "bootstrap-social": "~4",
+    "d3": "~3.5.5"
+  }
+}
