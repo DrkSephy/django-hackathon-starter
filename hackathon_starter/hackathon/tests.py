@@ -14,3 +14,15 @@ class HackathonViewsTestCase(TestCase):
 	def testSteamDiscountedGames(self):
 		resp = self.client.get('/hackathon/steamDiscountedGames/')
 		self.assertEqual(resp.status_code, 200)
+
+	def testQuandlDowJones(self):
+		resp = self.client.get('/hackathon/quandlDowJones/')
+		self.assertEqual(resp.status_code, 200)
+
+	def testQuandlSnp500(self):
+		resp = self.client.get('/hackathon/quandlSnp500')
+		self.assertEqual(resp.status_code, 301)
+
+	def testQuandlNasdaq(self):
+		resp = self.client.get('/hackathon/quandlNasdaq')
+		self.assertEqual(resp.status_code, 301)
