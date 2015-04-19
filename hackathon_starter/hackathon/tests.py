@@ -30,3 +30,11 @@ class HackathonViewsTestCase(TestCase):
 	def testGithubUser(self):
 		resp = self.client.get('/hackathon/githubUser/')
 		self.assertEqual(resp.status_code, 200)
+
+	def testGithubTopRepositories(self):
+		resp = self.client.get('/hackathon/githubTopRepositories/')
+		self.assertEqual(resp.status_code, 200)
+
+	def testGithubResume(self):
+		resp = self.client.get('/hackathon/githubResume/')
+		self.assertEqual(resp.status_code, 200)
