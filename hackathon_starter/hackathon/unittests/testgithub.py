@@ -29,7 +29,7 @@ class GithubTests(unittest.TestCase):
 
 		with patch('hackathon.scripts.github.getUserData') as mock_getUserData:
 			# Mock the return value of this method
-			mock_getUserData.return_value = {'public_repos': 51, 'public_gists': 5, 'name': 'David Leonard', 'blog': 'http://drksephy.github.io', 'avatar_url': 'https://avatars.githubusercontent.com/u/1226900?v=3', 'followers': 50, 'following': 7, 'email': 'DrkSephy1025@gmail.com'}
+			mock_getUserData.return_value = {'public_repos': 52, 'public_gists': 5, 'name': 'David Leonard', 'blog': 'http://drksephy.github.io', 'avatar_url': 'https://avatars.githubusercontent.com/u/1226900?v=3', 'followers': 51, 'following': 7, 'email': 'DrkSephy1025@gmail.com'}
 			jsonList.append(mock_getUserData.return_value)
 			for data in jsonList:
 				userData['name'] = mock_getUserData.return_value['name']
