@@ -3,8 +3,7 @@ that can collect information based on an user's gaming library.'''
 import requests
 import json
 
-steamun = "Marorin"
-apikey = '231E98D442E52B87110816C3D5114A1D'
+
 
 def gamespulling(steamid, apikey):
     '''Returns the JSON data from the Steam API based of one's
@@ -29,6 +28,7 @@ def steamidpulling(steamun, apikey):
     kuzu = json.loads(allo.content)
     steamid = kuzu['response']['steamid']
     return steamid
+
 def steamlibrarypull(steamid, apikey):
     '''Pulls out a CSV of Steam appids.'''
     steaminfo = {
@@ -37,14 +37,14 @@ def steamlibrarypull(steamid, apikey):
         'format':'JSON',
         'include_appinfo':'1'
     }
-    apiurl = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/'
-    reap = requests.get(apiurl, params=steaminfo)
+    url = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/'
+    reap = requests.get(url, params=steaminfo)
     desu = json.loads(reap.content)
     response = desu['response']['games']
     games = {}
     for game in response:
-        apiurl = 'http://store.steampowered.com/api/appdetails/?appids=%d&filters=price_overview&cc=us'
-        getprice = requests.get(apiurl % game['appid'])
+        url = 'http://store.steampowered.com/api/appdetails/?appids=%d&filters=price_overview&cc=us'
+        getprice = requests.get(url % game['appid'])
         if getprice.status_code == 200:
             rjson = json.loads(getprice.text)
             # use the appid to fetch the value and convert to decimal
