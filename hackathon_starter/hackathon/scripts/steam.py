@@ -3,8 +3,6 @@ that can collect information based on an user's gaming library.'''
 import requests
 import json
 
-
-
 def gamespulling(steamid, apikey):
     '''Returns the JSON data from the Steam API based of one's
     Steam ID number and returns a dictionary of
@@ -16,17 +14,17 @@ def gamespulling(steamid, apikey):
         'include_appinfo':'1'
     }
     apiurl = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/'
-    reap = requests.get(apiurl, params=steaminfo)
-    desu = json.loads(reap.content)
-    return desu['response']['games']
+    req = requests.get(apiurl, params=steaminfo)
+    data = json.loads(req.content)
+    return data['response']['games']
 
 def steamidpulling(steamun, apikey):
     '''Pulls out and returns the steam id number for use in steam queries.'''
     steaminfo = {'key': apikey, 'vanityurl': steamun}
     apiurl = 'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/'
-    allo = requests.get(apiurl, params=steaminfo)
-    kuzu = json.loads(allo.content)
-    steamid = kuzu['response']['steamid']
+    req = requests.get(apiurl, params=steaminfo)
+    data = json.loads(req.content)
+    steamid = data['response']['steamid']
     return steamid
 
 def steamlibrarypull(steamid, apikey):
@@ -38,9 +36,9 @@ def steamlibrarypull(steamid, apikey):
         'include_appinfo':'1'
     }
     url = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/'
-    reap = requests.get(url, params=steaminfo)
-    desu = json.loads(reap.content)
-    response = desu['response']['games']
+    req = requests.get(url, params=steaminfo)
+    data = json.loads(req.content)
+    response = data['response']['games']
     games = {}
     for game in response:
         url = 'http://store.steampowered.com/api/appdetails/?appids=%d&filters=price_overview&cc=us'
