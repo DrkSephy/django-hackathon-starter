@@ -64,7 +64,6 @@ def steam(request):
     game = gamespulling(steamID, key)
     return render(request,'hackathon/steam.html', {"game": game })
 
-
 def steamDiscountedGames(request):
     data = steamDiscounts()
     return JsonResponse({ 'data': data })
@@ -77,7 +76,27 @@ def facebook(request):
     '''A sample application that will publish a status update after going into the login process using the Javascript SDK '''
     yourappid = '364831617044713'
     return render(request, 'hackathon/facebook.html', { 'yourappid' : yourappid })
-    
+
+#################
+#   QUANDL API  #
+#################
+def quandldowjones(request):
+	'''Returns JSON response about the latest dowjones index.'''
+    APIKEY = ' fANs6ykrCdAxas7zpMz7'
+    parsedData = dowjonesindustrialavg(APIKEY)
+    return JsonResponse({'data': parsedData})
+
+def quandlsnp500(request):
+	'''Returns JSON response about the latest SNP 500 index.'''
+    APIKEY = ' fANs6ykrCdAxas7zpMz7'
+    parsedData = snp500indexpull(APIKEY)
+    return JsonResponse({'data': parsedData})
+
+def quandlnasdaq(request):
+	'''Returns JSON response about the latest nasdaq index.'''
+    APIKEY = ' fANs6ykrCdAxas7zpMz7'
+    parsedData = nasdaqpull(APIKEY)
+    return JsonResponse({'data': parsedData})
 #################
 #   GITHUB API  #
 #################
