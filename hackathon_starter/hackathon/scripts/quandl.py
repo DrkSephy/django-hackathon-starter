@@ -2,7 +2,7 @@
 aggregating data from markets throughout the world'''
 
 import requests
-import simplejson as json
+import json
 
 def dowjonesIndustrialAvg(apikey):
     '''Returns JSON data of the Dow Jones Average.'''

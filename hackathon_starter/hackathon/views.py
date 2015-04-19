@@ -109,7 +109,7 @@ def quandlstocks(request):
     everyData['dowjones'] = dowjonesdata
     everyData['snp'] = snpdata
     everyData['nasdaq'] = nasdaqdata
-    return render(request, 'hackathon/quandl.html', { 'data': everyData })
+    return render(request, 'hackathon/quandl.html', { 'everyData': everyData })
 
 #################
 #   GITHUB API  #
