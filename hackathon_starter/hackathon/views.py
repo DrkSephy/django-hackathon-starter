@@ -60,8 +60,8 @@ def steam(request):
     #Should link to test of Steam API example.
     key = '231E98D442E52B87110816C3D5114A1D'
     SteamUN = "Marorin"
-    steamID = steamIDPulling(SteamUN, key)
-    game = gamesPulling(steamID, key)
+    steamID = steamidpulling(SteamUN, key)
+    game = gamespulling(steamID, key)
     return render(request,'hackathon/steam.html', {"game": game })
 
 
