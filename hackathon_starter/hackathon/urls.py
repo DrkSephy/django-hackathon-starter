@@ -26,5 +26,5 @@ urlpatterns = patterns('',
     url(r'^quandlSnp500/$', views.quandlSnp500, name='quandlsnp500'),
     url(r'^quandlNasdaq/$', views.quandlNasdaq, name='quandlnasdaq'),
     url(r'^quandlDowJones/$', views.quandlDowJones, name='quandldowjones'),
-    url(r'^quandl/$', views.quandl, name='quandl'),
+    url(r'^quandlstocks/$', views.quandlstocks, name='quandlstocks'),
 )
