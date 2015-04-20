@@ -23,7 +23,7 @@ def snp500IndexPull(apikey):
 def nasdaqPull(apikey):
     '''Returns JSON data of the Nasdaq Index.'''
     parameters = {'rows' : 1, 'auth_token' : apikey}
-    apiurl = 'https://www.quandl.com/api/v1/datasets/GOOG/NASDAQ_SWTX.json?'
+    apiurl = 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?'
     req = requests.get(apiurl, params=parameters)
     data = json.loads(req.content)
     return data
