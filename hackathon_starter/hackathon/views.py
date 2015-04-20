@@ -19,6 +19,7 @@ from scripts.twilioapi import *
 from scripts.instagram import InstagramOauthClient
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
+from scripts.paypal import PaypalOauthClient
 
 # Python
 import oauth2 as oauth
@@ -33,6 +34,7 @@ from hackathon.forms import UserForm
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
+getPaypal = PaypalOauthClient(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET)
 
 def index(request):
     context = {'hello': 'world'}
@@ -251,6 +253,10 @@ def instagramMediaByLocation(request):
 #    PAYPAL API    #
 ####################
 def paypal(request):
+    #code = request.GET['code']
+    getPaypal.get_access_token()
+    getPaypal.test()
+
     context = {'title':'paypal'}
     return render(request, 'hackathon/paypal.html', context)
 
