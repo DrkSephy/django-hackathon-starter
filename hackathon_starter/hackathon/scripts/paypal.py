@@ -5,14 +5,7 @@ with Paypal data and returning the responses as JSON.
 '''
 
 import requests
-import urllib
-import urllib2
-import json
 import simplejson as json2
-import googlemaps
-from django.conf import settings
-from datetime import datetime
-from time import strftime
 import unicodedata
 
 authorization_url = 'https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id='
@@ -30,6 +23,8 @@ class PaypalOauthClient(object):
 
 	access_token = None
 	user_data = None
+	token_type = None
+	refresh_token = None
 
 	def __init__(self, client_id, client_secret):
 		'''
@@ -59,9 +54,9 @@ class PaypalOauthClient(object):
 		return auth_url
 
 
-	def get_access_token(self):
+	def get_access_token(self, code):
 		''' 
-		Obtains access token.
+		Obtains access token from authorization code.
 
 		Parameters:
 			code: String
@@ -74,10 +69,12 @@ class PaypalOauthClient(object):
 					'Accept-Language': 'en_US',
 					'content-type': 'application/x-www-form-urlencoded'
 				  }
-		data = { 'grant_type': 'client_credentials'}
+		data = { 'grant_type': 'authorization_code',
+				  'code': code,
+				  'redirect_uri':'http://localhost:8000/hackathon/paypal'}
 
 
-		req = requests.post(access_token_url, data=data, headers= headers, auth=(self.client_id, self.client_secret))
+		req = requests.post(access_token_url, data=data, headers=headers, auth=(self.client_id, self.client_secret))
 		
 		if req.status_code != 200:
 			raise Exception("Invalid response %s." %  req.status_code)
@@ -85,14 +82,57 @@ class PaypalOauthClient(object):
 		content = unicodedata.normalize('NFKD', req.text).encode('ascii','ignore')
 		jsonlist = json2.loads(content)
 
-
+		#print jsonlist
 		self.access_token = jsonlist['access_token']
+		self.token_type = jsonlist['token_type']
+		self.refresh_token = jsonlist['refresh_token']
+
+		return self.refresh_token
+
+
+	def get_refresh_token(self, refresh_token):
+		'''
+		This methods obtain new access token when current access_token expires.
+		'''
+
+		headers = {
+					'Accept': 'application/json',
+					'Accept-Language': 'en_US',
+					'content-type': 'application/x-www-form-urlencoded'
+				  }
+		data = { 'grant_type': 'refresh_token',
+				  'refresh_token': refresh_token}
+
+		req = requests.post(access_token_url, data=data, headers=headers, auth=(self.client_id, self.client_secret))
+		
+		if req.status_code != 200:
+			raise Exception("Invalid response %s." %  req.status_code)
+		
+		content = unicodedata.normalize('NFKD', req.text).encode('ascii','ignore')
+		jsonlist = json2.loads(content)
+
+		print jsonlist
+		self.access_token = jsonlist['access_token']
+		self.token_type = jsonlist['token_type']
+		return self.access_token
+
+
 
 
 	def test(self):
-		link ='https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/identity/openidconnect/userinfo/?schema=openid'
-		req = requests.get(link, headers={'Content-Type':'application/json', 'Authorization': self.access_token})
-		print req
-
+		#link ='https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/identity/openidconnect/userinfo' #/?schema=openid'
+		link = 'https://api.sandbox.paypal.com/v1/identity/openidconnect/tokenservice'
+		header = { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Type':'application/json'}
+		body = { 'schema':'openid', 'access_token': self.access_token}
+		
+		#req = requests.post(link, headers={'Content-Type':'application/json', 'Authorization': self.token_type+' '+self.access_token})
+		req = requests.post(link, headers=header, data=body)
+		
+		if req.status_code != 200:
+			raise Exception("Invalid response %s." %  req.status_code)
+		
+		content = unicodedata.normalize('NFKD', req.text).encode('ascii','ignore')
+		print content
+		
 
 
