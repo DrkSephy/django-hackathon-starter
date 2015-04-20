@@ -10,7 +10,15 @@ def dowjonesIndustrialAvg(apikey):
     apiurl = 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?'
     req = requests.get(apiurl, params=parameters)
     data = json.loads(req.content)
-    return data
+    parsedData = []
+    stockData = {}
+    for datum in data:
+        stockData['name'] = data['name']
+        stockData['description'] = data['description']
+        stockData['data'] = data['data']
+        stockData['code'] = data['code']
+    parsedData.append(stockData)
+    return parsedData
 
 def snp500IndexPull(apikey):
     '''Returns JSON data of the S&P 500 Index.'''
