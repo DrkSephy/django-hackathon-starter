@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<html>
+    {% include 'hackathon/base.html' %}
+
+    <body>
+    	{% if user.is_authenticated %}
+        	<h1>Api Example</h1>
+        	<strong>{{ boldmessage }}</strong><br />
+        {% else %}
+        	<h1> Please register/login! </h1>
+        {% endif %}
+    </body>
+</html>
