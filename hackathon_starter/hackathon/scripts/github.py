@@ -202,28 +202,29 @@ def filterCommits(data):
     '''
 
     maxCommits = []
-    for i in range(1, 10):
-        maxCommitedRepo = max(data, key=lambda x:x['total'])
+    i = 0
+    while i < 10:
+        maxCommitedRepo = max(data, key=lambda x: x['total'])
         maxCommits.append(maxCommitedRepo)
         index = data.index(maxCommitedRepo)
         data.pop(index)
+        i += 1
     return maxCommits
-    
-    
+
 def getStarGazerCount(clientID, clientSecret):
     '''
     Returns a list number of stargazers for each
-    of a user's public repositories.  
+    of a user's public repositories.
 
     Parameters:
-        clientID: String 
+        clientID: String
             - The clientID from registering this application
               on Github.
         clientSecret: String
             - The clientSecret from registering this application
             on Github.
 
-    Returns: 
+    Returns:
         stargazers: Dictionary
             - A dictionary containing the following data:
                 - starData['stargazers_count']
@@ -235,7 +236,8 @@ def getStarGazerCount(clientID, clientSecret):
     jsonList = []
     stargazers = []
     while True:
-        req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' + str(pageNumber) + '&' + clientID + '&' + clientSecret)
+        req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' \
+            + str(pageNumber) + '&' + clientID + '&' + clientSecret)
         jsonList.append(json.loads(req.content))
         if len(json.loads(req.content)) < 30:
             break
@@ -249,29 +251,31 @@ def getStarGazerCount(clientID, clientSecret):
             starData['stargazers_count'] = datum['stargazers_count']
             starData['name'] = datum['name']
             stargazers.append(starData)
-            
+
     return stargazers
 
 def filterStarGazerCount(data):
     '''
     Returns the top 10 stargazed repositories.
 
-    Parameters: 
+    Parameters:
         data: List
             - A list containing stargazer counts for all
             of a user's public repositories
 
     Returns:
         maxStars: List
-            - A list containing the top ten repositories 
+            - A list containing the top ten repositories
             with the maximum number of stargazers
     '''
-    maxStars= []
-    for i in range(1, 10):
-        maxStarGazers = max(data, key=lambda x:x['stargazers_count'])
+    maxStars = []
+    i = 0
+    while i < 10:
+        maxStarGazers = max(data, key=lambda x: x['stargazers_count'])
         maxStars.append(maxStarGazers)
         index = data.index(maxStarGazers)
         data.pop(index)
+        i += 1
     return maxStars
 
 
