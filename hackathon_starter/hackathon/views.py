@@ -19,6 +19,7 @@ from scripts.twilioapi import *
 from scripts.instagram import InstagramOauthClient
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
+from scripts.paypal import PaypalOauthClient
 
 # Python
 import oauth2 as oauth
@@ -33,6 +34,7 @@ from hackathon.forms import UserForm
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
+getPaypal = PaypalOauthClient(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET)
 
 def index(request):
     context = {'hello': 'world'}
@@ -235,9 +237,40 @@ def instagramUserMedia(request):
     ''' Returns JSON response about a specific Instagram User's Media. '''
     user_id = User.objects.get(username='mk200789').id
     access_token = Profile.objects.get(user=user_id).oauth_secret
-    parsedData = getInstagram.get_user_media(access_token)
+    parsedData = getInstagram.get_user_media(32833691,access_token)
     return JsonResponse({'data': parsedData })
 
+def instagramMediaByLocation(request):
+    if request.method == 'GET':
+        if request.GET.items():
+            if request.user in User.objects.all():
+                address = request.GET.get('address_field')
+                user_id = User.objects.get(username=request.user).id
+                access_token = Profile.objects.get(user=user_id).oauth_secret
+                #lat, lng = getInstagram.search_for_location(address, access_token)
+                geocode_result = getInstagram.search_for_location(address, access_token)
+                if geocode_result:
+                    location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
+                    media = getInstagram.search_location_media(location_ids, access_token)
+                    title = address
+        else:
+            title, media,location_ids, geocode_result = 'Media by location', '','', ''
+
+
+    context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids}
+    return render(request, 'hackathon/instagram_q.html', context)
+
+
+####################
+#    PAYPAL API    #
+####################
+def paypal(request):
+    #code = request.GET['code']
+    getPaypal.get_access_token()
+    getPaypal.test()
+
+    context = {'title':'paypal'}
+    return render(request, 'hackathon/paypal.html', context)
 
 ##################
 #  LINKED IN API #

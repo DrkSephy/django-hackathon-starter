@@ -1,0 +1,43 @@
+<div class="jumbotron">
+  <div class="container">
+
+    <div class="row text-center"> 
+        <h1> Instagram User Data </h1>
+    </div>
+
+	    <div class="col-lg-12">
+	        <div class="table-responsive">
+	            <table class="table table-bordered table-hover table-striped tablesorter">
+	                <thead> 
+	                	<tr>
+	                		<th>Username</th>
+	                		<th>ID</th>
+	                		<th>Bio</th>
+	                		<th>Website</th>
+	                		<th>Profile Image</th>
+	                		<th>Full Name</th>
+	                		<th>Following</th>
+	                		<th>Followers</th>
+	                		<th>Total Media</th>
+	                	</tr>
+	                </thead>
+	                <tbody>
+	                	<tr data-ng-repeat="data in instagramUserData">
+	                		<td>{{data.username}}</td>
+	                		<td>{{data.id}}</td>
+	                		<td>{{data.bio}}</td>
+	                		<td>{{data.website}}</td>
+	                		<td><img src="{{data.profile_picture}}"></td>
+	                		<td>{{data.full_name}}</td>
+	                		<td>{{data.counts.follows}}</td>
+	                		<td>{{data.counts.followed_by}}</td>
+	                		<td>{{data.counts.media}}</td>
+	                	</tr>
+	                </tbody>
+	            </table>
+
+	        	<img data-ng-repeat= "i in instagramUserMediaData.data" src="{{i.images.thumbnail.url}}">
+	        </div>
+	    </div>	    
+	</div>
+</div>
