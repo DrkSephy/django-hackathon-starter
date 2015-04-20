@@ -62,7 +62,7 @@ In order to write clean code with a consistent style guide, we'll be using `Pyli
 
 This project will use the camel-case naming convention for variables and function names, which PyLint complains about by default. As such, I have created a pylint configuration file within the home directory of the project (the same directory which contains `ionic`, `angular`, `hackathon_starter`.) To run pylint while supplying a pylint configuration file:
 
-    pylint --rcfile .pylintrc hackathon_starter/hackathon/scripts/github.py
+    pylint --rcfile path/to/pylintrcfile/.pylintrc hackathon_starter/hackathon/scripts/github.py
 
 Where you can substitute `github.py` with the script you'd like to evaluate. 
 
