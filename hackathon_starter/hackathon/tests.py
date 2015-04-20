@@ -1,8 +1,5 @@
 from django.test import TestCase
 
-# Create your tests here.
-
-
 class SteamViewTestCase(TestCase):
 	def testSteam(self):
 		resp = self.client.get('/hackathon/steam/')
@@ -35,6 +32,10 @@ class SteamViewTestCase(TestCase):
 		for dict in resp.context:
 			if 'appid' in dict:
 				self.assertTrue('appid' in dict)
+
+	def testSteamDiscountedGamesDiscount(self):
+		resp = self.client.get('/hackathon/steamDiscountedGames/')
+		self.assertEqual(resp.context, None)
 
 
 class HackathonViewsTestCase(TestCase):

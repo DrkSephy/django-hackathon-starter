@@ -63,9 +63,6 @@ def steam(request):
     SteamUN = "Marorin"
     steamID = steamidpulling(SteamUN, key)
     game = gamespulling(steamID, key)
-    for thing in game:
-        if 'playtime_forever' in thing:
-            print 'yeah'
     return render(request,'hackathon/steam.html', {"game": game })
 
 def steamDiscountedGames(request):
