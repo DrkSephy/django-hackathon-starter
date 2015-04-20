@@ -42,4 +42,12 @@ def nasdaqPull(apikey):
     apiurl = 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?'
     req = requests.get(apiurl, params=parameters)
     data = json.loads(req.content)
-    return data
+    parsedData = []
+    stockData = {}
+    for datum in data: 
+        stockData['name'] = data['name']
+        stockData['description'] = data['description']
+        stockData['data'] = data['data']
+        stockData['code'] = data['code']
+    parsedData.append(stockData)
+    return parsedData

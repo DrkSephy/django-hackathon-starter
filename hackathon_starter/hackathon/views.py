@@ -106,15 +106,10 @@ def quandlstocks(request):
     everyData = {}
     dowjonesdata = dowjonesIndustrialAvg(APIKEY)
     everyData['dow'] = dowjonesdata
-    #print everyData
     snpdata = snp500IndexPull(APIKEY)
     everyData['snp'] = snpdata
-    #nasdaqdata = nasdaqPull(APIKEY)
-    # print dowjonesdata
-    #everyData['dowjones'] = dowjonesdata
-    #everyData['snp'] = snpdata
-    #everyData['nasdaq'] = nasdaqdata
-    #print everyData
+    nasdaqdata = nasdaqPull(APIKEY)
+    everyData['nasdaq'] = nasdaqdata
     return render(request, 'hackathon/quandl.html', { 'everyData': everyData })
 
 #################
