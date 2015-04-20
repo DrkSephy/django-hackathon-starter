@@ -51,6 +51,7 @@ class PaypalOauthClient(object):
 		'''
 
 		auth_url = authorization_url + self.client_id + '&response_type=code&scope=openid&redirect_uri=http://localhost:8000/hackathon/paypal/'
+		print auth_url
 		return auth_url
 
 
