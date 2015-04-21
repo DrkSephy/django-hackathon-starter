@@ -1,46 +1,48 @@
-# pylint: disable=C0303
-
+'''This script contains methods belonging to the Steam web API
+that can collect information based on an user's gaming library.'''
 import requests
 import json
 
-SteamUN = "Marorin"
-key = '231E98D442E52B87110816C3D5114A1D'
+def gamespulling(steamid, apikey):
+    '''Returns the JSON data from the Steam API based of one's
+    Steam ID number and returns a dictionary of
+    gameids and minutes played.'''
+    steaminfo = {
+        'key': apikey,
+        'steamid': steamid,
+        'format':'JSON',
+        'include_appinfo':'1'
+    }
+    apiurl = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/'
+    req = requests.get(apiurl, params=steaminfo)
+    data = json.loads(req.content)
+    return data['response']['games']
 
-def gamesPulling(steamID,key):
-    # Returns the JSON data from the Steam API based of one's 
-    # Steam ID number and returns a dictionary of gameids and minutes played.
+def steamidpulling(steamun, apikey):
+    '''Pulls out and returns the steam id number for use in steam queries.'''
+    steaminfo = {'key': apikey, 'vanityurl': steamun}
+    apiurl = 'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/'
+    req = requests.get(apiurl, params=steaminfo)
+    data = json.loads(req.content)
+    steamid = data['response']['steamid']
+    return steamid
+
+def steamlibrarypull(steamid, apikey):
+    '''Pulls out a CSV of Steam appids.'''
     steaminfo = {
-        'key': key, 
-        'steamid': steamID,
+        'key': apikey,
+        'steamid': steamid,
         'format':'JSON',
         'include_appinfo':'1'
     }
-    r = requests.get('http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/', params=steaminfo)
-    d = json.loads(r.content)
-    return d['response']['games']
- 
-def steamIDPulling(SteamUN,key):
-    #Pulls out and returns the steam id number for use in steam queries.
-    steaminfo = {'key': key,'vanityurl': SteamUN}
-    a = requests.get('http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/', params=steaminfo)
-    k = json.loads(a.content)
-    SteamID = k['response']['steamid']
-    
-    return SteamID
-def steamlibrarypull(steamID, key):
-#Pulls out a CSV of Steam appids.
-    steaminfo = {
-        'key': key,
-        'steamid': steamID,
-        'format':'JSON',
-        'include_appinfo':'1'
-    }
-    r = requests.get('http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/', params=steaminfo)
-    d = json.loads(r.content)
-    response = d['response']['games']
+    url = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/'
+    req = requests.get(url, params=steaminfo)
+    data = json.loads(req.content)
+    response = data['response']['games']
     games = {}
     for game in response:
-        getprice = requests.get('http://store.steampowered.com/api/appdetails/?appids=%d&filters=price_overview&cc=us' % game['appid'])
+        url = 'http://store.steampowered.com/api/appdetails/?appids=%d&filters=price_overview&cc=us'
+        getprice = requests.get(url % game['appid'])
         if getprice.status_code == 200:
             rjson = json.loads(getprice.text)
             # use the appid to fetch the value and convert to decimal

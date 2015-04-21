@@ -12,12 +12,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 # Scripts
-from scripts.steam import gamesPulling, steamIDPulling 
+from scripts.steam import gamespulling, steamidpulling 
 from scripts.github import *
 from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
 from scripts.instagram import InstagramOauthClient
 from scripts.scraper import steamDiscounts
+from scripts.quandl import *
+from scripts.paypal import PaypalOauthClient
+from scripts.twitter import TwitterOauthClient
 
 # Python
 import oauth2 as oauth
@@ -32,6 +35,8 @@ from hackathon.forms import UserForm
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
+getPaypal = PaypalOauthClient(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET)
+getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
 
 def index(request):
     context = {'hello': 'world'}
@@ -44,12 +49,14 @@ def index(request):
 
 def api_examples(request):
     instagram_url =getInstagram.get_authorize_url()
+    paypal_url = getPaypal.get_authorize_url()
+    twitter_url = getTwitter.get_authorize_url()
     if not getTumblr.accessed:
         obtain_oauth_verifier = getTumblr.authorize_url()
     else:
         obtain_oauth_verifier = '/hackathon/tumblr'
     #obtain_oauth_verifier = getTumblr.authorize_url()
-    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url}
+    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url, 'paypal_url': paypal_url, 'twitter_url':twitter_url}
     return render(request, 'hackathon/api_examples.html', context)
 
 #################
@@ -60,14 +67,56 @@ def steam(request):
     #Should link to test of Steam API example.
     key = '231E98D442E52B87110816C3D5114A1D'
     SteamUN = "Marorin"
-    steamID = steamIDPulling(SteamUN, key)
-    game = gamesPulling(steamID, key)
+    steamID = steamidpulling(SteamUN, key)
+    game = gamespulling(steamID, key)
     return render(request,'hackathon/steam.html', {"game": game })
-
 
 def steamDiscountedGames(request):
     data = steamDiscounts()
     return JsonResponse({ 'data': data })
+
+#################
+#  FACEBOOK API #
+#################
+
+def facebook(request):
+    '''A sample application that will publish a status update after going into the login process using the Javascript SDK '''
+    yourappid = '364831617044713'
+    return render(request, 'hackathon/facebook.html', { 'yourappid' : yourappid })
+
+#################
+#   QUANDL API  #
+#################
+
+def quandlDowJones(request):
+    '''Returns JSON response about the latest dowjones index.'''
+    APIKEY = 'fANs6ykrCdAxas7zpMz7'
+    dowjonesdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
+    print dowjonesdata
+    return JsonResponse({'data': dowjonesdata})
+
+def quandlSnp500(request):
+    '''Returns JSON response about the latest SNP 500 index.'''
+    APIKEY = 'fANs6ykrCdAxas7zpMz7'
+    snpdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
+    return JsonResponse({'data': snpdata})
+
+def quandlNasdaq(request):
+    '''Returns JSON response about the latest nasdaq index.'''
+    APIKEY = 'fANs6ykrCdAxas7zpMz7'
+    nasdaqdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
+    return JsonResponse({'data': nasdaqdata})
+
+def quandlstocks(request):
+    APIKEY = 'fANs6ykrCdAxas7zpMz7'	
+    everyData = {}
+    dowjonesdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
+    everyData['dow'] = dowjonesdata
+    snpdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
+    everyData['snp'] = snpdata
+    nasdaqdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
+    everyData['nasdaq'] = nasdaqdata
+    return render(request, 'hackathon/quandl.html', { 'everyData': everyData })
 
 #################
 #   GITHUB API  #
@@ -192,8 +241,74 @@ def instagramUserMedia(request):
     ''' Returns JSON response about a specific Instagram User's Media. '''
     user_id = User.objects.get(username='mk200789').id
     access_token = Profile.objects.get(user=user_id).oauth_secret
-    parsedData = getInstagram.get_user_media(access_token)
+    parsedData = getInstagram.get_user_media(32833691,access_token)
     return JsonResponse({'data': parsedData })
+
+def instagramMediaByLocation(request):
+    if request.method == 'GET':
+        if request.GET.items():
+            if request.user in User.objects.all():
+                address = request.GET.get('address_field')
+                user_id = User.objects.get(username=request.user).id
+                access_token = Profile.objects.get(user=user_id).oauth_secret
+                #lat, lng = getInstagram.search_for_location(address, access_token)
+                geocode_result = getInstagram.search_for_location(address, access_token)
+                if geocode_result:
+                    location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
+                    media = getInstagram.search_location_media(location_ids, access_token)
+                    title = address
+        else:
+            title, media,location_ids, geocode_result = 'Media by location', '','', ''
+
+
+    context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids}
+    return render(request, 'hackathon/instagram_q.html', context)
+
+
+####################
+#    PAYPAL API    #
+####################
+
+def paypal(request):
+    authorization_code = request.GET['code']
+    refresh_token = getPaypal.get_access_token(authorization_code)
+    getPaypal.get_refresh_token(refresh_token)
+    #getPaypal.userinfo()
+    print getPaypal.access_token
+    getPaypal.create_invoice()
+
+    context = {'title':'paypal'}
+    return render(request, 'hackathon/paypal.html', context)
+
+
+####################
+#   TWITTER API    #
+####################
+def twitter(request):
+    oauth_verifier = request.GET['oauth_verifier']
+    getTwitter.get_access_token_url(oauth_verifier)     
+
+
+    if request.user not in User.objects.all():
+        try:  
+            user = User.objects.get(username=getTwitter.username )
+        except User.DoesNotExist:
+            username = getTwitter.username 
+            new_user = User.objects.create_user(username, username+'@example.com', 'password')
+            new_user.save()
+            profile = Profile()
+            profile.user = new_user
+            profile.oauth_token = getTwitter.oauth_token
+            profile.oauth_secret = getTwitter.oauth_token_secret
+            profile.save()
+
+        user = authenticate(username=getTwitter.username, password='password')
+        login(request, user)
+
+    
+
+    context ={'title': 'twitter'}
+    return render(request, 'hackathon/twitter.html', context)
 
 
 ##################
@@ -301,3 +416,7 @@ def instagram_login(request):
 def tumblr_login(request):
     tumblr_url = getTumblr.authorize_url()
     return HttpResponseRedirect(tumblr_url)
+
+def twitter_login(request):
+    twitter_url = getTwitter.get_authorize_url()
+    return HttpResponseRedirect(twitter_url)
