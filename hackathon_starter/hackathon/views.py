@@ -19,7 +19,6 @@ from scripts.twilioapi import *
 from scripts.instagram import InstagramOauthClient
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
-from scripts.paypal import PaypalOauthClient
 from scripts.twitter import TwitterOauthClient
 
 # Python
