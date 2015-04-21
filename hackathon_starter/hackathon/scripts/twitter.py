@@ -1,11 +1,17 @@
 import urlparse
 import oauth2 as oauth
+import requests
+import base64, random
 
 request_token_url = 'https://api.twitter.com/oauth/request_token'
 access_token_url = 'https://api.twitter.com/oauth/access_token'
 authorize_url = 'https://api.twitter.com/oauth/authorize'
 
 class TwitterOauthClient(object):
+
+	oauth_token = None
+	oauth_token_secret = None
+
 
 	def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret):
 		self.consumer_key = consumer_key
@@ -60,6 +66,16 @@ class TwitterOauthClient(object):
 		self.user_id = access_token['user_id']
 		self.username = access_token['screen_name']
 
+
+	def get_nonce(self):
+		'''
+		Unique token generated for each request.
+		'''
+		n = base64.b64encode(
+			''.join([str(random.randint(0, 9)) for i in range(24)]))
+		return n
+
+	
 		
 
 

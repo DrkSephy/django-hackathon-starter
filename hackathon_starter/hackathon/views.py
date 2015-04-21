@@ -305,6 +305,8 @@ def twitter(request):
         user = authenticate(username=getTwitter.username, password='password')
         login(request, user)
 
+    
+
     context ={'title': 'twitter'}
     return render(request, 'hackathon/twitter.html', context)
 
