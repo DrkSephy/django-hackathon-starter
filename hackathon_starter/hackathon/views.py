@@ -35,7 +35,6 @@ from hackathon.forms import UserForm
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
-getPaypal = PaypalOauthClient(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET)
 getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
 
 def index(request):
@@ -49,14 +48,13 @@ def index(request):
 
 def api_examples(request):
     instagram_url =getInstagram.get_authorize_url()
-    paypal_url = getPaypal.get_authorize_url()
     twitter_url = getTwitter.get_authorize_url()
     if not getTumblr.accessed:
         obtain_oauth_verifier = getTumblr.authorize_url()
     else:
         obtain_oauth_verifier = '/hackathon/tumblr'
     #obtain_oauth_verifier = getTumblr.authorize_url()
-    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url, 'paypal_url': paypal_url, 'twitter_url':twitter_url}
+    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url, 'twitter_url':twitter_url}
     return render(request, 'hackathon/api_examples.html', context)
 
 #################
@@ -245,40 +243,27 @@ def instagramUserMedia(request):
     return JsonResponse({'data': parsedData })
 
 def instagramMediaByLocation(request):
-    if request.method == 'GET':
-        if request.GET.items():
-            if request.user in User.objects.all():
-                address = request.GET.get('address_field')
-                user_id = User.objects.get(username=request.user).id
-                access_token = Profile.objects.get(user=user_id).oauth_secret
-                #lat, lng = getInstagram.search_for_location(address, access_token)
-                geocode_result = getInstagram.search_for_location(address, access_token)
-                if geocode_result:
-                    location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
-                    media = getInstagram.search_location_media(location_ids, access_token)
-                    title = address
-        else:
-            title, media,location_ids, geocode_result = 'Media by location', '','', ''
+    if request.GET.items():
+        print "address"
+        if request.user in User.objects.all():
+            address = request.GET.get('address_field')
+            user_id = User.objects.get(username=request.user).id
+            access_token = Profile.objects.get(user=user_id).oauth_secret
+            #lat, lng = getInstagram.search_for_location(address, access_token)
+            geocode_result = getInstagram.search_for_location(address, access_token)
+            if geocode_result:
+                location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
+                media = getInstagram.search_location_media(location_ids, access_token)
+                title = address
+            else: 
+                title = 'Media by location'
+    else:
+        print " none "
+        title, media,location_ids, geocode_result = 'Media by location', '','', ''
 
 
     context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids}
     return render(request, 'hackathon/instagram_q.html', context)
-
-
-####################
-#    PAYPAL API    #
-####################
-
-def paypal(request):
-    authorization_code = request.GET['code']
-    refresh_token = getPaypal.get_access_token(authorization_code)
-    getPaypal.get_refresh_token(refresh_token)
-    #getPaypal.userinfo()
-    print getPaypal.access_token
-    getPaypal.create_invoice()
-
-    context = {'title':'paypal'}
-    return render(request, 'hackathon/paypal.html', context)
 
 
 ####################
@@ -305,7 +290,7 @@ def twitter(request):
         user = authenticate(username=getTwitter.username, password='password')
         login(request, user)
 
-    
+    #getTwitter.get_trends_available()
 
     context ={'title': 'twitter'}
     return render(request, 'hackathon/twitter.html', context)

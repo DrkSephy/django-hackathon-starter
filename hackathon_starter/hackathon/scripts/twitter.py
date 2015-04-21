@@ -75,7 +75,8 @@ class TwitterOauthClient(object):
 			''.join([str(random.randint(0, 9)) for i in range(24)]))
 		return n
 
-	
+	#def get_trends_available(self):
+
 		
 
 
