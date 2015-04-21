@@ -271,6 +271,8 @@ def paypal(request):
     refresh_token = getPaypal.get_access_token(authorization_code)
     getPaypal.get_refresh_token(refresh_token)
     #getPaypal.userinfo()
+    print getPaypal.access_token
+    getPaypal.create_invoice()
 
     context = {'title':'paypal'}
     return render(request, 'hackathon/paypal.html', context)

@@ -7,6 +7,7 @@ with Paypal data and returning the responses as JSON.
 import requests
 import simplejson as json2
 import unicodedata
+import urllib
 
 authorization_url = 'https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id='
 access_token_url  = 'https://api.sandbox.paypal.com/v1/oauth2/token'
@@ -51,7 +52,6 @@ class PaypalOauthClient(object):
 		'''
 
 		auth_url = authorization_url + self.client_id + '&response_type=code&scope=openid&redirect_uri=http://localhost:8000/hackathon/paypal/'
-		print auth_url
 		return auth_url
 
 
@@ -117,17 +117,4 @@ class PaypalOauthClient(object):
 		#print jsonlist
 		self.access_token = jsonlist['access_token']
 		self.token_type = jsonlist['token_type']
-		return self.access_token
 
-
-	def userinfo(self):
-		link = 'https://api.sandbox.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid'
-		headers = { 'Content-Type':'application/json', 
-				   'Authorization': self.token_type + ' '+ self.access_token,
-				   'Accept-Language': 'en_US',
-				   'content-type': 'application/x-www-form-urlencoded'
-				 }
-		req = requests.get(link, headers=headers)
-		#print req.content
-
-	
