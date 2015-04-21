@@ -20,6 +20,7 @@ from scripts.instagram import InstagramOauthClient
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
 from scripts.paypal import PaypalOauthClient
+from scripts.twitter import TwitterOauthClient
 
 # Python
 import oauth2 as oauth
@@ -35,6 +36,7 @@ from hackathon.forms import UserForm
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
 getPaypal = PaypalOauthClient(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET)
+getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
 
 def index(request):
     context = {'hello': 'world'}
@@ -48,12 +50,13 @@ def index(request):
 def api_examples(request):
     instagram_url =getInstagram.get_authorize_url()
     paypal_url = getPaypal.get_authorize_url()
+    twitter_url = getTwitter.get_authorize_url()
     if not getTumblr.accessed:
         obtain_oauth_verifier = getTumblr.authorize_url()
     else:
         obtain_oauth_verifier = '/hackathon/tumblr'
     #obtain_oauth_verifier = getTumblr.authorize_url()
-    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url, 'paypal_url': paypal_url}
+    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url, 'paypal_url': paypal_url, 'twitter_url':twitter_url}
     return render(request, 'hackathon/api_examples.html', context)
 
 #################
@@ -278,6 +281,33 @@ def paypal(request):
     return render(request, 'hackathon/paypal.html', context)
 
 
+####################
+#   TWITTER API    #
+####################
+def twitter(request):
+    oauth_verifier = request.GET['oauth_verifier']
+    getTwitter.get_access_token_url(oauth_verifier)     
+
+
+    if request.user not in User.objects.all():
+        try:  
+            user = User.objects.get(username=getTwitter.username )
+        except User.DoesNotExist:
+            username = getTwitter.username 
+            new_user = User.objects.create_user(username, username+'@example.com', 'password')
+            new_user.save()
+            profile = Profile()
+            profile.user = new_user
+            profile.oauth_token = getTwitter.oauth_token
+            profile.oauth_secret = getTwitter.oauth_token_secret
+            profile.save()
+
+        user = authenticate(username=getTwitter.username, password='password')
+        login(request, user)
+
+    context ={'title': 'twitter'}
+    return render(request, 'hackathon/twitter.html', context)
+
 
 ##################
 #  LINKED IN API #
@@ -384,3 +414,7 @@ def instagram_login(request):
 def tumblr_login(request):
     tumblr_url = getTumblr.authorize_url()
     return HttpResponseRedirect(tumblr_url)
+
+def twitter_login(request):
+    twitter_url = getTwitter.get_authorize_url()
+    return HttpResponseRedirect(twitter_url)
