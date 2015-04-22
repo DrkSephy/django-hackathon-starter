@@ -27,7 +27,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile
+from hackathon.models import Snippet, Profile, InstagramProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -202,27 +202,36 @@ def instagram(request):
     code = request.GET['code']
     getInstagram.get_access_token(code)
 
+    #check if user in User profile
     if request.user not in User.objects.all():
+        print "user not in User"
         try:  
-            user = User.objects.get(username=getInstagram.user_data['username'] )
+            user = User.objects.get(username=getInstagram.user_data['username'])
         except User.DoesNotExist:
             username = getInstagram.user_data['username']
             new_user = User.objects.create_user(username, username+'@example.com', 'password')
             new_user.save()
-            profile = Profile()
+            profile = InstagramProfile()
             profile.user = new_user
-            profile.oauth_token = getInstagram.client_id
-            #since instagram doesnt have oauth_secret value, using this field to temp set in access token
-            # for JSON response
-            profile.oauth_secret = getInstagram.access_token 
+            profile.access_token = getInstagram.access_token 
             profile.save()
 
         user = authenticate(username=getInstagram.user_data['username'], password='password')
         login(request, user)
+    else:
+        #check if user has an Instragram profile
+        try:  
+            user = User.objects.get(username=request.user.username)
+            instagramUser = InstagramProfile.objects.get(user=user.id)
+        except InstagramProfile.DoesNotExist:
+            new_user = User.objects.get(username=request.user.username)
+            profile = InstagramProfile(user = new_user, access_token=getInstagram.access_token)
+            profile.save()
 
     search_tag = 'kitten'
     #return tagged objects
     tagged_media = getInstagram.get_tagged_media(search_tag)
+
     context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
     return render(request, 'hackathon/instagram.html', context)
 
@@ -242,26 +251,30 @@ def instagramUserMedia(request):
     return JsonResponse({'data': parsedData })
 
 def instagramMediaByLocation(request):
-    if request.GET.items():
-        print "address"
-        if request.user in User.objects.all():
-            address = request.GET.get('address_field')
-            user_id = User.objects.get(username=request.user).id
-            access_token = Profile.objects.get(user=user_id).oauth_secret
-            #lat, lng = getInstagram.search_for_location(address, access_token)
-            geocode_result = getInstagram.search_for_location(address, access_token)
-            if geocode_result:
-                location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
-                media = getInstagram.search_location_media(location_ids, access_token)
-                title = address
-            else: 
-                title = 'Media by location'
-    else:
-        print " none "
-        title, media,location_ids, geocode_result = 'Media by location', '','', ''
+    if request.method == 'GET':
+        if request.GET.items():
+            #check if user has a User profile
+            if request.user in User.objects.all():
+                #check if user has an Instagram profile
+                user = User.objects.get(username=request.user)
+                #if user has an Instagram profile, query the search
+                if InstagramProfile.objects.all().filter(user=user.id):
+                    address = request.GET.get('address_field')
+                    instagramUser = InstagramProfile.objects.get(user=user.id)
+                    access_token = instagramUser.access_token
+                    geocode_result = getInstagram.search_for_location(address, access_token)
+                    if geocode_result:
+                        location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
+                        media = getInstagram.search_location_media(location_ids, access_token)
+                        title = address
+                        err_msg = ''
+                else:
+                    title, media, err_msg, location_ids, geocode_result = 'Media by location','', str(request.user)+ ' does not have an InstagramProfile','', ''
+        else:
+            title, media, err_msg, location_ids, geocode_result = 'Media by location', '','', '', ''
 
 
-    context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids}
+    context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids, 'err_msg': err_msg}
     return render(request, 'hackathon/instagram_q.html', context)
 
 
