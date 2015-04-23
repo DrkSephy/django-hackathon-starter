@@ -92,9 +92,15 @@ class TwitterOauthClient(object):
 
 
 
-	def get_trends_available(self):
+	def get_trends_available(self, yahoo_consumer_key):
 		method = "get"
-		link ='https://api.twitter.com/1.1/trends/available.json'
+		link = 'https://api.twitter.com/1.1/trends/available.json'
+		link_parameters = {}
+		#link = 'https://api.twitter.com/1.1/trends/closest.json'
+		#link_parameters = {'lat':'40.782032', 'long':'-73.9717188'}
+		#link = 'https://api.twitter.com/1.1/trends/place.json'
+		#link_parameters = {'id': '1'}
+		
 
 		oauth_parameters = get_oauth_parameters(
 		    self.consumer_key,
@@ -104,6 +110,7 @@ class TwitterOauthClient(object):
 		oauth_parameters['oauth_signature'] = generate_signature(
 		    method,
 		    link,
+		    link_parameters,
 		    oauth_parameters,
 		    self.consumer_key,
 		    self.consumer_secret,
@@ -112,15 +119,34 @@ class TwitterOauthClient(object):
 
 		headers = {'Authorization': create_auth_header(oauth_parameters)}
 
+		if link_parameters:
+			link += '?'+urllib.urlencode(link_parameters)
 
 		req = requests.get(link, headers=headers)
-		print req.status_code
+		#print req.status_code
 		
 		if int(req.status_code) != 200:
 			raise Exception('Invalid response %s' %req.status_code)
 
-		content = json2.loads(req.content)[0]
-		print content
+		content = json2.loads(req.content)
+		#print len(content)
+		
+		for place in content:
+			for e in place:
+				if e == 'url':
+					request_neighbor_data=  requests.get(place[e]+'/neighbors?appid='+yahoo_consumer_key+'&format=json')
+					#print request_neighbor_data.status_code
+					if request_neighbor_data.status_code == 200:
+						neighbor = json2.loads(request_neighbor_data.content)
+					else:
+						neighbor = {}
+
+			place['neighbor'] = neighbor
+					#print place
+
+
+		return content
+		
 
 
 
@@ -141,15 +167,18 @@ def get_nonce():
 	return n
 
 
-def generate_signature(method, url, oauth_parameters, oauth_consumer_key, oauth_consumer_secret, oauth_token_secret=None, status=None):
+def generate_signature(method, link, link_parameters, oauth_parameters, oauth_consumer_key, oauth_consumer_secret, oauth_token_secret=None, status=None):
     '''
     Generate signature.
     '''
-
-    parameters = urllib.urlencode(collections.OrderedDict(sorted(oauth_parameters.items())))
+    if link_parameters:
+    	new_dict = dict(oauth_parameters, **link_parameters)
+    	parameters = urllib.urlencode(collections.OrderedDict(sorted(new_dict.items())))
+    else:
+    	parameters = urllib.urlencode(collections.OrderedDict(sorted(oauth_parameters.items())))
 
     #Create your Signature Base String
-    signature_base_string = ( method.upper() + '&' + percent_encode(str(url)) + '&' + percent_encode(parameters))
+    signature_base_string = ( method.upper() + '&' + percent_encode(str(link)) + '&' + percent_encode(parameters))
 
     #Get the signing key
     signing_key = create_signing_key(oauth_consumer_secret, oauth_token_secret)

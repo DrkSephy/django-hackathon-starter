@@ -32,6 +32,7 @@ from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
 
+
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
 getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
@@ -250,6 +251,7 @@ def instagramUserMedia(request):
     return JsonResponse({'data': parsedData })
 
 def instagramMediaByLocation(request):
+    print request.user
     if request.method == 'GET':
         if request.GET.items():
             #check if user has a User profile
@@ -308,9 +310,10 @@ def twitter(request):
             profile.save()            
 
 
-    getTwitter.get_trends_available()
+    value = getTwitter.get_trends_available(settings.YAHOO_CONSUMER_KEY)
+    #yahoo_woeid_link = 'http://where.yahooapis.com/v1/place/'+returned_woeid+'?appid='+settings.YAHOO_CONSUMER_KEY
 
-    context ={'title': 'twitter'}
+    context ={'title': 'twitter', 'value': value}
     return render(request, 'hackathon/twitter.html', context)
 
 
