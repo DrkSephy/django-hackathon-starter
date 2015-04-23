@@ -308,7 +308,7 @@ def twitter(request):
             profile.save()            
 
 
-    #getTwitter.get_trends_available()
+    getTwitter.get_trends_available()
 
     context ={'title': 'twitter'}
     return render(request, 'hackathon/twitter.html', context)

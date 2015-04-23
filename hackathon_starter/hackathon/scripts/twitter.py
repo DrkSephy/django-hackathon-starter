@@ -1,19 +1,42 @@
+
+'''
+twitter.py contains a handful of methods for interacting
+with Twitter data and returning the responses as JSON.
+'''
+
+
 import urlparse
 import oauth2 as oauth
 import requests
 import base64, random
+import urllib
+import binascii
+import time, collections, json, hmac, hashlib
+import simplejson as json2
 
 request_token_url = 'https://api.twitter.com/oauth/request_token'
 access_token_url = 'https://api.twitter.com/oauth/access_token'
 authorize_url = 'https://api.twitter.com/oauth/authorize'
 
 class TwitterOauthClient(object):
+	'''
+	Python Client for Twitter API.
+	'''	
 
 	oauth_token = None
 	oauth_token_secret = None
 
 
 	def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret):
+		'''
+		Parameters:
+			consumer_key: String
+				- The consumer_key from registering application
+				  on Instagram.
+			consumer_secret: String
+				- The consumer_secret from registering application
+				  on Instagram.
+		'''		
 		self.consumer_key = consumer_key
 		self.consumer_secret = consumer_secret
 		self.access_token = access_token
@@ -67,19 +90,119 @@ class TwitterOauthClient(object):
 		self.username = access_token['screen_name']
 
 
-	def get_nonce(self):
-		'''
-		Unique token generated for each request.
-		'''
-		n = base64.b64encode(
-			''.join([str(random.randint(0, 9)) for i in range(24)]))
-		return n
 
-	#def get_trends_available(self):
 
+	def get_trends_available(self):
+		method = "get"
+		link ='https://api.twitter.com/1.1/trends/available.json'
+
+		oauth_parameters = get_oauth_parameters(
+		    self.consumer_key,
+		    self.access_token
+		)
+
+		oauth_parameters['oauth_signature'] = generate_signature(
+		    method,
+		    link,
+		    oauth_parameters,
+		    self.consumer_key,
+		    self.consumer_secret,
+		    self.access_token_secret
+		)
+
+		headers = {'Authorization': create_auth_header(oauth_parameters)}
+
+
+		req = requests.get(link, headers=headers)
+		print req.status_code
 		
+		if int(req.status_code) != 200:
+			raise Exception('Invalid response %s' %req.status_code)
+
+		content = json2.loads(req.content)[0]
+		print content
 
 
 
 
+def percent_encode(string):
+	'''
+	Percent encode strings.
+	'''
+	return urllib.quote(string, safe='~')
 
+
+def get_nonce():
+	'''
+	Generate unique token per request.
+	'''
+
+	n = base64.b64encode(''.join([str(random.randint(0, 9)) for i in range(24)]))
+	return n
+
+
+def generate_signature(method, url, oauth_parameters, oauth_consumer_key, oauth_consumer_secret, oauth_token_secret=None, status=None):
+    '''
+    Generate signature.
+    '''
+
+    parameters = urllib.urlencode(collections.OrderedDict(sorted(oauth_parameters.items())))
+
+    #Create your Signature Base String
+    signature_base_string = ( method.upper() + '&' + percent_encode(str(url)) + '&' + percent_encode(parameters))
+
+    #Get the signing key
+    signing_key = create_signing_key(oauth_consumer_secret, oauth_token_secret)
+
+    return calculate_signature(signing_key, signature_base_string)
+
+
+
+def calculate_signature(signing_key, signature_base_string):
+    '''
+    Calculate signature using HMAC-SHA1 hashing algorithm.
+    '''
+    hashed = hmac.new(signing_key, signature_base_string, hashlib.sha1)
+
+    sig = binascii.b2a_base64(hashed.digest())[:-1]
+
+    return percent_encode(sig)
+
+
+def create_signing_key(oauth_consumer_secret, oauth_token_secret):
+    '''
+    Creates a key to sign the request with.
+    '''
+
+    signing_key = percent_encode(oauth_consumer_secret) + '&' + percent_encode(oauth_token_secret)
+
+    return signing_key
+
+
+def create_auth_header(parameters):
+	'''
+	Format authorization header with oath parameters.
+	'''
+
+	ordered_parameters = collections.OrderedDict(sorted(parameters.items()))
+	auth_header = ('%s="%s"' % (k, v) for k, v in ordered_parameters.iteritems())
+
+	return "OAuth " + ', '.join(auth_header)
+
+
+def get_oauth_parameters(consumer_key, access_token):
+    '''
+    Returns parameters for making requests.
+    '''
+    oauth_parameters = {
+        'oauth_timestamp': str(int(time.time())),
+        'oauth_signature_method': "HMAC-SHA1",
+        'oauth_version': "1.0",
+        'oauth_token': access_token,
+        'oauth_nonce': get_nonce(),
+        'oauth_consumer_key': consumer_key
+    }
+
+    return oauth_parameters
+
+    
