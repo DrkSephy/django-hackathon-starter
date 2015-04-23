@@ -19,7 +19,6 @@ from scripts.twilioapi import *
 from scripts.instagram import InstagramOauthClient
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
-from scripts.paypal import PaypalOauthClient
 from scripts.twitter import TwitterOauthClient
 
 # Python
@@ -28,14 +27,13 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile
+from hackathon.models import Snippet, Profile, InstagramProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
 
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
-getPaypal = PaypalOauthClient(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET)
 getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
 
 def index(request):
@@ -49,14 +47,13 @@ def index(request):
 
 def api_examples(request):
     instagram_url =getInstagram.get_authorize_url()
-    paypal_url = getPaypal.get_authorize_url()
     twitter_url = getTwitter.get_authorize_url()
     if not getTumblr.accessed:
         obtain_oauth_verifier = getTumblr.authorize_url()
     else:
         obtain_oauth_verifier = '/hackathon/tumblr'
     #obtain_oauth_verifier = getTumblr.authorize_url()
-    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url, 'paypal_url': paypal_url, 'twitter_url':twitter_url}
+    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url, 'twitter_url':twitter_url}
     return render(request, 'hackathon/api_examples.html', context)
 
 #################
@@ -205,27 +202,36 @@ def instagram(request):
     code = request.GET['code']
     getInstagram.get_access_token(code)
 
+    #check if user in User profile
     if request.user not in User.objects.all():
+        print "user not in User"
         try:  
-            user = User.objects.get(username=getInstagram.user_data['username'] )
+            user = User.objects.get(username=getInstagram.user_data['username'])
         except User.DoesNotExist:
             username = getInstagram.user_data['username']
             new_user = User.objects.create_user(username, username+'@example.com', 'password')
             new_user.save()
-            profile = Profile()
+            profile = InstagramProfile()
             profile.user = new_user
-            profile.oauth_token = getInstagram.client_id
-            #since instagram doesnt have oauth_secret value, using this field to temp set in access token
-            # for JSON response
-            profile.oauth_secret = getInstagram.access_token 
+            profile.access_token = getInstagram.access_token 
             profile.save()
 
         user = authenticate(username=getInstagram.user_data['username'], password='password')
         login(request, user)
+    else:
+        #check if user has an Instragram profile
+        try:  
+            user = User.objects.get(username=request.user.username)
+            instagramUser = InstagramProfile.objects.get(user=user.id)
+        except InstagramProfile.DoesNotExist:
+            new_user = User.objects.get(username=request.user.username)
+            profile = InstagramProfile(user = new_user, access_token=getInstagram.access_token)
+            profile.save()
 
     search_tag = 'kitten'
     #return tagged objects
     tagged_media = getInstagram.get_tagged_media(search_tag)
+
     context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
     return render(request, 'hackathon/instagram.html', context)
 
@@ -247,38 +253,29 @@ def instagramUserMedia(request):
 def instagramMediaByLocation(request):
     if request.method == 'GET':
         if request.GET.items():
+            #check if user has a User profile
             if request.user in User.objects.all():
-                address = request.GET.get('address_field')
-                user_id = User.objects.get(username=request.user).id
-                access_token = Profile.objects.get(user=user_id).oauth_secret
-                #lat, lng = getInstagram.search_for_location(address, access_token)
-                geocode_result = getInstagram.search_for_location(address, access_token)
-                if geocode_result:
-                    location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
-                    media = getInstagram.search_location_media(location_ids, access_token)
-                    title = address
+                #check if user has an Instagram profile
+                user = User.objects.get(username=request.user)
+                #if user has an Instagram profile, query the search
+                if InstagramProfile.objects.all().filter(user=user.id):
+                    address = request.GET.get('address_field')
+                    instagramUser = InstagramProfile.objects.get(user=user.id)
+                    access_token = instagramUser.access_token
+                    geocode_result = getInstagram.search_for_location(address, access_token)
+                    if geocode_result:
+                        location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
+                        media = getInstagram.search_location_media(location_ids, access_token)
+                        title = address
+                        err_msg = ''
+                else:
+                    title, media, err_msg, location_ids, geocode_result = 'Media by location','', str(request.user)+ ' does not have an InstagramProfile','', ''
         else:
-            title, media,location_ids, geocode_result = 'Media by location', '','', ''
+            title, media, err_msg, location_ids, geocode_result = 'Media by location', '','', '', ''
 
 
-    context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids}
+    context = {'title': title, 'geocode_result':geocode_result, 'media':media, 'list_id':location_ids, 'err_msg': err_msg}
     return render(request, 'hackathon/instagram_q.html', context)
-
-
-####################
-#    PAYPAL API    #
-####################
-
-def paypal(request):
-    authorization_code = request.GET['code']
-    refresh_token = getPaypal.get_access_token(authorization_code)
-    getPaypal.get_refresh_token(refresh_token)
-    #getPaypal.userinfo()
-    print getPaypal.access_token
-    getPaypal.create_invoice()
-
-    context = {'title':'paypal'}
-    return render(request, 'hackathon/paypal.html', context)
 
 
 ####################
@@ -305,7 +302,7 @@ def twitter(request):
         user = authenticate(username=getTwitter.username, password='password')
         login(request, user)
 
-    
+    #getTwitter.get_trends_available()
 
     context ={'title': 'twitter'}
     return render(request, 'hackathon/twitter.html', context)
