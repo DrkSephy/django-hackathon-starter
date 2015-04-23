@@ -148,6 +148,19 @@ class InstagramOauthClient(object):
 		return data
 
 	def search_for_location(self, address, access_token):
+		'''
+		Parameters:
+			access_token: String
+				- The access_token given after granting permission
+				  application access to Instagram data.
+			address: String
+				- The address is a user input.
+
+		Returns:
+			location: Dictionary
+				- A dictionary returning the latitude, and longitude
+				  of an address.
+		'''		
 		gmaps = googlemaps.Client(key=settings.GOOGLEMAP_API_KEY)
 		#geocoding and address
 		geocode_result = gmaps.geocode(address)
