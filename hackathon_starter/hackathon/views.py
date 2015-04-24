@@ -16,7 +16,7 @@ from scripts.steam import gamespulling, steamidpulling
 from scripts.github import *
 from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
-from scripts.instagram import InstagramOauthClient
+from scripts.instagram import InstagramOauthClient, searchForLocation
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
 from scripts.twitter import TwitterOauthClient
@@ -240,14 +240,14 @@ def instagramUser(request):
 
     user_id = User.objects.get(username='mk200789').id
     access_token = Profile.objects.get(user=user_id).oauth_secret
-    parsedData = getInstagram.get_user_info(access_token)
+    parsedData = getInstagram.get_user_info()
     return JsonResponse({ 'data': parsedData })
 
 def instagramUserMedia(request):
     ''' Returns JSON response about a specific Instagram User's Media. '''
     user_id = User.objects.get(username='mk200789').id
     access_token = Profile.objects.get(user=user_id).oauth_secret
-    parsedData = getInstagram.get_user_media(32833691,access_token)
+    parsedData = getInstagram.get_user_media(32833691)
     return JsonResponse({'data': parsedData })
 
 def instagramMediaByLocation(request):
@@ -262,11 +262,10 @@ def instagramMediaByLocation(request):
                 if InstagramProfile.objects.all().filter(user=user.id):
                     address = request.GET.get('address_field')
                     instagramUser = InstagramProfile.objects.get(user=user.id)
-                    access_token = instagramUser.access_token
-                    geocode_result = getInstagram.search_for_location(address, access_token)
+                    geocode_result = searchForLocation(address)
                     if geocode_result:
-                        location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'], access_token)
-                        media = getInstagram.search_location_media(location_ids, access_token)
+                        location_ids =getInstagram.search_location_ids(geocode_result['lat'], geocode_result['lng'])
+                        media = getInstagram.search_location_media(location_ids)
                         title = address
                         err_msg = ''
                 else:
