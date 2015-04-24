@@ -20,7 +20,17 @@ class Profile(models.Model):
 
 class InstagramProfile(models.Model):
     user = models.ForeignKey(User)
+    instagram_user = models.CharField(max_length=200)
     access_token = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return unicode(self.user)
+
+class TwitterProfile(models.Model):
+    user = models.ForeignKey(User)
+    twitter_user = models.CharField(max_length=200)
+    oauth_token = models.CharField(max_length=200)
+    oauth_token_secret = models.CharField(max_length=200)
 
     def __unicode__(self):
         return unicode(self.user)
