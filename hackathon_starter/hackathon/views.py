@@ -20,7 +20,7 @@ from scripts.instagram import *
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
 from scripts.twitter import TwitterOauthClient
-
+from scripts.nytimes import *
 # Python
 import oauth2 as oauth
 from rest_framework.renderers import JSONRenderer
