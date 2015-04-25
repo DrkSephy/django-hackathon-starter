@@ -16,7 +16,7 @@ from scripts.steam import gamespulling, steamidpulling
 from scripts.github import *
 from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
-from scripts.instagram import InstagramOauthClient, searchForLocation
+from scripts.instagram import *
 from scripts.scraper import steamDiscounts
 from scripts.quandl import *
 from scripts.twitter import TwitterOauthClient
@@ -45,32 +45,31 @@ def index(request):
             oauth_verifier = request.GET['oauth_verifier']
             getTwitter.get_access_token_url(oauth_verifier) 
 
-            if not User.objects.all().filter(username=request.user.username):
-                try:
-                    user = User.objects.get(username = getTwitter.username + '_twitter')#(username=getTwitter.username)
-                except User.DoesNotExist:
-                    username = getTwitter.username + '_twitter'
-                    new_user = User.objects.create_user(username, username+'@madewithtwitter.com', 'password')
-                    new_user.save()
-                    profile = TwitterProfile(user = new_user,oauth_token = getTwitter.oauth_token, oauth_token_secret= getTwitter.oauth_token_secret, twitter_user=getTwitter.username)
-                    profile.save()
-                user = authenticate(username=getTwitter.username+'_twitter', password='password')
-                login(request, user)
+            try:
+                user = User.objects.get(username = getTwitter.username + '_twitter')#(username=getTwitter.username)
+            except User.DoesNotExist:
+                username = getTwitter.username + '_twitter'
+                new_user = User.objects.create_user(username, username+'@madewithtwitter.com', 'password')
+                new_user.save()
+                profile = TwitterProfile(user = new_user,oauth_token = getTwitter.oauth_token, oauth_token_secret= getTwitter.oauth_token_secret, twitter_user=getTwitter.username)
+                profile.save()
+            user = authenticate(username=getTwitter.username+'_twitter', password='password')
+            login(request, user)
         elif 'code' in request.GET.keys():
             code = request.GET['code']
             getInstagram.get_access_token(code)
 
-            if not User.objects.all().filter(username=request.user.username):
-                try:  
-                    user = User.objects.get(username=getInstagram.user_data['username']+'_instagram')
-                except User.DoesNotExist:
-                    username = getInstagram.user_data['username']+'_instagram'
-                    new_user = User.objects.create_user(username, username+'@madewithinstagram.com', 'password')
-                    new_user.save()
-                    profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
-                    profile.save()
-                user = authenticate(username=getInstagram.user_data['username']+'_instagram' , password='password')
-                login(request, user) 
+
+            try:  
+                user = User.objects.get(username=getInstagram.user_data['username']+'_instagram')
+            except User.DoesNotExist:
+                username = getInstagram.user_data['username']+'_instagram'
+                new_user = User.objects.create_user(username, username+'@madewithinstagram.com', 'password')
+                new_user.save()
+                profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
+                profile.save()
+            user = authenticate(username=getInstagram.user_data['username']+'_instagram' , password='password')
+            login(request, user) 
 
     context = {'hello': 'world'}
     return render(request, 'hackathon/index.html', context)
