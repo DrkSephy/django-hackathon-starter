@@ -39,37 +39,58 @@ getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_
 def index(request):
     print "index: " + str(request.user)
 
-    #check returned parameters, if there is user logged in via social media
-    if request.GET.items():
-        if 'oauth_verifier' in request.GET.keys():
-            oauth_verifier = request.GET['oauth_verifier']
-            getTwitter.get_access_token_url(oauth_verifier) 
+    if not request.user.is_active:
+        if request.GET.items():
+            if 'oauth_verifier' in request.GET.keys():
+                oauth_verifier = request.GET['oauth_verifier']
+                getTwitter.get_access_token_url(oauth_verifier) 
 
-            try:
-                user = User.objects.get(username = getTwitter.username + '_twitter')#(username=getTwitter.username)
-            except User.DoesNotExist:
-                username = getTwitter.username + '_twitter'
-                new_user = User.objects.create_user(username, username+'@madewithtwitter.com', 'password')
-                new_user.save()
-                profile = TwitterProfile(user = new_user,oauth_token = getTwitter.oauth_token, oauth_token_secret= getTwitter.oauth_token_secret, twitter_user=getTwitter.username)
-                profile.save()
-            user = authenticate(username=getTwitter.username+'_twitter', password='password')
-            login(request, user)
-        elif 'code' in request.GET.keys():
-            code = request.GET['code']
-            getInstagram.get_access_token(code)
+                try:
+                    user = User.objects.get(username = getTwitter.username + '_twitter')#(username=getTwitter.username)
+                except User.DoesNotExist:
+                    username = getTwitter.username + '_twitter'
+                    new_user = User.objects.create_user(username, username+'@madewithtwitter.com', 'password')
+                    new_user.save()
+                    profile = TwitterProfile(user = new_user,oauth_token = getTwitter.oauth_token, oauth_token_secret= getTwitter.oauth_token_secret, twitter_user=getTwitter.username)
+                    profile.save()
+                user = authenticate(username=getTwitter.username+'_twitter', password='password')
+                login(request, user)
+            elif 'code' in request.GET.keys():
+                code = request.GET['code']
+                getInstagram.get_access_token(code)
 
+                try: 
+                    user = User.objects.get(username=getInstagram.user_data['username']+'_instagram')
+                except User.DoesNotExist:
+                    username = getInstagram.user_data['username']+'_instagram'
+                    new_user = User.objects.create_user(username, username+'@madewithinstagram.com', 'password')
+                    new_user.save()
+                    profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
+                    profile.save()
+                user = authenticate(username=getInstagram.user_data['username']+'_instagram' , password='password')
+                login(request, user)
+    else:
+        if request.GET.items():
+            if 'oauth_verifier' in request.GET.keys():
+                oauth_verifier = request.GET['oauth_verifier']
+                getTwitter.get_access_token_url(oauth_verifier)
+                user = User.objects.get(username = request.user.username)
 
-            try:  
-                user = User.objects.get(username=getInstagram.user_data['username']+'_instagram')
-            except User.DoesNotExist:
-                username = getInstagram.user_data['username']+'_instagram'
-                new_user = User.objects.create_user(username, username+'@madewithinstagram.com', 'password')
-                new_user.save()
-                profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
-                profile.save()
-            user = authenticate(username=getInstagram.user_data['username']+'_instagram' , password='password')
-            login(request, user) 
+                try:
+                    twitterUser = TwitterProfile.objects.get(user = user.id)
+                except TwitterProfile.DoesNotExist:
+                    profile = TwitterProfile(user = user, oauth_token = getTwitter.oauth_token, oauth_token_secret= getTwitter.oauth_token_secret, twitter_user=getTwitter.username)
+                    profile.save()
+            elif 'code' in request.GET.keys():
+                code = request.GET['code']
+                getInstagram.get_access_token(code)
+                user = User.objects.get(username = request.user.username)
+
+                try: 
+                    instagramUser = InstagramProfile.objects.get(user= user.id)
+                except InstagramProfile.DoesNotExist:
+                    profile = InstagramProfile(user = user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
+                    profile.save()
 
     context = {'hello': 'world'}
     return render(request, 'hackathon/index.html', context)
@@ -232,23 +253,17 @@ def tumblr(request):
 ####################
 
 def instagram(request):
-    print getInstagram.is_authorized
+    #print getInstagram.is_authorized
+
     if getInstagram.is_authorized:
-        try:
-            user = User.objects.get(username=request.user)
-            instagramUser = InstagramProfile.objects.get(user=user.id)
-        except InstagramProfile.DoesNotExist:
-            new_user = User.objects.get(username=request.user.username)
-            profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=new_user.username+'@instagram')
-            profile.save()
+        search_tag = 'kitten'
+        #return tagged objects
+        instagramUser = InstagramProfile.objects.get(user=request.user)
+        tagged_media = getTaggedMedia(search_tag, instagramUser.access_token)        
     else:
         instagram_url =getInstagram.get_authorize_url()
         return HttpResponseRedirect(instagram_url)
     
-    search_tag = 'kitten'
-    #return tagged objects
-    tagged_media = getTaggedMedia(search_tag, instagramUser.access_token)
-
     context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
     return render(request, 'hackathon/instagram.html', context)
 
@@ -300,19 +315,10 @@ def instagramMediaByLocation(request):
 
 def twitter(request):
     if getTwitter.is_authorized:
-        try:
-            user = User.objects.get(username=request.user.username)
-            twitterUser = TwitterProfile.objects.get(user=user.id)
-        except TwitterProfile.DoesNotExist:
-            new_user = User.objects.get(username=request.user.username)
-            profile = TwitterProfile(user = new_user, oauth_token = getTwitter.oauth_token, oauth_token_secret = getTwitter.oauth_token_secret, twitter_user=getTwitter.username)
-            profile.save()
-
+        value = getTwitter.get_trends_available(settings.YAHOO_CONSUMER_KEY)
     else:
         tumblr_url = getTwitter.get_authorize_url()
         return HttpResponseRedirect(tumblr_url)
-
-    value = getTwitter.get_trends_available(settings.YAHOO_CONSUMER_KEY)
 
     context ={'title': 'twitter', 'value': value}
     return render(request, 'hackathon/twitter.html', context)
