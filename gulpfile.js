@@ -3,8 +3,14 @@ var gulp = require('gulp');
 
 // 2. Include any plugins you might need.
 var process = require('child_process');
-
+var install = require("gulp-install");
 // 3. Write out the tasks 
+
+gulp.task('bowerinstall',function(){
+	console.info('Installing Bower Packages.')
+    gulp.src(['./bower.json', './package.json'])
+    .pipe(install());
+})
 
 gulp.task('djangomigrate', function(){
 	var spawn = process.spawn;
@@ -21,4 +27,4 @@ gulp.task('django', function(){
 });
 
 // 4. Default Task
-gulp.task('default',['django','djangomigrate']);
+gulp.task('default',['bowerinstall','django','djangomigrate']);
