@@ -7,6 +7,7 @@ import json
 def fetcharticle(apikey, url):
     '''returns the JSON data of the most
     popular articles by view from the past 24 hours.'''
+    parameters = {'api-key' : apikey}
     req = requests.get(url)
     data = json.loads(req.content)
     parsedData = []

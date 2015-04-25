@@ -21,6 +21,7 @@ from scripts.scraper import steamDiscounts
 from scripts.quandl import *
 from scripts.twitter import TwitterOauthClient
 from scripts.nytimes import *
+
 # Python
 import oauth2 as oauth
 from rest_framework.renderers import JSONRenderer
@@ -168,6 +169,15 @@ def quandlstocks(request):
     nasdaqdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
     everyData['nasdaq'] = nasdaqdata
     return render(request, 'hackathon/quandl.html', { 'everyData': everyData })
+
+#################
+#  NYTIMES API  #
+#################
+
+def nytimespop(request):
+    POPAPIKEY = 'be4cd251d8a4f1a3362689088bdb0255:0:71947444'
+    popdata = fetcharticle(POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
+    return JSONResponse({'data':popdata})
 
 #################
 #   GITHUB API  #
