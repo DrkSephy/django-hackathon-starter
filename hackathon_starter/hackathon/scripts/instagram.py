@@ -22,6 +22,7 @@ class InstagramOauthClient(object):
 
     access_token = None
     user_data = None
+    is_authorized = False
 
     def __init__(self, client_id, client_secret):
         '''
@@ -46,8 +47,9 @@ class InstagramOauthClient(object):
                 - The authorization url.
         '''
 
-        redirectUri = '&redirect_uri=http://localhost:8000/hackathon/instagram&response_type=code'
+        redirectUri = '&redirect_uri=http://127.0.0.1:8000/hackathon/&response_type=code'
         authURL = AUTHORIZATION_URL + self.client_id + redirectUri
+        #print authURL
         return authURL
 
     def get_access_token(self, code):
@@ -64,7 +66,7 @@ class InstagramOauthClient(object):
             'client_id' : self.client_id,
             'client_secret' : self.client_secret,
             'grant_type' : 'authorization_code',
-            'redirect_uri' : 'http://localhost:8000/hackathon/instagram',
+            'redirect_uri' : 'http://127.0.0.1:8000/hackathon/',
             'code' : code}
 
         authSettingUrl = urllib.urlencode(authSetting)
@@ -73,148 +75,12 @@ class InstagramOauthClient(object):
         jsonlist = json.load(content)
         self.access_token = jsonlist['access_token']
         self.user_data = jsonlist['user']
+        self.is_authorized = True
 
 
-    def get_tagged_media(self, tag):
-        '''
-        Get recent tagged media.
-
-        Parameters:
-            tag: String
-                - The tag used to search the most recent media that's tagged with it.
-
-        Returns:
-            data: Dictionary
-                - A dictionary containing recent tagged 120 media
-                  counts data pertaining to each media.
-        '''
-
-        tagUri = 'https://api.instagram.com/v1/tags/'
-        taggedMediaUrl = tagUri + tag + '/media/recent?access_token=' + self.access_token
-        req = requests.get(taggedMediaUrl)
-        content = json2.loads(req.content)
-        data = content['data']
-
-        while len(data) <= 100:
-            nextUrl = content['pagination']['next_url']
-            req = requests.get(nextUrl)
-            content = json2.loads(req.content)
-            for i in content['data']:
-                data.append(i)
-        #print len(data)
-        return data
 
 
-    def get_user_info(self):
-        '''
-        Get user information.
 
-        Parameters:
-            access_token: String
-                - The access_token given after granting permission
-                  application access to Instagram data.
-
-        Returns:
-            data: Dictionary
-                - A dictionary containing user information.
-        '''
-
-        userInfo = 'https://api.instagram.com/v1/users/32833691/?access_token='+self.access_token
-        req = requests.get(userInfo)
-        content = json2.loads(req.content)
-        data = content['data']
-        return data
-
-
-    def get_user_media(self, userId):
-        '''
-        Parameters:
-            access_token: String
-                - The access_token given after granting permission
-                  application access to Instagram data.
-
-        Returns:
-            data: Dictionary
-                - A dictionary containing user media information.
-        '''
-
-        userMediaUri = 'https://api.instagram.com/v1/users/' + str(userId)
-        userMedia = userMediaUri + '/media/recent/?access_token=' + self.access_token
-        req = requests.get(userMedia)
-        content = json2.loads(req.content)
-        data = content['data']
-        return data
-
-
-    def search_location_ids(self, lat, lng):
-        '''
-        Parameters:
-            lat: Float
-                - The latitude of the input address
-            lng: Float
-                - The longitude of the input address
-
-        Returns:
-            listOfIds: Dictionary
-                - A dictionary returning the list of location ids
-                  of the given address coordinates.
-        '''
-
-        locIdUri = 'https://api.instagram.com/v1/locations/search?lat=' + str(lat)
-        location = locIdUri+'&lng='+str(lng)+'&access_token='+self.access_token+'&distance=5000'
-        req = requests.get(location)
-        data = json2.loads(req.content)
-        listOfIds = []
-        if data['meta']['code'] != 200:
-            raise Exception("Invalid response %s." % data['meta']['code'])
-        searchIds = data['data']
-        for data in searchIds:
-            for i in data:
-                if i == 'id':
-                    listOfIds.append(data[i])
-        return listOfIds
-
-
-    def search_location_media(self, listOfLocationIds):
-        '''
-        Parameters:
-            listOfLocationIds: Float
-                - list of location ids retrieve from coordinate of
-                  of searched address.
-            access_token: String
-                - The access_token given after granting permission
-                  application access to Instagram data.
-
-        Returns:
-            media: Dictionary
-                - A dictionary returning the list of recent media
-                  of the list of location ids.
-        '''
-
-        media = []
-        locationUri = 'https://api.instagram.com/v1/locations/'
-        for location in listOfLocationIds:
-            mediaByLocation = locationUri+location+'/media/recent?access_token='+self.access_token
-            req = requests.get(mediaByLocation)
-            contentAll = json2.loads(req.content)
-            if contentAll['pagination']:
-                tempMedia = []
-                nextUrl = contentAll['pagination']['next_url']
-                req = requests.get(nextUrl)
-                content = json2.loads(req.content)
-                for i in content['data']:
-                    i['created_time'] = datetime.fromtimestamp(int(i['created_time']))
-                    i['created_time'] = i['created_time'].strftime('%Y-%m-%d %H:%M:%S')
-                    tempMedia.append(i)
-                media += [tempMedia]
-            else:
-                for i in contentAll['data']:
-                    for data in i:
-                        if data == 'created_time':
-                            i[data] = datetime.fromtimestamp(int(i[data]))
-                            i[data] = i[data].strftime('%Y-%m-%d %H:%M:%S')
-                media.append(contentAll['data'])
-        return media
 
 
 def searchForLocation(address):
@@ -236,3 +102,147 @@ def searchForLocation(address):
     if geocodeResult:
         location = geocodeResult[0]['geometry']['location']
         return location
+
+
+def getTaggedMedia(tag, accessToken):
+    '''
+    Get recent tagged media.
+
+    Parameters:
+        tag: String
+            - The tag used to search the most recent media that's tagged with it.
+
+    Returns:
+        data: Dictionary
+            - A dictionary containing recent tagged 120 media
+              counts data pertaining to each media.
+    '''
+
+    tagUri = 'https://api.instagram.com/v1/tags/'
+    taggedMediaUrl = tagUri + tag + '/media/recent?access_token=' + accessToken
+    req = requests.get(taggedMediaUrl)
+    content = json2.loads(req.content)
+    data = content['data']
+
+    while len(data) <= 100:
+        nextUrl = content['pagination']['next_url']
+        req = requests.get(nextUrl)
+        content = json2.loads(req.content)
+        for i in content['data']:
+            data.append(i)
+    #print len(data)
+    return data
+
+
+def getUserInfo(accessToken):
+    '''
+    Get user information.
+
+    Parameters:
+        access_token: String
+            - The access_token given after granting permission
+              application access to Instagram data.
+
+    Returns:
+        data: Dictionary
+            - A dictionary containing user information.
+    '''
+
+    userInfo = 'https://api.instagram.com/v1/users/32833691/?access_token='+accessToken
+    req = requests.get(userInfo)
+    content = json2.loads(req.content)
+    data = content['data']
+    return data
+
+
+def getUserMedia(userId, accessToken):
+    '''
+    Parameters:
+        accessToken: String
+            - The access_token given after granting permission
+              application access to Instagram data.
+        userId: Integer
+            - User's instagram ID number.
+
+    Returns:
+        data: Dictionary
+            - A dictionary containing user media information.
+    '''
+
+    userMediaUri = 'https://api.instagram.com/v1/users/' + str(userId)
+    userMedia = userMediaUri + '/media/recent/?access_token=' + accessToken
+    req = requests.get(userMedia)
+    content = json2.loads(req.content)
+    data = content['data']
+    return data
+
+
+def searchLocationIds(lat, lng, accessToken):
+    '''
+    Parameters:
+        lat: Float
+            - The latitude of the input address
+        lng: Float
+            - The longitude of the input address
+
+    Returns:
+        listOfIds: Dictionary
+            - A dictionary returning the list of location ids
+              of the given address coordinates.
+    '''
+
+    locIdUri = 'https://api.instagram.com/v1/locations/search?lat=' + str(lat)
+    location = locIdUri+'&lng='+str(lng)+'&access_token='+ accessToken+'&distance=5000'
+    req = requests.get(location)
+    data = json2.loads(req.content)
+    listOfIds = []
+    if data['meta']['code'] != 200:
+        raise Exception("Invalid response %s." % data['meta']['code'])
+    searchIds = data['data']
+    for data in searchIds:
+        for i in data:
+            if i == 'id':
+                listOfIds.append(data[i])
+    return listOfIds
+
+
+def searchLocationMedia(listOfLocationIds, accessToken):
+    '''
+    Parameters:
+        listOfLocationIds: Float
+            - list of location ids retrieve from coordinate of
+              of searched address.
+        access_token: String
+            - The access_token given after granting permission
+              application access to Instagram data.
+
+    Returns:
+        media: Dictionary
+            - A dictionary returning the list of recent media
+              of the list of location ids.
+    '''
+
+    media = []
+    locationUri = 'https://api.instagram.com/v1/locations/'
+    for location in listOfLocationIds:
+        mediaByLocation = locationUri+location+'/media/recent?access_token='+ accessToken
+        req = requests.get(mediaByLocation)
+        contentAll = json2.loads(req.content)
+        if contentAll['pagination']:
+            tempMedia = []
+            nextUrl = contentAll['pagination']['next_url']
+            req = requests.get(nextUrl)
+            content = json2.loads(req.content)
+            for i in content['data']:
+                i['created_time'] = datetime.fromtimestamp(int(i['created_time']))
+                i['created_time'] = i['created_time'].strftime('%Y-%m-%d %H:%M:%S')
+                tempMedia.append(i)
+            media += [tempMedia]
+        else:
+            for i in contentAll['data']:
+                for data in i:
+                    if data == 'created_time':
+                        i[data] = datetime.fromtimestamp(int(i[data]))
+                        i[data] = i[data].strftime('%Y-%m-%d %H:%M:%S')
+            media.append(contentAll['data'])
+    return media
