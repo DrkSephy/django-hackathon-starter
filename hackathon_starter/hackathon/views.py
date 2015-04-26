@@ -450,7 +450,7 @@ def user_logout(request):
 
 
 def instagram_login(request):
-    instagram_url =getInstagram.get_authorize_url()
+    instagram_url = getInstagram.get_authorize_url()
     return HttpResponseRedirect(instagram_url)
 
 def tumblr_login(request):

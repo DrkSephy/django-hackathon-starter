@@ -36,6 +36,28 @@ Twilio
 .. automodule:: twilioapi
 	:members:
 
+Twitter
+=======
+.. automodule:: twitter
+	:members:
+
+Scraper
+=======
+.. automodule:: scraper
+	:members:
+
+New York Times
+==============
+.. automodule:: nytimes
+	:members:
+
+Instagram
+=========
+.. automodule:: instagram
+	:members:
+
+
+
 
 Indices and tables
 ==================
