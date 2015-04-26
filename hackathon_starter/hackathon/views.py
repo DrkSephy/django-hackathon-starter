@@ -180,6 +180,12 @@ def nytimespop(request):
     popdata = fetcharticle(POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
     return JSONResponse({'data': popdata})
 
+def nytimestop(request):
+    '''Returns JSON response about the articles located in the homepage'''
+    TOPAPIKEY = 'c9655598e1fd4ff591f6d46f2321260e:17:71947444'
+    topdata = fetcharticle(TOPAPIKEY, 'http://api.nytimes.com/svc/topstories/v1/home.json?')
+    return JSONResponse({'data': topdata})
+
 #################
 #   GITHUB API  #
 #################
