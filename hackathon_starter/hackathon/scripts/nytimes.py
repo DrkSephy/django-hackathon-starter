@@ -8,15 +8,15 @@ def fetcharticle(apikey, url):
     '''returns the JSON data of the most
     popular articles by view from the past 24 hours.'''
     parameters = {'api-key' : apikey}
-    req = requests.get(url)
+    req = requests.get(url, params=parameters)
     data = json.loads(req.content)
     parsedData = []
-    stockData = {}
+    newsData = {}
     for datum in data:
-    	stockData = ['title'] = data['title']
-    	stockData = ['abstract'] = data['abstract']
-    	stockData = ['section'] = data['section']
-    	stockData = ['byline'] = data['byline']
-    	stockData = ['views'] = data['views']
-    parsedData.append(stockData)
+    	newsData['title'] = data['results']['title']
+    	newsData['abstract'] = data['results']['abstract']
+    	newsData['section'] = data['results']['section']
+    	newsData['byline'] = data['results']['byline']
+    	newsData['views'] = data['results']['views']
+    parsedData.append(newsData)
     return parsedData

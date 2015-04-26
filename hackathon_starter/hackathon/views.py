@@ -177,7 +177,7 @@ def quandlstocks(request):
 def nytimespop(request):
     POPAPIKEY = 'be4cd251d8a4f1a3362689088bdb0255:0:71947444'
     popdata = fetcharticle(POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
-    return JSONResponse({'data':popdata})
+    return JSONResponse({'data': popdata})
 
 #################
 #   GITHUB API  #
