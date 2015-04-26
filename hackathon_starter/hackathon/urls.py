@@ -31,4 +31,5 @@ urlpatterns = patterns('',
     url(r'^quandlDowJones/$', views.quandlDowJones, name='quandldowjones'),
     url(r'^quandlstocks/$', views.quandlstocks, name='quandlstocks'),
     url(r'^nytimespop/$', views.nytimespop, name='nytimespop'),
+    url(r'^nytimestop/$', views.nytimestop, name='nytimestop'),
 )

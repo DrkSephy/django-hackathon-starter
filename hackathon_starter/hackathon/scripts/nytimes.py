@@ -16,6 +16,6 @@ def fetcharticle(apikey, url):
                 "abstract": datum["abstract"],
                 "section": datum["section"],
                 "byline": datum["byline"],
-                "views": datum["views"]}
+                }
         parsedData.append(new_data)
     return parsedData
