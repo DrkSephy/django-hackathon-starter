@@ -186,6 +186,16 @@ def nytimestop(request):
     topdata = fetcharticle(TOPAPIKEY, 'http://api.nytimes.com/svc/topstories/v1/home.json?')
     return JSONResponse({'data': topdata})
 
+def nytimesarticles(request):
+    POPAPIKEY = 'be4cd251d8a4f1a3362689088bdb0255:0:71947444'
+    TOPAPIKEY = 'c9655598e1fd4ff591f6d46f2321260e:17:71947444'
+    everyData = {}
+    popdata = fetcharticle(POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
+    topdata = topdata = fetcharticle(TOPAPIKEY, 'http://api.nytimes.com/svc/topstories/v1/home.json?')
+    everyData['top'] = topdata
+    everyData['pop'] = popdata
+    return render(request, 'hackathon/nytimes.html', { 'everyData': everyData })
+
 #################
 #   GITHUB API  #
 #################
