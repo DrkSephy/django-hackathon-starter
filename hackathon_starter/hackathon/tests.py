@@ -70,3 +70,7 @@ class HackathonViewsTestCase(TestCase):
 	def testTwilio(self):
 		resp = self.client.get('/hackathon/twilio/')
 		self.assertEqual(resp.status_code, 200)
+	
+	def testNytimespop(self):
+		resp = self.client.get('/hackathon/nytimespop/')
+		self.assertEqual(resp.status_code, 200)

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+
+    <h1 class="text-center"> New York Times Collection </h1>
+    <h2 class="text-center"> Popular Stories Data </h2>
+	<div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Title <i class="icon-sort"></i></th>
+                <th class="header"> Abstract <i class="icon-sort"></i></th>
+                <th class="header"> Section Located <i class="icon-sort"></i></th>
+                <th class="header"> Author <i class="icon-sort"></i></th>  
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for data in everyData.pop %}
+                <tr>
+                    <td>{{ data.title }}</td>
+                    <td>{{ data.abstract }}</td>
+                    <td>{{ data.section }}</td>
+                    <td>{{ data.byline }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+    <h2 class="text-center"> Top Stories Data </h2>
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Title <i class="icon-sort"></i></th>
+                <th class="header"> Abstract <i class="icon-sort"></i></th>
+                <th class="header"> Section Located <i class="icon-sort"></i></th>
+                <th class="header"> Author <i class="icon-sort"></i></th>  
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for data in everyData.top %}
+                <tr>
+                    <td>{{ data.title }}</td>
+                    <td>{{ data.abstract }}</td>
+                    <td>{{ data.section }}</td>
+                    <td>{{ data.byline }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+  
+</body>
+</html>
