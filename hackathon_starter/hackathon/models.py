@@ -45,5 +45,8 @@ class Snippet(models.Model):
         ordering = ('created',)
 
 class MeetupToken(models.Model):
-    user = models.ForeignKey(User)
+    # user = models.ForeignKey(User)
     access_token = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return unicode(self.access_token)

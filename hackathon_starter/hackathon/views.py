@@ -143,15 +143,15 @@ def facebook(request):
 
 def meetup(request):
     CONSUMER_KEY = 'p50vftdqq72tgotpaeqk5660un'
-    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/token'
+    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/meetupToken'
     AUTHORIZE_URL = 'https://secure.meetup.com/oauth2/authorize?client_id=' + CONSUMER_KEY + '&response_type=code' + '&redirect_uri=' + REDIRECT_URI
     return HttpResponseRedirect(AUTHORIZE_URL)
 
-def token(request):
+def meetupToken(request):
     access_token_url = 'https://secure.meetup.com/oauth2/access?'
     CLIENT_KEY = 'p50vftdqq72tgotpaeqk5660un'
     CLIENT_SECRET = 'i5l00ln2r4mcf161n6451hjoj8'
-    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/token'
+    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/meetupToken'
     url = access_token_url + 'client_id=' +  CLIENT_KEY + '&client_secret=' + CLIENT_SECRET + '&grant_type=authorization_code' + '&redirect_uri=' + REDIRECT_URI + '&code=' +  request.GET.get('code')
 
     response = requests.post(url)
@@ -159,6 +159,8 @@ def token(request):
     # profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
     meetupToken = MeetupToken(access_token = access_token)
     meetupToken.save()
+    thing = MeetupToken.objects.all()
+    print thing[0]
     req = requests.get("https://api.meetup.com/2/member/self/?access_token=" + access_token)
     print req.content
     return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
