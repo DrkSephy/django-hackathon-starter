@@ -32,7 +32,7 @@ class LinkedInAPI(object):
 
          li_url ='http://www.linkedin.com'
          authorize_path = li_url +'/uas/oauth/authorization'
-         auth_url = authorize_path+self.consumer_key+'redirect_uri=https://127.0.0.1:8000/hackathon/linkedin'
+         auth_url = authorize_path+'?response_type=code'+self.consumer_key+'redirect_uri=https://127.0.0.1:8000/hackathon/linkedin'
          return auth_url
 
     def get_access_token(self, request_token, verifier):
