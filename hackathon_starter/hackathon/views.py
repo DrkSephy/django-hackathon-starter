@@ -161,6 +161,7 @@ def meetupToken(request):
 def meetupUser(request):
     access_token = MeetupToken.objects.all()[0]
     userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
+    print userData
     return render(request, 'hackathon/meetup.html', { 'data': userData })
 
 #################

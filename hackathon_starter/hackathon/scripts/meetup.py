@@ -9,5 +9,14 @@ USERDATA = 'https://api.meetup.com/2/member/self/?access_token='
 
 def retrieveUserData(url):
 	req = requests.get(url)
-	return req.content
+	content = json.loads(req.content)
+	filteredData = []
+	data = {}
+	data['name'] = content['name']
+	data['country'] = content['country'].upper()
+	data['city'] = content['city']
+	data['state'] = content['state']
+	data['status'] = content['status']
+	filteredData.append(data)
+	return filteredData
 
