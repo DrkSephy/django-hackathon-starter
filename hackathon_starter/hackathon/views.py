@@ -21,6 +21,7 @@ from scripts.scraper import steamDiscounts
 from scripts.quandl import *
 from scripts.twitter import TwitterOauthClient
 from scripts.nytimes import *
+from scripts.meetup import *
 
 # Python
 import oauth2 as oauth
@@ -159,12 +160,13 @@ def meetupToken(request):
     # profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
     meetupToken = MeetupToken(access_token = access_token)
     meetupToken.save()
-    thing = MeetupToken.objects.all()
-    print thing[0]
-    req = requests.get("https://api.meetup.com/2/member/self/?access_token=" + access_token)
-    print req.content
     return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
 
+def meetupUser(request):
+    access_token = MeetupToken.objects.all()[0]
+    userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
+    print userData
+    return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
 
 #################
 #   QUANDL API  #
