@@ -384,8 +384,14 @@ def twitter(request):
     return render(request, 'hackathon/twitter.html', context)
 
 def twitterTweets(request):
+    print getTwitter.is_authorized
+    if getTwitter.is_authorized:
+        content = getTwitter.get_tweets()
+    else:
+        twitter_url = getTwitter.get_authorize_url()
+        return HttpResponseRedirect(twitter_url)
 
-    context ={'title': 'twitter tweet'}
+    context ={'title': 'twitter tweet', 'content': content}
     return render(request, 'hackathon/twitter_tweet.html', context)    
 
 ##################
