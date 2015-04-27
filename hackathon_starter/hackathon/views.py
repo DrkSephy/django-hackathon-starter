@@ -161,10 +161,13 @@ def meetupToken(request):
 
 def meetupUser(request):
     access_token = MeetupToken.objects.all()[0]
+    meetupData = {}
     userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
+    meetupData['userData'] = userData
     dashboardData = retrieveDashboard('https://api.meetup.com/dashboard?access_token=' + str(access_token))
+    meetupData['dashboardData'] = dashboardData
     print dashboardData
-    return render(request, 'hackathon/meetup.html', { 'data': userData })
+    return render(request, 'hackathon/meetup.html', { 'data': meetupData })
 
 #################
 #   QUANDL API  #

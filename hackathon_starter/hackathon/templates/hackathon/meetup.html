@@ -18,7 +18,7 @@
             </thead>
             <tbody>
 
-            {% for key in data %}
+            {% for key in data.userData %}
                 <tr>
                     <td>{{ key.name }}</td>
                     <td>{{ key.state }}</td>
@@ -33,6 +33,30 @@
         </div>
     </div>
 
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Last Meetup Group <i class="icon-sort"></i></th>
+                <th class="header"> Name <i class="icon-sort"></i></th>
+                <th class="header"> Last Event Location <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for key in data.dashboardData %}
+                <tr>
+                    <td>{{ key.group }}</td>
+                    <td>{{ key.name }}</td>
+                    <td>{{ key.last_event.name}}</td>
+    			</tr>
+            {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+    </div>
     
 
 </body>
