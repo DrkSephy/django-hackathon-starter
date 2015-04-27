@@ -20,3 +20,8 @@ def retrieveUserData(url):
 	filteredData.append(data)
 	return filteredData
 
+def retrieveDashboard(url):
+	req = requests.get(url)
+	return req.content
+	
+
