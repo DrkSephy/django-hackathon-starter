@@ -21,14 +21,16 @@ from scripts.scraper import steamDiscounts
 from scripts.quandl import *
 from scripts.twitter import TwitterOauthClient
 from scripts.nytimes import *
+from scripts.meetup import *
 
 # Python
 import oauth2 as oauth
+import simplejson as json
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -135,6 +137,37 @@ def facebook(request):
     '''A sample application that will publish a status update after going into the login process using the Javascript SDK '''
     yourappid = '364831617044713'
     return render(request, 'hackathon/facebook.html', { 'yourappid' : yourappid })
+
+#################
+#   MEETUP API  #
+#################
+
+def meetup(request):
+    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/meetupToken'
+    AUTHORIZE_URL = 'https://secure.meetup.com/oauth2/authorize?client_id=' + settings.MEETUP_CONSUMER_KEY + '&response_type=code' + '&redirect_uri=' + REDIRECT_URI
+    return HttpResponseRedirect(AUTHORIZE_URL)
+
+def meetupToken(request):
+    access_token_url = 'https://secure.meetup.com/oauth2/access?'
+    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/meetupToken'
+    url = access_token_url + 'client_id=' +  settings.MEETUP_CONSUMER_KEY + '&client_secret=' + settings.MEETUP_CONSUMER_SECRET + '&grant_type=authorization_code' + '&redirect_uri=' + REDIRECT_URI + '&code=' +  request.GET.get('code')
+
+    response = requests.post(url)
+    access_token = json.loads(response.content)['access_token']
+    print access_token
+    meetupToken = MeetupToken(access_token = access_token)
+    meetupToken.save()
+    return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
+
+def meetupUser(request):
+    access_token = MeetupToken.objects.all()[0]
+    meetupData = {}
+    userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
+    meetupData['userData'] = userData
+    dashboardData = retrieveDashboard('https://api.meetup.com/dashboard?access_token=' + str(access_token))
+    meetupData['dashboardData'] = dashboardData
+    print dashboardData
+    return render(request, 'hackathon/meetup.html', { 'data': meetupData })
 
 #################
 #   QUANDL API  #
@@ -450,7 +483,7 @@ def user_logout(request):
 
 
 def instagram_login(request):
-    instagram_url =getInstagram.get_authorize_url()
+    instagram_url = getInstagram.get_authorize_url()
     return HttpResponseRedirect(instagram_url)
 
 def tumblr_login(request):
