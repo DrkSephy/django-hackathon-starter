@@ -111,6 +111,42 @@ class TwitterOauthClient(object):
         self.is_authorized = True
 
 
+    def get_tweets(self):
+        '''
+        Get tweets of relevant search query.
+        '''
+        method = 'get'
+        link = 'https://api.twitter.com/1.1/search/tweets.json'
+        linkParameters = {'q':'obama', 'count': '100', 'result_type': 'popular'}
+
+        oauthParameters = getOauthParameters(
+            self.consumer_key,
+            self.access_token
+        )
+
+        oauthParameters['oauth_signature'] = generateSignature(
+            method,
+            link,
+            linkParameters,
+            oauthParameters,
+            self.consumer_secret,
+            self.access_token_secret
+        )
+
+        headers = {'Authorization': createAuthHeader(oauthParameters)}
+
+        link += '?' + urllib.urlencode(linkParameters)
+
+        req = requests.get(link, headers=headers)
+
+        if int(req.status_code) != 200:
+            raise Exception('Invalid response %s' %req.status_code)
+
+        content = json2.loads(req.content)
+
+        return content['statuses']
+
+
     def get_trends_available(self, yahooConsumerKey):
         '''
         Get the locations that Twitter has trending topic information for.
