@@ -147,6 +147,19 @@ def meetup(request):
     AUTHORIZE_URL = 'https://secure.meetup.com/oauth2/authorize?client_id=' + CONSUMER_KEY + '&response_type=code' + '&redirect_uri=' + REDIRECT_URI
     return HttpResponseRedirect(AUTHORIZE_URL)
 
+def token(request):
+    access_token_url = 'https://secure.meetup.com/oauth2/access?'
+    CLIENT_KEY = 'p50vftdqq72tgotpaeqk5660un'
+    CLIENT_SECRET = 'i5l00ln2r4mcf161n6451hjoj8'
+    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/token'
+    url = access_token_url + 'client_id=' +  CLIENT_KEY + '&client_secret=' + CLIENT_SECRET + '&grant_type=authorization_code' + '&redirect_uri=' + REDIRECT_URI + '&code=' +  request.GET.get('code')
+
+    response = requests.post(url)
+    access_token = json.loads(response.content)['access_token']
+    req = requests.get("https://api.meetup.com/2/member/self/?access_token=" + access_token)
+    print req.content
+    return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
+
 
 #################
 #   QUANDL API  #
