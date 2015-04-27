@@ -165,8 +165,7 @@ def meetupToken(request):
 def meetupUser(request):
     access_token = MeetupToken.objects.all()[0]
     userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
-    print userData
-    return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
+    return render(request, 'hackathon/meetup.html', { 'data': userData })
 
 #################
 #   QUANDL API  #
