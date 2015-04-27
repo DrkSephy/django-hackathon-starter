@@ -10,7 +10,6 @@ USERDATA = 'https://api.meetup.com/2/member/self/?access_token='
 def retrieveUserData(url):
 	req = requests.get(url)
 	content = json.loads(req.content)
-	print content
 	filteredData = []
 	data = {}
 	data['name'] = content['name']
@@ -23,6 +22,13 @@ def retrieveUserData(url):
 
 def retrieveDashboard(url):
 	req = requests.get(url)
-	return req.content
+	content = json.loads(req.content)
+	filteredData = []
+	data = {}
+	data['last_event'] = content['last_event']['venue']
+	data['group'] = content['last_event']['group']['name']
+	data['name'] = content['last_event']['name']
+	filteredData.append(data)
+	return filteredData
 
 

@@ -161,10 +161,9 @@ def meetupToken(request):
 
 def meetupUser(request):
     access_token = MeetupToken.objects.all()[0]
-    print access_token
-    req = requests.get('https://api.meetup.com/2/member/self/?access_token=a8223cf09ed4ee48ba9784a44576b492' + str(access_token))
     userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
     dashboardData = retrieveDashboard('https://api.meetup.com/dashboard?access_token=' + str(access_token))
+    print dashboardData
     return render(request, 'hackathon/meetup.html', { 'data': userData })
 
 #################
