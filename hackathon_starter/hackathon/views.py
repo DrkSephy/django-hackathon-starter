@@ -22,6 +22,7 @@ from scripts.quandl import *
 from scripts.twitter import TwitterOauthClient
 from scripts.nytimes import *
 from scripts.meetup import *
+from scripts.linkedin import LinkedInAPI
 
 # Python
 import oauth2 as oauth
@@ -38,6 +39,7 @@ from hackathon.forms import UserForm
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
 getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+getLinkedIn= LinkedInAPI(settings.LINKEDIN_API_KEY,settings.LINKEDIN_SECRET_KEY,settings.LINKEDIN_USER_TOKEN,settings.LINKEDIN_USER_SECRET)
 
 def index(request):
     print "index: " + str(request.user)
@@ -389,7 +391,9 @@ def twitter(request):
 ##################
 
 def linkedin(request):
-    userinfo = getUserInfo()
+    linkedin_url = getLinkedIn.get_authorize_url()
+    return HttpResponseRedirect(linkedin_url)
+    
     context = {'title': 'linkedin Example','userdata': userinfo}
     return render(request, 'hackathon/linkedin.html', context)
 
