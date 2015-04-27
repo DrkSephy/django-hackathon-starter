@@ -24,6 +24,7 @@ from scripts.nytimes import *
 
 # Python
 import oauth2 as oauth
+import simplejson as json
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
@@ -135,6 +136,17 @@ def facebook(request):
     '''A sample application that will publish a status update after going into the login process using the Javascript SDK '''
     yourappid = '364831617044713'
     return render(request, 'hackathon/facebook.html', { 'yourappid' : yourappid })
+
+#################
+#   MEETUP API  #
+#################
+
+def meetup(request):
+    CONSUMER_KEY = 'p50vftdqq72tgotpaeqk5660un'
+    REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/token'
+    AUTHORIZE_URL = 'https://secure.meetup.com/oauth2/authorize?client_id=' + CONSUMER_KEY + '&response_type=code' + '&redirect_uri=' + REDIRECT_URI
+    return HttpResponseRedirect(AUTHORIZE_URL)
+
 
 #################
 #   QUANDL API  #

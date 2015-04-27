@@ -33,4 +33,6 @@ urlpatterns = patterns('',
     url(r'^nytimespop/$', views.nytimespop, name='nytimespop'),
     url(r'^nytimestop/$', views.nytimestop, name='nytimestop'),
     url(r'^nytimesarticles/$', views.nytimesarticles, name='nytimesarticles'),
+    url(r'^meetup/$', views.meetup, name='meetup'),
+    url(r'^token/$', views.token, name='token'),
 )
