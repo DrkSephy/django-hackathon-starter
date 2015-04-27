@@ -43,3 +43,7 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+class MeetupToken(models.Model):
+    user = models.ForeignKey(User)
+    access_token = models.CharField(max_length=200)

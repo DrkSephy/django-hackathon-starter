@@ -29,7 +29,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -156,6 +156,9 @@ def token(request):
 
     response = requests.post(url)
     access_token = json.loads(response.content)['access_token']
+    # profile = InstagramProfile(user = new_user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
+    meetupToken = MeetupToken(access_token = access_token)
+    meetupToken.save()
     req = requests.get("https://api.meetup.com/2/member/self/?access_token=" + access_token)
     print req.content
     return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
