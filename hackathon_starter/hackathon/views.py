@@ -383,6 +383,10 @@ def twitter(request):
     context ={'title': 'twitter', 'value': value}
     return render(request, 'hackathon/twitter.html', context)
 
+def twitterTweets(request):
+
+    context ={'title': 'twitter tweet'}
+    return render(request, 'hackathon/twitter_tweet.html', context)    
 
 ##################
 #  LINKED IN API #

@@ -117,13 +117,9 @@ class TwitterOauthClient(object):
 
         '''
 
-        method = "get"
+        method = 'get'
         link = 'https://api.twitter.com/1.1/trends/available.json'
         linkParameters = {}
-        #link = 'https://api.twitter.com/1.1/trends/closest.json'
-        #link_parameters = {'lat':'40.782032', 'long':'-73.9717188'}
-        #link = 'https://api.twitter.com/1.1/trends/place.json'
-        #link_parameters = {'id': '1'}
 
         oauthParameters = getOauthParameters(
             self.consumer_key,
