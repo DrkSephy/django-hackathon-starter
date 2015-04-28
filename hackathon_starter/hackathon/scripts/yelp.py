@@ -9,7 +9,7 @@ TOKEN = 'AWYVs7Vim7mwYyT1BLJA2xhNTs_vXLYS'
 TOKEN_SECRET = 'Rv4GrlYxYGhxUs14s0VBfk7JLJY'
 
 def requestData():
-    url = 'http://api.yelp.com/v2/business/marlowe-san-francisco-2?'
+    url = 'http://api.yelp.com/v2/business/yelp-san-francisco?'
 
     consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
     oauth_request = oauth2.Request(method="GET", url=url)
