@@ -23,6 +23,7 @@ from scripts.twitter import TwitterOauthClient
 from scripts.nytimes import *
 from scripts.meetup import *
 from scripts.linkedin import LinkedInAPI
+from scripts.yelp import requestData
 
 # Python
 import oauth2 as oauth
@@ -139,6 +140,15 @@ def facebook(request):
     '''A sample application that will publish a status update after going into the login process using the Javascript SDK '''
     yourappid = '364831617044713'
     return render(request, 'hackathon/facebook.html', { 'yourappid' : yourappid })
+
+
+#################
+#    YELP API   #
+#################
+
+def yelp(request):
+    data = requestData()
+    return render(request, 'hackathon/yelp.html', { 'data': data })
 
 #################
 #   MEETUP API  #

@@ -37,4 +37,5 @@ urlpatterns = patterns('',
     url(r'^meetup/$', views.meetup, name='meetup'),
     url(r'^meetupToken/$', views.meetupToken, name='meetupToken'),
     url(r'^meetupUser/$', views.meetupUser, name='meetupUser'),
+    url(r'^yelp/$', views.yelp, name='yelp'),
 )
