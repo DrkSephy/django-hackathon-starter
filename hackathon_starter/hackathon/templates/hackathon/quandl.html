@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+
+    <h1 class="text-center"> Quandl Collection </h1>
+    <h2 class="text-center"> Dow Jones Data </h2>
+	<div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Name <i class="icon-sort"></i></th>
+                <th class="header"> Description <i class="icon-sort"></i></th>
+                <th class="header"> Data <i class="icon-sort"></i></th>
+                <th class="header"> Code <i class="icon-sort"></i></th>  
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for data in everyData.dow %}
+                <tr>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.description }}</td>
+                    <td>{{ data.data }}</td>
+                    <td>{{ data.code }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+    <h2 class="text-center"> SnP 500 Data </h2>
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Name <i class="icon-sort"></i></th>
+                <th class="header"> Description <i class="icon-sort"></i></th>
+                <th class="header"> Data <i class="icon-sort"></i></th>
+                <th class="header"> Code <i class="icon-sort"></i></th>  
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for data in everyData.snp %}
+                <tr>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.description }}</td>
+                    <td>{{ data.data }}</td>
+                    <td>{{ data.code }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+    <h2 class="text-center"> Nasdaq Data </h2>
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Name <i class="icon-sort"></i></th>
+                <th class="header"> Description <i class="icon-sort"></i></th>
+                <th class="header"> Data <i class="icon-sort"></i></th>
+                <th class="header"> Code <i class="icon-sort"></i></th>  
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for data in everyData.nasdaq %}
+                <tr>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.description }}</td>
+                    <td>{{ data.data }}</td>
+                    <td>{{ data.code }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+        
+</body>
+</html>
