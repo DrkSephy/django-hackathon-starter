@@ -402,7 +402,8 @@ def twitterTweets(request):
         return HttpResponseRedirect(twitter_url)
 
     context ={'title': 'twitter tweet', 'content': content}
-    return render(request, 'hackathon/twitter_tweet.html', context)    
+    return render(request, 'hackathon/twitter_tweet.html', context)
+
 
 ##################
 #  LINKED IN API #
