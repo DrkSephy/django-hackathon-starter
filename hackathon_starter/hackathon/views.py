@@ -150,25 +150,33 @@ def meetup(request):
     return HttpResponseRedirect(AUTHORIZE_URL)
 
 def meetupToken(request):
+    # print request.GET.get('code')
     access_token_url = 'https://secure.meetup.com/oauth2/access?'
     REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/meetupToken'
     url = access_token_url + 'client_id=' +  settings.MEETUP_CONSUMER_KEY + '&client_secret=' + settings.MEETUP_CONSUMER_SECRET + '&grant_type=authorization_code' + '&redirect_uri=' + REDIRECT_URI + '&code=' +  request.GET.get('code')
 
     response = requests.post(url)
     access_token = json.loads(response.content)['access_token']
-    print access_token
-    meetupToken = MeetupToken(access_token = access_token)
-    meetupToken.save()
-    return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/api/')
+    # print access_token
+    #if not MeetupToken.objects.all()[0]:
+    if not MeetupToken.objects.all().exists():
+        meetupToken = MeetupToken(access_token = access_token)
+        meetupToken.save()
+    return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/meetupUser/')
 
-def meetupUser(request):
+def meetupUser(request): 
+    if not MeetupToken.objects.all().exists():
+        return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/meetup')
     access_token = MeetupToken.objects.all()[0]
+    #access_token = MeetupToken.objects.all()[-1]
+    #print access_token
     meetupData = {}
     userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
+    #print 'https://api.meetup.com/2/member/self/?access_token=' + str(access_token);
     meetupData['userData'] = userData
     dashboardData = retrieveDashboard('https://api.meetup.com/dashboard?access_token=' + str(access_token))
     meetupData['dashboardData'] = dashboardData
-    print dashboardData
+    #print dashboardData
     return render(request, 'hackathon/meetup.html', { 'data': meetupData })
 
 #################
