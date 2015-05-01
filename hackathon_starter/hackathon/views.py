@@ -147,7 +147,10 @@ def facebook(request):
 #################
 
 def yelp(request):
-    data = requestData()
+    data = {}
+    if request.method == 'POST':
+        location = request.POST.get('location')
+        data = requestData(location)
     return render(request, 'hackathon/yelp.html', { 'data': data })
 
 #################
