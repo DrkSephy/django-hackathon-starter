@@ -10,7 +10,7 @@ TOKEN_SECRET = 'Rv4GrlYxYGhxUs14s0VBfk7JLJY'
 
 def requestData(location):
     data = []
-    url = 'http://api.yelp.com/v2/business/' + location
+    url = 'http://api.yelp.com/v2/business/' + location + '?'
 
     consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
     oauth_request = oauth2.Request(method="GET", url=url)
