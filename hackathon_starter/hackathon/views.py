@@ -175,6 +175,9 @@ def meetupToken(request):
     if not MeetupToken.objects.all().exists():
         meetupToken = MeetupToken(access_token = access_token)
         meetupToken.save()
+    else:
+        meetupToken = MeetupToken(access_token = access_token)
+        MeetupToken.objects.all()[0] = meetupToken
     return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/meetupUser/')
 
 def meetupUser(request): 
@@ -186,8 +189,9 @@ def meetupUser(request):
     meetupData = {}
     userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
     meetupData['userData'] = userData
-    dashboardData = retrieveDashboard('https://api.meetup.com/dashboard?access_token=' + str(access_token))
-    meetupData['dashboardData'] = dashboardData
+    # print 'https://api.meetup.com/dashboard?access_token=' + str(access_token)
+    #dashboardData = retrieveDashboard('https://api.meetup.com/dashboard?access_token=' + str(access_token))
+    #meetupData['dashboardData'] = dashboardData
     return render(request, 'hackathon/meetup.html', { 'data': meetupData })
 
 #################
