@@ -12,10 +12,11 @@ def fetcharticle(apikey, url):
     data = json.loads(req.content)
     parsedData = []
     for datum in data['results']:
-        new_data = {"title": datum["title"],
-                "abstract": datum["abstract"],
-                "section": datum["section"],
-                "byline": datum["byline"],
-                }
+        new_data = {
+            "title": datum["title"],
+            "abstract": datum["abstract"],
+            "section": datum["section"],
+            "byline": datum["byline"],
+        }
         parsedData.append(new_data)
     return parsedData
