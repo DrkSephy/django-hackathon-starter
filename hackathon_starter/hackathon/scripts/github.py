@@ -17,25 +17,53 @@ AUTHORIZE_URL = 'https://github.com/login/oauth/authorize'
 ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
 
 class GithubOauthClient(object):
-    
+    '''
+    Python Client for Github API.
+    '''    
     access_token = None
     token_type = None
 
     def __init__(self, client_id, client_secret):
+        '''
+        Parameters:
+            client_id: String
+                - The client_id from registering application
+                  on Github.
+            client_secret: String
+                - The client_secret from registering application
+                  on Github.
+        '''
         self.client_id = client_id
         self.client_secret = client_secret
 
     def get_authorize_url(self):
+        '''
+        Obtains authorize url link with given client_id.
+
+        Returns:
+            authURL: String
+                - The authorization url.
+        '''
+
         auth_setting = {'client_id': self.client_id,
                         'redirect_uri': 'http://127.0.0.1:8000/hackathon/',
                         'scope': 'user, public_repo, repo, repo_deployment, notifications, gist'}
         params = urllib.urlencode(auth_setting)
-        auth_link = AUTHORIZE_URL + '?' + params
-        print auth_link
+        authURL = AUTHORIZE_URL + '?' + params
+        print authURL
         
-        return auth_link
+        return authURL
 
     def get_access_token(self, code):
+        '''
+        Obtains access token.
+
+        Parameters:
+            code: String
+                - The code is retrieved from the authorization url parameter
+                  to obtain access_token.
+        '''
+
         settings = {'client_id': self.client_id,
                     'client_secret': self.client_secret,
                     'code': code,
@@ -49,14 +77,20 @@ class GithubOauthClient(object):
         if int(req.status_code) != 200:
             raise Exception('Invalid response %s' %req.status_code)
 
-        print req.content
         content = urlparse.parse_qs(req.content)
-        print content
         self.access_token = content['access_token'][0]
         self.token_type = content['token_type'][0]
         self.scopes = content['scope'][0]
 
     def getUserInfo(self):
+        '''
+        Obtains user information.
+
+        Returns:
+            content: Dictionary
+                - A dictionary containing user information.
+        '''
+
         link = 'https://api.github.com/user?access_token=' + self.access_token
         req = requests.get(link)
 
@@ -65,6 +99,7 @@ class GithubOauthClient(object):
 
         content = json.loads(req.content)
         self.username = content['login']
+        return content
 
 
 

@@ -50,7 +50,6 @@ def index(request):
     if not request.user.is_active:
         if request.GET.items():
             if profile_track == 'github':
-                print "GITHUB"
                 code = request.GET['code']
                 getGithub.get_access_token(code)
                 getGithub.getUserInfo()
@@ -95,11 +94,11 @@ def index(request):
                 login(request, user)
     else:
         if request.GET.items():
+            user = User.objects.get(username = request.user.username)
             if profile_track == 'github':
                 code = request.GET['code']
                 getGithub.get_access_token(code)
                 getGithub.getUserInfo()
-                user = User.objects.get(username = request.user.username)
 
                 try:
                     githubUser = GithubProfile.objects.get(user=user.id)
@@ -109,7 +108,6 @@ def index(request):
             elif profile_track == 'twitter':
                 oauth_verifier = request.GET['oauth_verifier']
                 getTwitter.get_access_token_url(oauth_verifier)
-                user = User.objects.get(username = request.user.username)
 
                 try:
                     twitterUser = TwitterProfile.objects.get(user = user.id)
@@ -119,7 +117,6 @@ def index(request):
             elif profile_track == 'instagram':
                 code = request.GET['code']
                 getInstagram.get_access_token(code)
-                user = User.objects.get(username = request.user.username)
 
                 try: 
                     instagramUser = InstagramProfile.objects.get(user= user.id)
