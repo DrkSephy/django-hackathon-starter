@@ -221,31 +221,27 @@ def meetupUser(request):
 
 def quandlDowJones(request):
     '''Returns JSON response about the latest dowjones index.'''
-    APIKEY = 'fANs6ykrCdAxas7zpMz7'
-    dowjonesdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
+    dowjonesdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
     print dowjonesdata
     return JsonResponse({'data': dowjonesdata})
 
 def quandlSnp500(request):
     '''Returns JSON response about the latest SNP 500 index.'''
-    APIKEY = 'fANs6ykrCdAxas7zpMz7'
-    snpdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
+    snpdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
     return JsonResponse({'data': snpdata})
 
 def quandlNasdaq(request):
     '''Returns JSON response about the latest nasdaq index.'''
-    APIKEY = 'fANs6ykrCdAxas7zpMz7'
-    nasdaqdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
+    nasdaqdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
     return JsonResponse({'data': nasdaqdata})
 
 def quandlstocks(request):
-    APIKEY = 'fANs6ykrCdAxas7zpMz7' 
     everyData = {}
-    dowjonesdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
+    dowjonesdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
     everyData['dow'] = dowjonesdata
-    snpdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
+    snpdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
     everyData['snp'] = snpdata
-    nasdaqdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
+    nasdaqdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
     everyData['nasdaq'] = nasdaqdata
     return render(request, 'hackathon/quandl.html', { 'everyData': everyData })
 
