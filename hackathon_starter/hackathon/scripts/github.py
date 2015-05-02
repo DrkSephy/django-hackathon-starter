@@ -5,7 +5,7 @@ with Github data and returning the responses as JSON.
 
 import requests
 import simplejson as json
-import urllibc, urlparse
+import urllib, urlparse
 
 ########################
 # GITHUB API CONSTANTS #
