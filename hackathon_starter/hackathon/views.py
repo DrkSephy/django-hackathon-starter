@@ -294,7 +294,7 @@ def githubUser(request):
     # return JsonResponse({ 'data': parsedData })
 
 def githubTopRepositories(request):
-    '''Returns JSON response of a User's Top Committed repositories'''
+    '''Returns Top Commited Repositories for a specific Github User'''
 
     parsedData = {}
     if request.method == 'POST':
