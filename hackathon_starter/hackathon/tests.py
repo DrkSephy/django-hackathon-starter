@@ -68,10 +68,6 @@ class HackathonViewsTestCase(TestCase):
 		resp = self.client.get('/hackathon/githubResume/')
 		self.assertEqual(resp.status_code, 200)
 
-	def testTwilio(self):
-		resp = self.client.get('/hackathon/twilio/')
-		self.assertEqual(resp.status_code, 200)
-	
 	def testNytimespop(self):
 		resp = self.client.get('/hackathon/nytimespop/')
 		self.assertEqual(resp.status_code, 200)
@@ -101,4 +97,12 @@ class ScraperTestCase(TestCase):
 	def testScraperContent(self):
 		resp = self.client.get('/hackathon/steamDiscountedGames/')
 		self.assertNotEqual(resp.content, '')
+
+class TwilioTestCase(TestCase):
+	def testTwilio(self):
+		resp = self.client.get('/hackathon/twilio/')
+		self.assertEqual(resp.status_code, 200)
+
+	
+
 
