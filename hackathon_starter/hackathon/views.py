@@ -210,14 +210,9 @@ def meetupUser(request):
     if not MeetupToken.objects.all().exists():
         return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/meetup')
     access_token = MeetupToken.objects.all()[0]
-    #access_token = MeetupToken.objects.all()[-1]
-    #print access_token
     meetupData = {}
     userData = retrieveUserData('https://api.meetup.com/2/member/self/?access_token=' + str(access_token))
     meetupData['userData'] = userData
-    # print 'https://api.meetup.com/dashboard?access_token=' + str(access_token)
-    #dashboardData = retrieveDashboard('https://api.meetup.com/dashboard?access_token=' + str(access_token))
-    #meetupData['dashboardData'] = dashboardData
     return render(request, 'hackathon/meetup.html', { 'data': meetupData })
 
 #################
@@ -260,22 +255,18 @@ def quandlstocks(request):
 
 def nytimespop(request):
     '''Returns JSON response about the most viewed articles for the last 24 hours.'''
-    POPAPIKEY = 'be4cd251d8a4f1a3362689088bdb0255:0:71947444'
-    popdata = fetcharticle(POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
+    popdata = fetcharticle(settings.POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
     return JSONResponse({'data': popdata})
 
 def nytimestop(request):
     '''Returns JSON response about the articles located in the homepage'''
-    TOPAPIKEY = 'c9655598e1fd4ff591f6d46f2321260e:17:71947444'
-    topdata = fetcharticle(TOPAPIKEY, 'http://api.nytimes.com/svc/topstories/v1/home.json?')
+    topdata = fetcharticle(settings.TOPAPIKEY, 'http://api.nytimes.com/svc/topstories/v1/home.json?')
     return JSONResponse({'data': topdata})
 
 def nytimesarticles(request):
-    POPAPIKEY = 'be4cd251d8a4f1a3362689088bdb0255:0:71947444'
-    TOPAPIKEY = 'c9655598e1fd4ff591f6d46f2321260e:17:71947444'
     everyData = {}
-    popdata = fetcharticle(POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
-    topdata = topdata = fetcharticle(TOPAPIKEY, 'http://api.nytimes.com/svc/topstories/v1/home.json?')
+    popdata = fetcharticle(settings.POPAPIKEY, 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?')
+    topdata = topdata = fetcharticle(settings.TOPAPIKEY, 'http://api.nytimes.com/svc/topstories/v1/home.json?')
     everyData['top'] = topdata
     everyData['pop'] = popdata
     return render(request, 'hackathon/nytimes.html', { 'everyData': everyData })
@@ -496,8 +487,6 @@ def snippet_list(request):
 ##################
 
 def twilio(request):
-    # Test credentials
-    # sendSMS('Meow', '+13473282978', '+13473781813')
     if request.method == 'POST':
         number = request.POST.get('number')
         message = request.POST.get('message')
