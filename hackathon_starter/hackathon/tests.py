@@ -130,6 +130,6 @@ class NewYorkTimesTestCase(TestCase):
 
 	def testNewYorkTimesArticlesContent(self):
 		resp = self.client.get('/hackathon/nytimesarticles/')
-		self.assertEqualNotEqual(resp.content, '')
+		self.assertNotEqual(resp.content, '')
 
 
