@@ -285,11 +285,13 @@ def nytimesarticles(request):
 #################
 
 
+
+
 def githubUser(request):
     '''Returns JSON response about a specific Github User'''
 
     parsedData = {}
-    parsedData['userData'] = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    parsedData['userData'] = getUserData('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     return JsonResponse({ 'data': parsedData })
 
 def githubTopRepositories(request):

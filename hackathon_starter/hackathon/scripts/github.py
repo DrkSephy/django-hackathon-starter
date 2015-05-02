@@ -11,7 +11,7 @@ import urllib, urllib2, urlparse
 # GITHUB API CONSTANTS #
 ########################
 
-API_BASE_URL = 'https://api.github.com/users/DrkSephy'
+API_BASE_URL = 'https://api.github.com/users/'
 
 AUTHORIZE_URL = 'https://github.com/login/oauth/authorize'
 ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
@@ -104,7 +104,7 @@ class GithubOauthClient(object):
 
 
 
-def getUserData(clientID, clientSecret):
+def getUserData(user, clientID, clientSecret):
     '''
     Returns data found on a Github User's public profile.
     This includes information such as number of followers,
@@ -138,7 +138,8 @@ def getUserData(clientID, clientSecret):
                 - userData['following']
                     - Number of users being followed
     '''
-    url = API_BASE_URL + '?' + clientID + '&' + clientSecret
+    url = API_BASE_URL + user +  '?' + clientID + '&' + clientSecret
+    print url
     req = requests.get(url)
     jsonList = []
     jsonList.append(json.loads(req.content))
