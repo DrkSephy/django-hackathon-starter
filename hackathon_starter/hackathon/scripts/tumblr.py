@@ -44,7 +44,7 @@ class TumblrOauthClient(object):
         Redirects user to authorize use.
         '''
         client = oauth2.Client(self.consumer)
-        content = client.request(request_token_url, "GET")
+        resp, content = client.request(request_token_url, "GET")
         #parse content
         if not self.oauth_token:
             request_token = dict(urlparse.parse_qsl(content))
@@ -65,7 +65,7 @@ class TumblrOauthClient(object):
         print self.oauth_verifier
         token.set_verifier(self.oauth_verifier)
         client = oauth2.Client(self.consumer, token)
-        content = client.request(access_token_url, "POST")
+        resp, content = client.request(access_token_url, "POST")
         access_token = dict(urlparse.parse_qsl(content))
         #set verified token
         self.token = oauth2.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
