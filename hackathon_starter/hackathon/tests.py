@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.test import Client
 
 class SteamViewTestCase(TestCase):
 	def testSteam(self):
@@ -74,3 +75,11 @@ class HackathonViewsTestCase(TestCase):
 	def testNytimespop(self):
 		resp = self.client.get('/hackathon/nytimespop/')
 		self.assertEqual(resp.status_code, 200)
+
+	def testYelpPost(self):
+		resp = self.client.post('/hackathon/yelp/', {'location': 'yelp-san-francisco'})
+		self.assertEqual(resp.status_code, 200)
+
+	def testYelpContent(self):
+		resp = self.client.post('/hackathon/yelp/', {'location': 'yelp-san-francisco'})
+		self.assertNotEqual(resp.content, '')
