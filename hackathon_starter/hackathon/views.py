@@ -37,17 +37,23 @@ from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
 
+profile_track = None
 getTumblr = TumblrOauthClient(settings.TUMBLR_CONSUMER_KEY, settings.TUMBLR_CONSUMER_SECRET)
 getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTAGRAM_CLIENT_SECRET)
 getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
 getLinkedIn= LinkedInAPI(settings.LINKEDIN_API_KEY,settings.LINKEDIN_SECRET_KEY,settings.LINKEDIN_USER_TOKEN,settings.LINKEDIN_USER_SECRET)
+getGithub = GithubOauthClient('2a11ce63ea7952d21f02', '7e20f82a34698fb33fc837186e96b12aaca2618d')
 
 def index(request):
     print "index: " + str(request.user)
 
     if not request.user.is_active:
         if request.GET.items():
-            if 'oauth_verifier' in request.GET.keys():
+            if profile_track == 'github':
+                code = request.GET['code']
+                getGithub.get_access_token(code)
+                print getGithub.access_token
+            elif 'oauth_verifier' in request.GET.keys():
                 oauth_verifier = request.GET['oauth_verifier']
                 getTwitter.get_access_token_url(oauth_verifier) 
 
@@ -531,3 +537,9 @@ def tumblr_login(request):
 def twitter_login(request):
     twitter_url = getTwitter.get_authorize_url()     
     return HttpResponseRedirect(twitter_url)
+
+def github_login(request):
+    github_url = getGithub.get_authorize_url()
+    global profile_track
+    profile_track = 'github'
+    return HttpResponseRedirect(github_url)

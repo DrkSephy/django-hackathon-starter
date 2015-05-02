@@ -5,12 +5,53 @@ with Github data and returning the responses as JSON.
 
 import requests
 import simplejson as json
+import urllib, urllib2, urlparse
 
 ########################
 # GITHUB API CONSTANTS #
 ########################
 
 API_BASE_URL = 'https://api.github.com/users/DrkSephy'
+
+AUTHORIZE_URL = 'https://github.com/login/oauth/authorize'
+ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
+
+class GithubOauthClient(object):
+    
+    access_token = None
+    token_type = None
+
+    def __init__(self, client_id, client_secret):
+        self.client_id = client_id
+        self.client_secret = client_secret
+
+    def get_authorize_url(self):
+        auth_setting = {'client_id': self.client_id,
+                        'redirect_uri': 'http://127.0.0.1:8000/hackathon/',
+                        'scope': 'user, public_repo, repo, repo_deployment, notifications, gist'}
+        params = urllib.urlencode(auth_setting)
+        auth_link = AUTHORIZE_URL + '?' + params
+        print auth_link
+        
+        return auth_link
+
+    def get_access_token(self, code):
+        settings = {'client_id': self.client_id,
+                    'client_secret': self.client_secret,
+                    'code': code,
+                    'redirect_uri': 'http://127.0.0.1:8000/hackathon/'}
+        params = urllib.urlencode(settings)
+        access_link = ACCESS_TOKEN_URL + '?' + params
+        req = requests.get(access_link)
+
+        if int(req.status_code) != 200:
+            raise Exception('Invalid response %s' %req.status_code)
+
+        content = urlparse.parse_qs(req.content)
+        self.access_token = content['access_token'][0]
+        self.token_type = content['token_type'][0]
+        print self.access_token
+
 
 def getUserData(clientID, clientSecret):
     '''
