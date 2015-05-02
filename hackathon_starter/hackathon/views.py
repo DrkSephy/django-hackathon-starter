@@ -289,10 +289,12 @@ def nytimesarticles(request):
 
 def githubUser(request):
     '''Returns JSON response about a specific Github User'''
-
     parsedData = {}
-    parsedData['userData'] = getUserData('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    return JsonResponse({ 'data': parsedData })
+    if request.method == 'POST':
+        user = request.POST.get('user')
+        parsedData['userData'] = getUserData(user, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    return render(request, 'hackathon/github.html', {'data': parsedData})
+    # return JsonResponse({ 'data': parsedData })
 
 def githubTopRepositories(request):
     '''Returns JSON response of a User's Top Committed repositories'''
@@ -319,7 +321,7 @@ def githubResume(request):
     allData['filteredData'] = filtered
     allData['filteredStargazers'] = filteredStargazers
     allData['forkedRepos'] = forkedRepos
-    return render(request, 'hackathon/github.html', { 'data': allData })
+    return render(request, 'hackathon/githubResume.html', { 'data': allData })
 
 
 #################
