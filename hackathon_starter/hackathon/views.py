@@ -133,7 +133,7 @@ def index(request):
 ##################
 
 def api_examples(request):
-    instagram_url =getInstagram.get_authorize_url()
+    instagram_url = getInstagram.get_authorize_url()
     if not getTumblr.accessed:
         obtain_oauth_verifier = getTumblr.authorize_url()
     else:
