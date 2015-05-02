@@ -103,6 +103,9 @@ class TwilioTestCase(TestCase):
 		resp = self.client.get('/hackathon/twilio/')
 		self.assertEqual(resp.status_code, 200)
 
-	
+	def testMessage(self):
+		resp = self.client.post('/hackathon/twilio/', {'number': '+13473282978', 'message': 'hello world'})
+		self.assertEqual(resp.status_code, 302)
+
 
 
