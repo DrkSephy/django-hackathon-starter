@@ -1,3 +1,11 @@
+# pylint: disable=invalid-name
+
+'''
+Yelp.py contains methods for
+authenticating the user and
+retrieving data from Yelp's API.
+'''
+
 import simplejson as json
 import oauth2
 import requests
@@ -9,6 +17,10 @@ TOKEN = 'AWYVs7Vim7mwYyT1BLJA2xhNTs_vXLYS'
 TOKEN_SECRET = 'Rv4GrlYxYGhxUs14s0VBfk7JLJY'
 
 def requestData(location):
+    '''
+    Authenticates a request and returns
+    data from Yelp API.
+    '''
     data = []
     url = 'http://api.yelp.com/v2/business/' + location + '?'
 
@@ -26,9 +38,7 @@ def requestData(location):
     token = oauth2.Token(TOKEN, TOKEN_SECRET)
     oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
     signed_url = oauth_request.to_url()
-    
     req = requests.get(signed_url)
     content = json.loads(req.content)
     data.append(content)
-
     return data
