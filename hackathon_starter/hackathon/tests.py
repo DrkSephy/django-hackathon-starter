@@ -124,4 +124,12 @@ class NewYorkTimesTestCase(TestCase):
 		resp = self.client.get('/hackathon/nytimestop/')
 		self.assertNotEqual(resp.content, '')
 
+	def testNewYorkTimesArticles(self):
+		resp = self.client.get('/hackathon/nytimesarticles/')
+		self.assertEqual(resp.status_code, 200)
+
+	def testNewYorkTimesArticlesContent(self):
+		resp = self.client.get('/hackathon/nytimesarticles/')
+		self.assertEqualNotEqual(resp.content, '')
+
 
