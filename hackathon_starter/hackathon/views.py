@@ -53,7 +53,7 @@ def index(request):
                 code = request.GET['code']
                 getGithub.get_access_token(code)
                 print getGithub.access_token
-            elif 'oauth_verifier' in request.GET.keys():
+            elif profile_track == 'twitter':
                 oauth_verifier = request.GET['oauth_verifier']
                 getTwitter.get_access_token_url(oauth_verifier) 
 
@@ -67,7 +67,7 @@ def index(request):
                     profile.save()
                 user = authenticate(username=getTwitter.username+'_twitter', password='password')
                 login(request, user)
-            elif 'code' in request.GET.keys():
+            elif profile_track == 'instagram':
                 code = request.GET['code']
                 getInstagram.get_access_token(code)
 
@@ -83,7 +83,7 @@ def index(request):
                 login(request, user)
     else:
         if request.GET.items():
-            if 'oauth_verifier' in request.GET.keys():
+            if profile_track == 'twitter':
                 oauth_verifier = request.GET['oauth_verifier']
                 getTwitter.get_access_token_url(oauth_verifier)
                 user = User.objects.get(username = request.user.username)
@@ -93,7 +93,7 @@ def index(request):
                 except TwitterProfile.DoesNotExist:
                     profile = TwitterProfile(user = user, oauth_token = getTwitter.oauth_token, oauth_token_secret= getTwitter.oauth_token_secret, twitter_user=getTwitter.username)
                     profile.save()
-            elif 'code' in request.GET.keys():
+            elif profile_track == 'instagram':
                 code = request.GET['code']
                 getInstagram.get_access_token(code)
                 user = User.objects.get(username = request.user.username)
@@ -344,7 +344,7 @@ def tumblr(request):
 ####################
 
 def instagram(request):
-    #print getInstagram.is_authorized
+    print getInstagram.is_authorized
 
     if getInstagram.is_authorized:
         search_tag = 'kitten'
@@ -352,6 +352,8 @@ def instagram(request):
         instagramUser = InstagramProfile.objects.get(user=request.user)
         tagged_media = getTaggedMedia(search_tag, instagramUser.access_token)        
     else:
+        global profile_track
+        profile_track = 'instagram'
         instagram_url =getInstagram.get_authorize_url()
         return HttpResponseRedirect(instagram_url)
     
@@ -419,6 +421,8 @@ def twitterTweets(request):
     if getTwitter.is_authorized:
         content = getTwitter.get_tweets()
     else:
+        global profile_track
+        profile_track = 'twitter'
         twitter_url = getTwitter.get_authorize_url()
         return HttpResponseRedirect(twitter_url)
 
@@ -527,19 +531,25 @@ def user_logout(request):
 
 
 def instagram_login(request):
+    global profile_track
+    profile_track = 'instagram'
     instagram_url = getInstagram.get_authorize_url()
     return HttpResponseRedirect(instagram_url)
 
 def tumblr_login(request):
+    global profile_track
+    profile_track = 'tumblr'
     tumblr_url = getTumblr.authorize_url()
     return HttpResponseRedirect(tumblr_url)
 
 def twitter_login(request):
+    global profile_track
+    profile_track = 'twitter'
     twitter_url = getTwitter.get_authorize_url()     
     return HttpResponseRedirect(twitter_url)
 
 def github_login(request):
-    github_url = getGithub.get_authorize_url()
     global profile_track
     profile_track = 'github'
+    github_url = getGithub.get_authorize_url()
     return HttpResponseRedirect(github_url)
