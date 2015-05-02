@@ -5,7 +5,7 @@ with Github data and returning the responses as JSON.
 
 import requests
 import simplejson as json
-import urllib, urllib2, urlparse
+import urllibc, urlparse
 
 ########################
 # GITHUB API CONSTANTS #
@@ -19,7 +19,7 @@ ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
 class GithubOauthClient(object):
     '''
     Python Client for Github API.
-    '''    
+    '''
     access_token = None
     token_type = None
 
@@ -45,13 +45,12 @@ class GithubOauthClient(object):
                 - The authorization url.
         '''
 
-        auth_setting = {'client_id': self.client_id,
-                        'redirect_uri': 'http://127.0.0.1:8000/hackathon/',
-                        'scope': 'user, public_repo, repo, repo_deployment, notifications, gist'}
-        params = urllib.urlencode(auth_setting)
+        authSetting = {'client_id': self.client_id,
+                       'redirect_uri': 'http://127.0.0.1:8000/hackathon/',
+                       'scope': 'user, public_repo, repo, repo_deployment, notifications, gist'}
+        params = urllib.urlencode(authSetting)
         authURL = AUTHORIZE_URL + '?' + params
-        print authURL
-        
+
         return authURL
 
     def get_access_token(self, code):
@@ -69,10 +68,9 @@ class GithubOauthClient(object):
                     'code': code,
                     'redirect_uri': 'http://127.0.0.1:8000/hackathon/',
                     'accept': 'json'}
-        
         params = urllib.urlencode(settings)
-        access_link = ACCESS_TOKEN_URL + '?' + params
-        req = requests.get(access_link)
+        accessLink = ACCESS_TOKEN_URL + '?' + params
+        req = requests.get(accessLink)
 
         if int(req.status_code) != 200:
             raise Exception('Invalid response %s' %req.status_code)
@@ -100,9 +98,6 @@ class GithubOauthClient(object):
         content = json.loads(req.content)
         self.username = content['login']
         return content
-
-
-
 
 def getUserData(user, clientID, clientSecret):
     '''
