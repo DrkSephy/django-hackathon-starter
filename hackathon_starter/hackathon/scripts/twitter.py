@@ -1,3 +1,6 @@
+# pylint: disable=too-many-instance-attributes
+# pylint: disable=unused-variable
+# pylint: disable=too-many-arguments
 
 '''
 twitter.py contains a handful of methods for interacting
@@ -218,7 +221,6 @@ def getNonce():
 
     nonce = base64.b64encode(''.join([str(random.randint(0, 9)) for i in range(24)]))
     return nonce
-
 
 def generateSignature(method, link, linkParameters, oauthParameters,
                       oauthConsumerSecret, oauthTokenSecret=None):
