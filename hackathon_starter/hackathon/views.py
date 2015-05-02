@@ -32,7 +32,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -50,9 +50,21 @@ def index(request):
     if not request.user.is_active:
         if request.GET.items():
             if profile_track == 'github':
+                print "GITHUB"
                 code = request.GET['code']
                 getGithub.get_access_token(code)
-                print getGithub.access_token
+                getGithub.getUserInfo()
+
+                try:
+                    user = User.objects.get(username = getGithub.username + '_github')
+                except User.DoesNotExist:
+                    username = getGithub.username + '_github'
+                    new_user = User.objects.create_user(username, username+'@madewithgithub.com', 'password')
+                    new_user.save()
+                    profile = GithubProfile(user=new_user, access_token=getGithub.access_token, scopes=getGithub.scopes ,github_user=getGithub.username)
+                    profile.save()
+                user = authenticate(username=getGithub.username+'_github', password='password')
+                login(request, user)
             elif profile_track == 'twitter':
                 oauth_verifier = request.GET['oauth_verifier']
                 getTwitter.get_access_token_url(oauth_verifier) 
@@ -83,7 +95,18 @@ def index(request):
                 login(request, user)
     else:
         if request.GET.items():
-            if profile_track == 'twitter':
+            if profile_track == 'github':
+                code = request.GET['code']
+                getGithub.get_access_token(code)
+                getGithub.getUserInfo()
+                user = User.objects.get(username = request.user.username)
+
+                try:
+                    githubUser = GithubProfile.objects.get(user=user.id)
+                except GithubProfile.DoesNotExist:
+                    profile = GithubProfile(user=new_user, access_token=getGithub.access_token, scopes=getGithub.scopes ,github_user=getGithub.username)
+                    profile.save()
+            elif profile_track == 'twitter':
                 oauth_verifier = request.GET['oauth_verifier']
                 getTwitter.get_access_token_url(oauth_verifier)
                 user = User.objects.get(username = request.user.username)

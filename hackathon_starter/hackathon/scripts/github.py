@@ -39,7 +39,8 @@ class GithubOauthClient(object):
         settings = {'client_id': self.client_id,
                     'client_secret': self.client_secret,
                     'code': code,
-                    'redirect_uri': 'http://127.0.0.1:8000/hackathon/'}
+                    'redirect_uri': 'http://127.0.0.1:8000/hackathon/',
+                    'accept': 'json'}
         
         params = urllib.urlencode(settings)
         access_link = ACCESS_TOKEN_URL + '?' + params
@@ -48,13 +49,24 @@ class GithubOauthClient(object):
         if int(req.status_code) != 200:
             raise Exception('Invalid response %s' %req.status_code)
 
-
+        print req.content
         content = urlparse.parse_qs(req.content)
         print content
         self.access_token = content['access_token'][0]
         self.token_type = content['token_type'][0]
-        self.scope = content['scope']
-        #print self.scope
+        self.scopes = content['scope'][0]
+
+    def getUserInfo(self):
+        link = 'https://api.github.com/user?access_token=' + self.access_token
+        req = requests.get(link)
+
+        if int(req.status_code) != 200:
+            raise Exception('Invalid response %s' %req.status_code)
+
+        content = json.loads(req.content)
+        self.username = content['login']
+
+
 
 
 def getUserData(clientID, clientSecret):
