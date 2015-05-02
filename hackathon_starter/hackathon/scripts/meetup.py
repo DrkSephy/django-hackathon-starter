@@ -8,6 +8,7 @@ import simplejson as json
 USERDATA = 'https://api.meetup.com/2/member/self/?access_token='
 
 def retrieveUserData(url):
+    '''Returns user profile info from meetup.com profile'''
     req = requests.get(url)
     content = json.loads(req.content)
     filteredData = []
