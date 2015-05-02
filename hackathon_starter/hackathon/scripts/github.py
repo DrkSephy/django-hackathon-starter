@@ -193,7 +193,7 @@ def getUserRepositories(user, clientID, clientSecret):
             repositories.append(datum['name'])
     return repositories
 
-def getForkedRepositories(clientID, clientSecret):
+def getForkedRepositories(user, clientID, clientSecret):
     '''
     Returns a list of all the public forked repositories
     owned by a User.
@@ -216,7 +216,7 @@ def getForkedRepositories(clientID, clientSecret):
     jsonList = []
     forkedRepositories = []
     while True:
-        req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' \
+        req = requests.get('https://api.github.com/users/' + user + '/repos?page=' \
             + str(pageNumber) + '&' + clientID + '&' + clientSecret)
         jsonList.append(json.loads(req.content))
         if len(json.loads(req.content)) < 30:
@@ -304,7 +304,7 @@ def filterCommits(data):
         i += 1
     return maxCommits
 
-def getStarGazerCount(clientID, clientSecret):
+def getStarGazerCount(user, clientID, clientSecret):
     '''
     Returns a list number of stargazers for each
     of a user's public repositories.
@@ -329,7 +329,7 @@ def getStarGazerCount(clientID, clientSecret):
     jsonList = []
     stargazers = []
     while True:
-        req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' \
+        req = requests.get('https://api.github.com/users/' + user + '/repos?page=' \
             + str(pageNumber) + '&' + clientID + '&' + clientSecret)
         jsonList.append(json.loads(req.content))
         if len(json.loads(req.content)) < 30:

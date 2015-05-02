@@ -312,12 +312,12 @@ def githubResume(request):
     
     allData = {}
     userData = getUserData('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    repositories = getUserRepositories('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    list = getTopContributedRepositories('DrkSephy', repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     filtered = filterCommits(list)
-    stargazers = getStarGazerCount(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    stargazers = getStarGazerCount('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     filteredStargazers = filterStarGazerCount(stargazers)
-    forkedRepos = getForkedRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    forkedRepos = getForkedRepositories('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     allData['userData'] = userData
     allData['filteredData'] = filtered
     allData['filteredStargazers'] = filteredStargazers
