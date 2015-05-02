@@ -211,7 +211,7 @@ def quandlNasdaq(request):
     return JsonResponse({'data': nasdaqdata})
 
 def quandlstocks(request):
-    APIKEY = 'fANs6ykrCdAxas7zpMz7'	
+    APIKEY = 'fANs6ykrCdAxas7zpMz7' 
     everyData = {}
     dowjonesdata = fetchData(APIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
     everyData['dow'] = dowjonesdata
