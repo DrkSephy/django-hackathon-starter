@@ -20,15 +20,4 @@ def retrieveUserData(url):
     filteredData.append(data)
     return filteredData
 
-def retrieveDashboard(url):
-    req = requests.get(url)
-    content = json.loads(req.content)
-    filteredData = []
-    data = {}
-    data['last_event'] = content['last_event']['venue']
-    data['group'] = content['last_event']['group']['name']
-    data['name'] = content['last_event']['name']
-    filteredData.append(data)
-    return filteredData
-
 

@@ -76,6 +76,7 @@ class HackathonViewsTestCase(TestCase):
 		resp = self.client.get('/hackathon/nytimespop/')
 		self.assertEqual(resp.status_code, 200)
 
+class YelpTestCase(TestCase):
 	def testYelpPost(self):
 		resp = self.client.post('/hackathon/yelp/', {'location': 'yelp-san-francisco'})
 		self.assertEqual(resp.status_code, 200)
@@ -87,5 +88,9 @@ class HackathonViewsTestCase(TestCase):
 	def testYelpContentNotNone(self):
 		resp = self.client.post('/hackathon/yelp/', {'location': 'yelp-san-francisco'})
 		self.assertIsNotNone(resp.content)
+
+	def testGetYelpPage(self):
+		resp = self.client.get('/hackathon/yelp')
+		self.assertEqual(resp.status_code, 301)
 
 
