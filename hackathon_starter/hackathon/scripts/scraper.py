@@ -1,10 +1,11 @@
+# pylint: disable=line-too-long
+
 '''
 scraper.py contains various methods for scraping
 HTML content and packaging into dictionaries.
 '''
 
 import requests
-import itertools 
 from bs4 import BeautifulSoup
 
 def fetchHTML(url):
@@ -41,7 +42,7 @@ def extractTag(content, tag, className=None):
             - Content embed within searched tags
     '''
     soup = BeautifulSoup(content)
-    data = soup.findAll(tag, { 'class': className })
+    data = soup.findAll(tag, {'class': className})
     filteredData = []
     for datum in data:
         filteredData.append(datum.text)
@@ -49,6 +50,7 @@ def extractTag(content, tag, className=None):
 
 
 def steamDiscounts():
+    '''Returns discounts from steam.com'''
     req = requests.get('http://store.steampowered.com/search/?specials=1#sort_by=_ASC&sort_order=ASC&specials=1&page=1')
     content = req.text
     soup = BeautifulSoup(content)
@@ -84,7 +86,7 @@ def steamDiscounts():
     discount = soup.findAll('div', {'class': 'col search_discount'})
 
     id = 0
-    # Get all game discounts 
+    # Get all game discounts
     gameDiscounts = []
     for discountedGame in discount:
         span = discountedGame.findAll('span')
