@@ -83,3 +83,9 @@ class HackathonViewsTestCase(TestCase):
 	def testYelpContent(self):
 		resp = self.client.post('/hackathon/yelp/', {'location': 'yelp-san-francisco'})
 		self.assertNotEqual(resp.content, '')
+
+	def testYelpContentNotNone(self):
+		resp = self.client.post('/hackathon/yelp/', {'location': 'yelp-san-francisco'})
+		self.assertIsNotNone(resp.content)
+
+
