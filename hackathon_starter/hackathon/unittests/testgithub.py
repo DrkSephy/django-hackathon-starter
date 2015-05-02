@@ -18,6 +18,7 @@ class GithubTests(unittest.TestCase):
 		# Client and Secret ID
 		clientID = self.clientID
 		clientSecret = self.clientSecret
+		user = 'DrkSephy'
 
 		# Construct the URL
 		self.url = self.API_BASE_URL +  '?' + clientID + '&' + clientSecret
@@ -29,7 +30,7 @@ class GithubTests(unittest.TestCase):
 
 		with patch('hackathon.scripts.github.getUserData') as mock_getUserData:
 			# Mock the return value of this method
-			mock_getUserData.return_value = {'public_repos': 52, 'public_gists': 5, 'name': 'David Leonard', 'blog': 'http://drksephy.github.io', 'avatar_url': 'https://avatars.githubusercontent.com/u/1226900?v=3', 'followers': 51, 'following': 7, 'email': 'DrkSephy1025@gmail.com'}
+			mock_getUserData.return_value = getUserData(user, clientID, clientSecret)
 			jsonList.append(mock_getUserData.return_value)
 			for data in jsonList:
 				userData['name'] = mock_getUserData.return_value['name']
@@ -41,7 +42,7 @@ class GithubTests(unittest.TestCase):
 				userData['followers'] = mock_getUserData.return_value['followers']
 				userData['following'] = mock_getUserData.return_value['following']
 			parsedData.append(userData)
-			self.assertEqual(getUserData(clientID, clientSecret), parsedData)
+			self.assertEqual(getUserData(user, clientID, clientSecret), parsedData)
 
 	def testGetUserRepositories(self):
 		'''Test for github.py getUserRepositories'''
@@ -49,6 +50,7 @@ class GithubTests(unittest.TestCase):
 		# Client and Secret ID
 		clientID = self.clientID
 		clientSecret = self.clientSecret
+		user = 'DrkSephy'
 
 		pageNumber = 1
 		jsonList = []
@@ -63,9 +65,9 @@ class GithubTests(unittest.TestCase):
 					pageNumber += 1
 
 
-		repositories = getUserRepositories(clientID, clientSecret)
+		repositories = getUserRepositories(user, clientID, clientSecret)
 
-		self.assertEqual(getUserRepositories(clientID, clientSecret), repositories)
+		self.assertEqual(getUserRepositories(user, clientID, clientSecret), repositories)
 
 
 	def testGetForkedRepositories(self):
@@ -74,6 +76,7 @@ class GithubTests(unittest.TestCase):
 		# Client and Secret ID
 		clientID = self.clientID
 		clientSecret = self.clientSecret
+		user = 'DrkSephy'
 		
 		pageNumber = 1
 		jsonList = []
@@ -89,7 +92,7 @@ class GithubTests(unittest.TestCase):
 					pageNumber += 1
 
 		forkedRepositories = [{'name': 'async'}, {'name': 'FizzBuzz-Test-1'}, {'name': 'hackathon-starter'}, {'name': 'historicalWeather'}, {'name': 'jsrecipes'}, {'name': 'node'}, {'name': 'rst2pdf'}, {'name': 'rust-by-example'}, {'name': 'satellizer'}, {'name': 'vitanao'}, {'name': 'WaterEmblem'}, {'name': 'webauth-via-ssh'}]
-		self.assertEqual(getForkedRepositories(clientID, clientSecret), forkedRepositories)
+		self.assertEqual(getForkedRepositories(user, clientID, clientSecret), forkedRepositories)
 
 	def testGetTopContributedRepositories(self):
 		'''Test for github.py getTopContributedRepositories'''
@@ -98,6 +101,7 @@ class GithubTests(unittest.TestCase):
 		clientID = self.clientID
 		clientSecret = self.clientSecret
 		repos = ['async']
+		user = 'DrkSephy'
 
 		jsonList = []
 		for repo in repos:
@@ -132,7 +136,7 @@ class GithubTests(unittest.TestCase):
 		parsedData = [{'total': 1, 'repo_name': 'async', 'author': 'DrkSephy'}]
 
 		
-		self.assertEqual(getTopContributedRepositories(repos, clientID, clientSecret), parsedData)
+		self.assertEqual(getTopContributedRepositories(user, repos, clientID, clientSecret), parsedData)
 
 
 	def testGetStarGazerCount(self):
@@ -141,6 +145,7 @@ class GithubTests(unittest.TestCase):
 		# Client and Secret ID
 		clientID = self.clientID
 		clientSecret = self.clientSecret
+		user = 'DrkSephy'
 
 		pageNumber = 1
 		jsonList = []
@@ -155,8 +160,8 @@ class GithubTests(unittest.TestCase):
 				elif len(mock_getStarGazerCount.return_value) >= 30:
 					pageNumber += 1
 
-		stargazers = getStarGazerCount(clientID, clientSecret)
-		self.assertEqual(getStarGazerCount(clientID, clientSecret), stargazers)
+		stargazers = getStarGazerCount(user, clientID, clientSecret)
+		self.assertEqual(getStarGazerCount(user, clientID, clientSecret), stargazers)
 
 
 
@@ -172,10 +177,10 @@ class GithubTests(unittest.TestCase):
 	def testFilterCommits(self):
 		'''Test for github.py filtercommits'''
 		maxCommits = []
-		data = [{'total': 85, 'repo_name': 'ACM-Game-Presentation', 'author': 'DrkSephy'}, {'total': 16, 'repo_name': 'ACM-Portfolio-Presentation', 'author': 'DrkSephy'}, {'total': 17, 'repo_name': 'angular-nhl', 'author': 'DrkSephy'}, {'total': 1, 'repo_name': 'async', 'author': 'DrkSephy'}, {'total': 55, 'repo_name': 'd3-sandbox', 'author': 'DrkSephy'}, {'total': 7, 'repo_name': 'Deep-Learning', 'author': 'DrkSephy'}, {'total': 11, 'repo_name': 'Django-Hackathon-Starter', 'author': 'DrkSephy'}, {'total': 433, 'repo_name': 'drksephy.github.io', 'author': 'DrkSephy'}, {'total': 3, 'repo_name': 'el-gamal-attack', 'author': 'DrkSephy'}, {'total': 1, 'repo_name': 'FizzBuzz-Test-1', 'author': 'DrkSephy'}, {'total': 44, 'repo_name': 'flux-reactJS', 'author': 'DrkSephy'}, {'total': 4, 'repo_name': 'fractals', 'author': 'DrkSephy'}, {'total': 32, 'repo_name': 'git-api', 'author': 'DrkSephy'}, {'total': 160, 'repo_name': 'git-technetium', 'author': 'DrkSephy'}, {'total': 1, 'repo_name': 'hackathon-starter', 'author': 'DrkSephy'}, {'total': 6, 'repo_name': 'hackcity', 'author': 'DrkSephy'}, {'total': 4, 'repo_name': 'hackcity.github.io', 'author': 'DrkSephy'}, {'total': 15, 'repo_name': 'I4330', 'author': 'DrkSephy'}, {'total': 31, 'repo_name': 'integrated-chinese', 'author': 'DrkSephy'}, {'total': 1, 'repo_name': 'jsrecipes', 'author': 'DrkSephy'}, {'total': 20, 'repo_name': 'learn-angularJS', 'author': 'DrkSephy'}, {'total': 13, 'repo_name': 'legionJS', 'author': 'DrkSephy'}, {'total': 26, 'repo_name': 'lehman-hackathon', 'author': 'DrkSephy'}, {'total': 55, 'repo_name': 'mean-sandbox', 'author': 'DrkSephy'}, {'total': 4, 'repo_name': 'mean-stack-talk', 'author': 'DrkSephy'}, {'total': 297, 'repo_name': 'NOAA-Projects', 'author': 'DrkSephy'}, {'total': 39, 'repo_name': 'nodeapps', 'author': 'DrkSephy'}, {'total': 488, 'repo_name': 'pascal-compiler', 'author': 'DrkSephy'}, {'total': 117, 'repo_name': 'pascal-js', 'author': 'DrkSephy'}, {'total': 12, 'repo_name': 'Project-Euler', 'author': 'DrkSephy'}, {'total': 139, 'repo_name': 'python-imp-interpreter', 'author': 'DrkSephy'}, {'total': 2, 'repo_name': 'rst2pdf', 'author': 'DrkSephy'}, {'total': 2, 'repo_name': 'rust-by-example', 'author': 'DrkSephy'}, {'total': 34, 'repo_name': 'rust-sandbox', 'author': 'DrkSephy'}, {'total': 2, 'repo_name': 'satellizer', 'author': 'DrkSephy'}, {'total': 45, 'repo_name': 'smw-asm', 'author': 'DrkSephy'}, {'total': 291, 'repo_name': 'swift-sandbox', 'author': 'DrkSephy'}, {'total': 101, 'repo_name': 'Tales-of-Kratos', 'author': 'DrkSephy'}, {'total': 12, 'repo_name': 'theano-sandbox', 'author': 'DrkSephy'}, {'total': 13, 'repo_name': 'todo', 'author': 'DrkSephy'}, {'total': 18, 'repo_name': 'TV-Show-Premieres', 'author': 'DrkSephy'}, {'total': 34, 'repo_name': 'tv-show-tracker', 'author': 'DrkSephy'}, {'total': 1, 'repo_name': 'vitanao', 'author': 'DrkSephy'}, {'total': 475, 'repo_name': 'WaterEmblem', 'author': 'DrkSephy'}, {'total': 3, 'repo_name': 'webauth-ssh-authentication', 'author': 'DrkSephy'}, {'total': 3, 'repo_name': 'WebRing', 'author': 'DrkSephy'}, {'total': 15, 'repo_name': 'yabe', 'author': 'DrkSephy'}]
+		data = filterCommits(data)
 		with patch('hackathon.scripts.github.filterCommits') as mock_filterCommits:
-			mock_filterCommits.return_value = [{'total': 488, 'repo_name': 'pascal-compiler', 'author': 'DrkSephy'}, {'total': 475, 'repo_name': 'WaterEmblem', 'author': 'DrkSephy'}, {'total': 433, 'repo_name': 'drksephy.github.io', 'author': 'DrkSephy'}, {'total': 297, 'repo_name': 'NOAA-Projects', 'author': 'DrkSephy'}, {'total': 291, 'repo_name': 'swift-sandbox', 'author': 'DrkSephy'}, {'total': 160, 'repo_name': 'git-technetium', 'author': 'DrkSephy'}, {'total': 139, 'repo_name': 'python-imp-interpreter', 'author': 'DrkSephy'}, {'total': 117, 'repo_name': 'pascal-js', 'author': 'DrkSephy'}, {'total': 101, 'repo_name': 'Tales-of-Kratos', 'author': 'DrkSephy'}]
-			maxCommits = [{'total': 488, 'repo_name': 'pascal-compiler', 'author': 'DrkSephy'}, {'total': 475, 'repo_name': 'WaterEmblem', 'author': 'DrkSephy'}, {'total': 433, 'repo_name': 'drksephy.github.io', 'author': 'DrkSephy'}, {'total': 297, 'repo_name': 'NOAA-Projects', 'author': 'DrkSephy'}, {'total': 291, 'repo_name': 'swift-sandbox', 'author': 'DrkSephy'}, {'total': 160, 'repo_name': 'git-technetium', 'author': 'DrkSephy'}, {'total': 139, 'repo_name': 'python-imp-interpreter', 'author': 'DrkSephy'}, {'total': 117, 'repo_name': 'pascal-js', 'author': 'DrkSephy'}, {'total': 101, 'repo_name': 'Tales-of-Kratos', 'author': 'DrkSephy'}]
+			mock_filterCommits.return_value = filterCommits(data)
+			maxCommits = filterCommits(data)
 			self.assertEqual(filterCommits(data), maxCommits)
 
 
