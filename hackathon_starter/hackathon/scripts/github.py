@@ -158,7 +158,7 @@ def getUserData(user, clientID, clientSecret):
 
     return parsedData
 
-def getUserRepositories(clientID, clientSecret):
+def getUserRepositories(user, clientID, clientSecret):
     '''
     Returns a list of all the public repositories
     owned by a User.
@@ -181,7 +181,7 @@ def getUserRepositories(clientID, clientSecret):
     repositories = []
 
     while True:
-        req = requests.get('https://api.github.com/users/DrkSephy/repos?page=' \
+        req = requests.get('https://api.github.com/users/' + user + '/repos?page=' \
             + str(pageNumber) + '&' + clientID + '&' + clientSecret)
         jsonList.append(json.loads(req.content))
         if len(json.loads(req.content)) < 30:
@@ -235,7 +235,7 @@ def getForkedRepositories(clientID, clientSecret):
 
     return forkedRepositories
 
-def getTopContributedRepositories(repos, clientID, clientSecret):
+def getTopContributedRepositories(user, repos, clientID, clientSecret):
     '''
     Returns a list containing the commit totals for all
     repositories owned by a user.
@@ -260,7 +260,7 @@ def getTopContributedRepositories(repos, clientID, clientSecret):
     '''
     jsonList = []
     for repo in repos:
-        req = requests.get('https://api.github.com/repos/DrkSephy/' + repo \
+        req = requests.get('https://api.github.com/repos/' + user + '/' + repo \
             + '/stats/contributors' + '?' + clientID + '&' + clientSecret)
         jsonList.append(json.loads(req.content))
 
@@ -271,7 +271,7 @@ def getTopContributedRepositories(repos, clientID, clientSecret):
         indexNumber += 1
         commits = {}
         for data in item:
-            if data['author']['login'] == 'DrkSephy':
+            if data['author']['login'] == user:
                 commits['author'] = data['author']['login']
                 commits['total'] = data['total']
                 commits['repo_name'] = repos[indexNumber]

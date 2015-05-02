@@ -284,11 +284,8 @@ def nytimesarticles(request):
 #   GITHUB API  #
 #################
 
-
-
-
 def githubUser(request):
-    '''Returns JSON response about a specific Github User'''
+    '''Returns Github Profile data for a specific user.'''
     parsedData = {}
     if request.method == 'POST':
         user = request.POST.get('user')
@@ -300,17 +297,21 @@ def githubTopRepositories(request):
     '''Returns JSON response of a User's Top Committed repositories'''
 
     parsedData = {}
-    repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
-    filtered = filterCommits(list)
-    parsedData['committed'] = filtered
-    return JsonResponse({ 'data': parsedData })
+    if request.method == 'POST':
+        user = request.POST.get('user')
+        repositories = getUserRepositories(user, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+        list = getTopContributedRepositories(user, repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+        filtered = filterCommits(list)
+        parsedData['committed'] = filtered
+        print parsedData
+    return render(request, 'hackathon/githubTopRepositories.html', {'data': parsedData})
+    # return JsonResponse({ 'data': parsedData })
 
 def githubResume(request):
     '''A sample application which pulls various Github data to form a Resume of sorts'''
     
     allData = {}
-    userData = getUserData(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
+    userData = getUserData('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     repositories = getUserRepositories(settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     list = getTopContributedRepositories(repositories, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     filtered = filterCommits(list)
