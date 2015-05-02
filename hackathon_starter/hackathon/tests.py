@@ -93,4 +93,12 @@ class YelpTestCase(TestCase):
 		resp = self.client.get('/hackathon/yelp')
 		self.assertEqual(resp.status_code, 301)
 
+class ScraperTestCase(TestCase):
+	def testScraperPage(self):
+		resp = self.client.get('/hackathon/steamDiscountedGames/')
+		self.assertEqual(resp.status_code, 200)
+
+	def testScraperContent(self):
+		resp = self.client.get('/hackathon/steamDiscountedGames/')
+		self.assertNotEqual(resp.content, '')
 
