@@ -53,15 +53,21 @@ def index(request):
                 code = request.GET['code']
                 getGithub.get_access_token(code)
                 getGithub.getUserInfo()
-
+                print getGithub.access_token
                 try:
                     user = User.objects.get(username = getGithub.username + '_github')
                 except User.DoesNotExist:
                     username = getGithub.username + '_github'
                     new_user = User.objects.create_user(username, username+'@madewithgithub.com', 'password')
                     new_user.save()
-                    profile = GithubProfile(user=new_user, access_token=getGithub.access_token, scopes=getGithub.scopes ,github_user=getGithub.username)
+                    try:
+                        profile = GithubProfile.objects.get(user = new_user.id)
+                        profile.access_token = getGithub.access_token
+                    except GithubProfile.DoesNotExist:
+                        profile = GithubProfile(user=new_user, access_token=getGithub.access_token, scopes=getGithub.scopes ,github_user=getGithub.username)
                     profile.save()
+                    #profile = GithubProfile(user=new_user, access_token=getGithub.access_token, scopes=getGithub.scopes ,github_user=getGithub.username)
+                    #profile.save()
                 user = authenticate(username=getGithub.username+'_github', password='password')
                 login(request, user)
             elif profile_track == 'twitter':

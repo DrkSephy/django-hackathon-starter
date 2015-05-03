@@ -65,8 +65,8 @@ class TwitterOauthClient(object):
         client = oauth.Client(self.consumer)
         resp, content = client.request(REQUEST_TOKEN_URL, 'GET')
 
-        if int(resp['status']) != 200:
-            raise Exception('Invalid response %s' %resp['status'])
+        #if int(resp['status']) != 200:
+        #    raise Exception('Invalid response %s' %resp['status'])
 
         requestToken = dict(urlparse.parse_qsl(content))
 
