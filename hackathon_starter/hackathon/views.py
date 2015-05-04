@@ -365,17 +365,20 @@ def instagram(request):
     print getInstagram.is_authorized
 
     if getInstagram.is_authorized:
-        search_tag = 'kitten'
-        #return tagged objects
-        instagramUser = InstagramProfile.objects.get(user=request.user)
-        tagged_media = getTaggedMedia(search_tag, instagramUser.access_token)        
+        if request.method == 'GET':
+            if request.GET.items():
+                instagram_tag = request.GET.get('instagram_tag')
+                instagramUser = InstagramProfile.objects.get(user = request.user)
+                tagged_media = getTaggedMedia(instagram_tag, instagramUser.access_token)
+            else:
+                instagram_tag, tagged_media = '', ''
     else:
         global profile_track
         profile_track = 'instagram'
         instagram_url =getInstagram.get_authorize_url()
         return HttpResponseRedirect(instagram_url)
     
-    context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': search_tag}
+    context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': instagram_tag}
     return render(request, 'hackathon/instagram.html', context)
 
 def instagramUser(request):
