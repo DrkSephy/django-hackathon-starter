@@ -440,7 +440,13 @@ def twitter(request):
 def twitterTweets(request):
     print getTwitter.is_authorized
     if getTwitter.is_authorized:
-        content = getTwitter.get_tweets()
+        #content = getTwitter.get_tweets()
+        if request.method == 'GET':
+            if request.GET.items():
+                tweets = request.GET.get('tweets')
+                content = getTwitter.get_tweets(tweets)
+            else:
+                content = ''
     else:
         global profile_track
         profile_track = 'twitter'

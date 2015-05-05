@@ -114,13 +114,13 @@ class TwitterOauthClient(object):
         self.is_authorized = True
 
 
-    def get_tweets(self):
+    def get_tweets(self, tweet):
         '''
         Get tweets of relevant search query.
         '''
         method = 'get'
         link = 'https://api.twitter.com/1.1/search/tweets.json'
-        linkParameters = {'q':'obama', 'count': '100', 'result_type': 'popular'}
+        linkParameters = {'q': tweet, 'count': '100', 'result_type': 'popular'}
 
         oauthParameters = getOauthParameters(
             self.consumer_key,
