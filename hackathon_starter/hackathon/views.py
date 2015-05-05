@@ -241,14 +241,44 @@ def quandlNasdaq(request):
     nasdaqdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
     return JsonResponse({'data': nasdaqdata})
 
+def quandlapple(request):
+    '''Returns JSON response about the latest apple stock.'''
+    appledata = fetchstockData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/GOOG/NASDAQ_AAPL.json')
+    return JsonResponse({'data': appledata})
+
+def quandlNasdaqdiff(request):
+    '''Returns JSON response about the latest nasdaq index.'''
+    nasdaqdata = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
+    return JsonResponse({'data': nasdaqdata})
+
+def quandlSnp500diff(request):
+    '''Returns JSON response about the latest SNP 500 index.'''
+    snpdata = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
+    return JsonResponse({'data': snpdata})
+
+def quandlDowJonesdiff(request):
+    '''Returns JSON response about the latest dowjones index.'''
+    dowjonesdata = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
+    return JsonResponse({'data': dowjonesdata})
+
+def quandlapplediff(request):
+    '''Returns JSON response about the latest apple stock.'''
+    appledata = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/GOOG/NASDAQ_AAPL.json')
+    return JsonResponse({'data': appledata})
+
 def quandlstocks(request):
     everyData = {}
     dowjonesdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
     everyData['dow'] = dowjonesdata
+    everyData['dowdiff'] = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/BCB/UDJIAD1.json?')
     snpdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
     everyData['snp'] = snpdata
+    everyData['snpdiff'] = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/YAHOO/INDEX_GSPC.json?')
     nasdaqdata = fetchData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
     everyData['nasdaq'] = nasdaqdata
+    everyData['nasdaqdiff'] = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/NASDAQOMX/COMP.json?')
+    everyData['apple'] = fetchstockData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/GOOG/NASDAQ_AAPL.json')
+    everyData['applediff'] = rdiffData(settings.QUANDLAPIKEY, 'https://www.quandl.com/api/v1/datasets/GOOG/NASDAQ_AAPL.json')
     return render(request, 'hackathon/quandl.html', { 'everyData': everyData })
 
 #################
