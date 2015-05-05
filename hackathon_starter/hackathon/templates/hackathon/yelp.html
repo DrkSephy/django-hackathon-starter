@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    {% include 'hackathon/base.html' %}
+    <style>
+      .form-signin {
+        max-width: 550px;
+        padding: 15px;
+        margin: 0 auto;
+      }    
+    </style>
+
+    <body>
+      <h1 class="text-center"> Yelp API </h1>
+      <div class="container text-center">
+        <form class="form-signin" id="login_form" method="post" action="/hackathon/yelp/">
+          {% csrf_token %}
+          {% load bootstrap %}
+          <br>
+          <input type="text" name="location" class="form-control" placeholder="Enter a location, e.g: yelp-san-francisco" value="" required autofocus>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+          <input type="hidden" name="submit" value="submit" />
+        </form>
+      </div>
+
+      	{% if data %}
+	      <div class="col-lg-12">
+	        <div class="table-responsive">
+	            <table class="table table-bordered table-hover table-striped tablesorter">
+	                <thead>
+	                <tr>
+	                <th class="header"> Name <i class="icon-sort"></i></th>
+	                <th class="header"> Snippet Text <i class="icon-sort"></i></th>
+	                <th class="header"> Open? <i class="icon-sort"></i></th>
+	                <th class="header"> Review Count <i class="icon-sort"></i></th>
+	                <th class="header"> URL <i class="icon-sort"></i></th>
+	                </tr>
+	            </thead>
+	            <tbody>
+
+	            {% for key in data %}
+	                <tr>
+	                    <td>{{ key.name }}</td>
+	                    <td>{{ key.snippet_text }}</td>
+	                    <td>{{ key.is_closed }}</td>
+	                    <td>{{ key.review_count }}</td>
+	                    <td>{{ key.url |urlize }}</td>
+	    			</tr>
+	            {% endfor %}
+
+	            </tbody>
+	            </table>
+	        </div>
+	      </div>
+	    {% endif %}
+
+    </body>
+</html>

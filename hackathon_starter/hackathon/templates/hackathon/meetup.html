@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+
+    <h1 class="text-center"> Meetup Profile </h1>
+	<div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Name <i class="icon-sort"></i></th>
+                <th class="header"> State <i class="icon-sort"></i></th>
+                <th class="header"> City <i class="icon-sort"></i></th>
+                <th class="header"> Country <i class="icon-sort"></i></th>
+                <th class="header"> Status <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for key in data.userData %}
+                <tr>
+                    <td>{{ key.name }}</td>
+                    <td>{{ key.state }}</td>
+                    <td>{{ key.city }}</td>
+                    <td>{{ key.country }}</td>
+                    <td>{{ key.status }}</td>
+    			</tr>
+            {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

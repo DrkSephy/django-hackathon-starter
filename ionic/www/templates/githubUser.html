@@ -1,0 +1,22 @@
+<ion-view title="Github User Data">
+  <ion-nav-buttons side="left">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+
+  
+    	<ion-item ng-repeat="data in githubUserData.data.userData">
+    		<div class="col">Name: {{ data.name }}</div>
+			  <div class="col">Public Repos: {{ data.public_repos }}</div>
+			  <div class="col">Public Gists: {{ data.public_gists }}</div>
+			  <div class="col">Blog URL: {{ data.blog }} </div>
+			  <div class="col">Followers: {{ data.followers }}</div>
+			  <div class="col">Following: {{ data.following }}</div>
+			  <div class="col">E-mail: {{ data.email }}</div>
+    	</ion-item>
+
+ 
+
+  
+  </ion-content>
+</ion-view>
