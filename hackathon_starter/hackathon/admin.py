@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hackathon.models import UserProfile, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile
+from hackathon.models import UserProfile, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile
 
 # Register your models here.
 class TwitterProfileAdmin(admin.ModelAdmin):
@@ -11,4 +11,5 @@ admin.site.register(InstagramProfile)
 admin.site.register(TwitterProfile, TwitterProfileAdmin)
 admin.site.register(GithubProfile)
 admin.site.register(MeetupToken)
+admin.site.register(LinkedinProfile)
 

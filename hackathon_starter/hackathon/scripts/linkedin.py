@@ -45,3 +45,16 @@ class LinkedinOauthClient(object):
         content = json.loads(req.content)
         self.access_token = content['access_token']
         self.is_authorized = True
+
+    def getUserInfo(self):
+        link = 'https://api.linkedin.com/v1/people/~?format=json&oauth2_access_token=' + self.access_token
+        headers = {'x-li-format' : 'json',
+                   'content-type' : 'application/json'}
+        req = requests.get(link, headers=headers)
+        content = json.loads(req.content)
+
+        if req.status_code != 200:
+            raise Exception('Invalid response %s' %req.status_code)
+
+        self.user_id = content['id']
+        return content

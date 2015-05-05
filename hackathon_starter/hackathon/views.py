@@ -32,7 +32,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -101,6 +101,24 @@ def index(request):
             elif profile_track == 'linkedin':
                 code = request.GET['code']
                 getLinkedIn.get_access_token(code)
+                getLinkedIn.getUserInfo()
+
+                try:
+                    user = User.objects.get(username=getLinkedIn.user_id+'_linkedin')
+                except User.DoesNotExist:
+                    username = getLinkedIn.user_id+'_linkedin'
+                    new_user = User.objects.create_user(username, username+'@madwithlinkedin.com', 'password')
+                    new_user.save()
+                    try:
+                        profile =LinkedinProfile.objects.get(user = new_user.id)
+                        profile.access_token = LinkedinProfile.access_token
+                    except LinkedinProfile.DoesNotExist:
+                        profile = LinkedinProfile(user=new_user, access_token=getLinkedIn.access_token, linkedin_user=getLinkedIn.user_id)
+                    profile.save()
+                user = authenticate(username=getLinkedIn.user_id+'_linkedin', password='password')
+                login(request, user)
+
+
     else:
         if request.GET.items():
             user = User.objects.get(username = request.user.username)
