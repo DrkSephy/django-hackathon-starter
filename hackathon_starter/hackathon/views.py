@@ -117,8 +117,6 @@ def index(request):
                     profile.save()
                 user = authenticate(username=getLinkedIn.user_id+'_linkedin', password='password')
                 login(request, user)
-
-
     else:
         if request.GET.items():
             user = User.objects.get(username = request.user.username)
@@ -149,6 +147,16 @@ def index(request):
                     instagramUser = InstagramProfile.objects.get(user= user.id)
                 except InstagramProfile.DoesNotExist:
                     profile = InstagramProfile(user = user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
+                    profile.save()
+            elif profile_track == 'linkedin':
+                code = request.GET['code']
+                getLinkedIn.get_access_token(code)
+                getLinkedIn.getUserInfo()
+
+                try:
+                    linkedinUser = LinkedinProfile.objects.get(user=user.id)
+                except LinkedinProfile.DoesNotExist:
+                    profile = LinkedinProfile(user = user, access_token = getLinkedIn.access_token, linkedin_user=getLinkedIn.user_id)
                     profile.save()
 
     context = {'hello': 'world'}
@@ -452,8 +460,10 @@ def twitter(request):
     if getTwitter.is_authorized:
         value = getTwitter.get_trends_available(settings.YAHOO_CONSUMER_KEY)
     else:
-        tumblr_url = getTwitter.get_authorize_url()
-        return HttpResponseRedirect(tumblr_url)
+        global profile_track
+        profile_track = 'twitter'
+        twitter_url = getTwitter.get_authorize_url()
+        return HttpResponseRedirect(twitter_url)
 
     context ={'title': 'twitter', 'value': value}
     return render(request, 'hackathon/twitter.html', context)
@@ -484,14 +494,14 @@ def twitterTweets(request):
 
 def linkedin(request):
     if getLinkedIn.is_authorized:
-        print 'Authorized'
+        content = getLinkedIn.getUserInfo()
     else:
         global profile_track 
         profile_track = 'linkedin'
         linkedin_url = getLinkedIn.get_authorize_url()
         return HttpResponseRedirect(linkedin_url)
 
-    context = {'title': 'linkedin example'}
+    context = {'title': 'linkedin example', 'content': content}
     return render(request, 'hackathon/linkedin.html', context)
 
 

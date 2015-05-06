@@ -21,7 +21,7 @@ class LinkedinOauthClient(object):
                         'client_secret' : self.client_secret,
                         'redirect_uri' : 'http://127.0.0.1:8000/hackathon/',
                         'state' : 'DCEeFWf45A53sdfKef424',
-                        'scope': 'r_basicprofile'}
+                        'scope': 'r_fullprofile'}
 
         params = urllib.urlencode(auth_setting)
         authURL = AUTHORIZATION_URL + '?' + params
@@ -47,7 +47,8 @@ class LinkedinOauthClient(object):
         self.is_authorized = True
 
     def getUserInfo(self):
-        link = 'https://api.linkedin.com/v1/people/~?format=json&oauth2_access_token=' + self.access_token
+        #link = 'https://api.linkedin.com/v1/people/~?format=json&oauth2_access_token=' + self.access_token
+        link = 'https://api.linkedin.com/v1/people/~:(id,first-name,skills,educations,languages,twitter-accounts)?oauth2_access_token='+self.access_token
         headers = {'x-li-format' : 'json',
                    'content-type' : 'application/json'}
         req = requests.get(link, headers=headers)
@@ -57,4 +58,5 @@ class LinkedinOauthClient(object):
             raise Exception('Invalid response %s' %req.status_code)
 
         self.user_id = content['id']
+        print content
         return content
