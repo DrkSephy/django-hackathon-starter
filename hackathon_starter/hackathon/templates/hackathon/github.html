@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+    <style>
+      .form-signin {
+        max-width: 550px;
+        padding: 15px;
+        margin: 0 auto;
+      }    
+    </style>
+
+    <h1 class="text-center"> Github User Data </h1>
+
+    <div class="container text-center">
+        <form class="form-signin" id="login_form" method="post" action="/hackathon/githubUser/">
+          {% csrf_token %}
+          {% load bootstrap %}
+          <br>
+          <input type="text" name="user" class="form-control" placeholder="Github User Name, e.g: DrkSephy" value="" required autofocus>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Get Data</button>
+          <input type="hidden" name="submit" value="submit" />
+        </form>
+    </div>
+
+    {% if data %}
+    	<div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped tablesorter">
+                    <thead>
+                    <tr>
+                    <th class="header"> Username <i class="icon-sort"></i></th>
+                    <th class="header"> Blog <i class="icon-sort"></i></th>
+                    <th class="header"> Public Repos <i class="icon-sort"></i></th>
+                    <th class="header"> Public Gists <i class="icon-sort"></i></th>
+                    <th class="header"> Email <i class="icon-sort"></i></th>
+                    <th class="header"> Followers <i class="icon-sort"></i></th>
+                    <th class="header"> Following <i class="icon-sort"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for key in data.userData %}
+                    <tr>
+                        <td>{{ key.name }}</td>
+                        <td>{{ key.blog }}</td>
+                        <td>{{ key.public_repos }}</td>
+                        <td>{{ key.public_gists }}</td>
+                        <td>{{ key.email }}</td>
+                        <td>{{ key.followers }}</td>
+                        <td>{{ key.following }}</td>
+        			</tr>
+                {% endfor %}
+
+                </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+</body>
+</html>

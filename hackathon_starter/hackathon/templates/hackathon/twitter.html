@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+	<h1 class="text-center"> {{ title }}</h1> 
+
+	<div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                <th class="header"> Name <i class="icon-sort"></i></th>
+                <th class="header"> Woeid <i class="icon-sort"></i></th>
+                <th class="header"> Place type <i class="icon-sort"></i></th>
+                <th class="header"> Country <i class="icon-sort"></i></th>
+                <th class="header"> Country Code <i class="icon-sort"></i></th>
+                <th class="header"> ParentID <i class="icon-sort"></i></th>
+                <th class="header"> Neighbor <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in value %}
+                <tr>
+                    <td>{{ item.name }}</td> 
+                    <td>{{ item.woeid }}</td>
+                    <td>{{ item.placeType.name}}</td>
+                    <td>{{ item.country}}</td>
+                    <td>{{ item.countryCode}}</td>
+                    <td>{{ item.parentid}}</td>
+                    {% if item.neighbor %}
+                        <td>
+                            {% for v in item.neighbor.places.place %}
+                                {{ v.name }},
+                            {% endfor %}
+                        </td>
+                    {% else %}
+                        <td>No available Data.</td>
+                    {% endif %}
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+	{% include 'hackathon/base.html' %}
+	<h1 class="text-center"> {{ title }}</h1>
+	<br>
+	<div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+	                <tr>
+	                <th class="header"> First Name <i class="icon-sort"></i></th>
+	                <th class="header"> Skills <i class="icon-sort"></i></th>
+	                <th class="header"> Education <i class="icon-sort"></i></th>
+	                </tr>
+            	</thead>
+            	<tbody>
+	                <tr>
+	                    <td>{{ content.firstName }}</td> 
+	                    <td>
+	                    	{% if content.skills %}
+	                    		{% for i in content.skills.values %}
+	                    			{{i.skill.name}} 
+	                    		{% endfor %}
+	                    	{% else %}
+	                    		None
+	                    	{% endif %}
+	                    </td>
+	                    <td>
+	                    	{% if content.educations %}
+	                    		{% for i in content.educations.values %}
+	                    			<strong>{{i.schoolName }}</strong> [{{i.degree}}, {{i.fieldOfStudy}}] ({{i.startDate.year}} - {{i.endDate.year}})
+	                    		{% endfor %}
+	                    	{% else %}
+	                    		None
+	                    	{% endif %}
+	                    </td>
+	                </tr>
+            	</tbody>
+            </table>
+        </div>
+	</div>
+</body>
+</html>

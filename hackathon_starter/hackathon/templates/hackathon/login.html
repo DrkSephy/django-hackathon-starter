@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    {% include 'hackathon/base.html' %}
+    <style>
+      .form-signin {
+        max-width: 550px;
+        padding: 15px;
+        margin: 0 auto;
+      }    
+    </style>
+
+    <body>
+      <div class="container text-center">
+        <form class="form-signin" id="login_form" method="post" action="/hackathon/login/">
+          {% csrf_token %}
+          {% load bootstrap %}
+          <h2 class="form-signin-heading">Login</h2>
+          <br>
+          <input type="text" name="username" class="form-control" placeholder="Username" value="" required autofocus>
+          <br>
+          <input type="password" name="password" class="form-control" placeholder="Password" value=""required>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          <input type="hidden" name="submit" value="submit" />
+        </form>
+      </div>
+
+      <div class="form-signin">          
+        <a class="btn btn-block btn-social btn-twitter" href="http://127.0.0.1:8000/hackathon/twitter_login/">
+          <i class="fa fa-twitter"></i>
+          Sign in with Twitter
+        </a>
+        <a class="btn btn-block btn-social btn-instagram" href="http://localhost:8000/hackathon/instagram_login/">
+          <i class="fa fa-instagram"></i>
+          Sign in with Instagram
+        </a>
+        <a class="btn btn-block btn-social btn-tumblr" href="http://localhost:8000/hackathon/tumblr_login/">
+          <i class="fa fa-tumblr"></i>
+          Sign in with Tumblr
+        </a>
+        <a class="btn btn-block btn-social btn-github" href="http://localhost:8000/hackathon/github_login/">
+          <i class="fa fa-github"></i>
+          Sign in with Github
+        </a>
+        <a class="btn btn-block btn-social btn-linkedin" href="http://localhost:8000/hackathon/linkedin_login/">
+          <i class="fa fa-linkedin"></i>
+          Sign in with LinkedIn
+        </a> 
+      </div>
+    </body>
+</html>

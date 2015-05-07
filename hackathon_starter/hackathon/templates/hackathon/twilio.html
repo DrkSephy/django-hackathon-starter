@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    {% include 'hackathon/base.html' %}
+    <style>
+      .form-signin {
+        max-width: 550px;
+        padding: 15px;
+        margin: 0 auto;
+      }    
+    </style>
+
+    <body>
+
+      {{ context }}
+      <h1 class="text-center"> Twilio Messages </h1>
+      <div class="container text-center">
+        <form class="form-signin" id="login_form" method="post" action="/hackathon/twilio/">
+          {% csrf_token %}
+          {% load bootstrap %}
+          <br>
+          <input type="text" name="number" class="form-control" placeholder="Phone Number - e.g: +13473282978" value="" required autofocus>
+          <br>
+          <input type="text" name="message" class="form-control" placeholder="Message - e.g: Hello World!" value="" required>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Send Message</button>
+          <input type="hidden" name="submit" value="submit" />
+        </form>
+      </div>
+
+    </body>
+</html>
