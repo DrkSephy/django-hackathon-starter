@@ -51,7 +51,7 @@ class TumblrOauthClient(object):
             self.oauth_token = request_token['oauth_token']
             self.oauth_token_secret = request_token['oauth_token_secret']
         link = authorize_url + "?oauth_token=" + self.oauth_token + \
-            "&redirect_uri=http%3A%2F%2Flocalhost%3A8000/hackathon/tumblr"
+            "&redirect_uri=http://127.0.0.1:8000/hackathon/"
         return link
 
 

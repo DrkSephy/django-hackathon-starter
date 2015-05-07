@@ -168,13 +168,7 @@ def index(request):
 ##################
 
 def api_examples(request):
-    instagram_url = getInstagram.get_authorize_url()
-    if not getTumblr.accessed:
-        obtain_oauth_verifier = getTumblr.authorize_url()
-    else:
-        obtain_oauth_verifier = '/hackathon/tumblr'
-    #obtain_oauth_verifier = getTumblr.authorize_url()
-    context = {'title': 'API Examples Page', 'tumblr_url': obtain_oauth_verifier, 'instagram_url':instagram_url}
+    context = {'title': 'API Examples Page'}
     return render(request, 'hackathon/api_examples.html', context)
 
 #################
