@@ -3,81 +3,84 @@
 <body>
 	{% include 'hackathon/base.html' %}
 
-    <h1 class="text-center"> Quandl Collection </h1>
-    <h2 class="text-center"> Dow Jones Data </h2>
-	<div class="col-lg-12">
+<h1 class="text-center"> Quandl Collection </h1>
+    <h2 class="text-center"> Index Data </h2>
+    <div class="col-lg-12">
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped tablesorter">
                 <thead>
                 <tr>
                 <th class="header"> Name <i class="icon-sort"></i></th>
-                <th class="header"> Description <i class="icon-sort"></i></th>
+                <th class="header"> Code <i class="icon-sort"></i></th>
                 <th class="header"> Data <i class="icon-sort"></i></th>
-                <th class="header"> Code <i class="icon-sort"></i></th>  
+                <th class="header"> Change <i class="icon-sort"></i></th> 
                 </tr>
             </thead>
             <tbody>
-
+            <tr>
             {% for data in everyData.dow %}
-                <tr>
                     <td>{{ data.name }}</td>
-                    <td>{{ data.description }}</td>
-                    <td>{{ data.data }}</td>
                     <td>{{ data.code }}</td>
-                </tr>
+                    <td>{{ data.data }}</td>
             {% endfor %}
-            </tbody>
-            </table>
-        </div>
-    </div>
-    <h2 class="text-center"> SnP 500 Data </h2>
-    <div class="col-lg-12">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover table-striped tablesorter">
-                <thead>
-                <tr>
-                <th class="header"> Name <i class="icon-sort"></i></th>
-                <th class="header"> Description <i class="icon-sort"></i></th>
-                <th class="header"> Data <i class="icon-sort"></i></th>
-                <th class="header"> Code <i class="icon-sort"></i></th>  
+            {% for data in everyData.dowdiff %}
+                    <td>{{ data.rdiff }}</td>
+            {% endfor %}
                 </tr>
-            </thead>
-            <tbody>
-
+                <tr>
             {% for data in everyData.snp %}
-                <tr>
                     <td>{{ data.name }}</td>
-                    <td>{{ data.description }}</td>
-                    <td>{{ data.data }}</td>
                     <td>{{ data.code }}</td>
-                </tr>
+                    <td>{{ data.data }}</td>
             {% endfor %}
+            {% for data in everyData.snpdiff %}
+                    <td>{{ data.rdiff }}</td>
+            {% endfor %}
+                </tr>
+                <tr>
+            {% for data in everyData.nasdaq %}
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.code }}</td>
+                    <td>{{ data.data }}</td>
+            {% endfor %}
+            {% for data in everyData.nasdaqdiff %}
+                    <td>{{ data.rdiff }}</td>
+            {% endfor %}
+                </tr>
             </tbody>
             </table>
         </div>
     </div>
-    <h2 class="text-center"> Nasdaq Data </h2>
+
+<h2 class="text-center"> Stock Data </h2>
     <div class="col-lg-12">
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped tablesorter">
                 <thead>
                 <tr>
                 <th class="header"> Name <i class="icon-sort"></i></th>
-                <th class="header"> Description <i class="icon-sort"></i></th>
-                <th class="header"> Data <i class="icon-sort"></i></th>
-                <th class="header"> Code <i class="icon-sort"></i></th>  
+                <th class="header"> Code <i class="icon-sort"></i></th>
+                <th class="header"> Open <i class="icon-sort"></i></th>
+                <th class="header"> High <i class="icon-sort"></i></th>
+                <th class="header"> Low <i class="icon-sort"></i></th>
+                <th class="header"> Close <i class="icon-sort"></i></th>
+                <th class="header"> Change <i class="icon-sort"></i></th> 
                 </tr>
             </thead>
             <tbody>
-
-            {% for data in everyData.nasdaq %}
-                <tr>
+            <tr>
+            {% for data in everyData.apple %}
                     <td>{{ data.name }}</td>
-                    <td>{{ data.description }}</td>
-                    <td>{{ data.data }}</td>
                     <td>{{ data.code }}</td>
-                </tr>
+                    <td>{{ data.open }}</td>
+                    <td>{{ data.high }}</td>
+                    <td>{{ data.low }}</td>
+                    <td>{{ data.close }}</td>
             {% endfor %}
+            {% for data in everyData.applediff %}
+                    <td>{{ data.rdiff }}</td>
+            {% endfor %}
+                </tr>
             </tbody>
             </table>
         </div>
