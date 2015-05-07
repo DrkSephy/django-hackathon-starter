@@ -1,13 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <style type="text/css">
-        .slice text {
-            font-size: 16pt;
-            font-family: Arial;
-        }   
-    </style>
-</head>
 <body>
     {% include 'hackathon/base.html' %}
     <h1 class="text-center"> {{ title }}</h1>
@@ -48,13 +40,5 @@
             </table>
         </div>
     </div>
-    {{data}}
-    <script type="text/javascript">
-        var width = 300,
-        height = 300,
-        radius =100, 
-        color = d3.scale.category20c();
-    </script>
-    {% endif %}
 </body>
 </html>
