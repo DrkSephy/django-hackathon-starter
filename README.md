@@ -23,6 +23,7 @@ Table of Contents
 -----------------
 
 - [Features](#features)
+- [Pre-requisites](#pre-requisites)
 - [Getting Started](#getting-started)
 - [Obtaining API Keys](#getting-api-keys)
 - [License](#license)
@@ -51,6 +52,13 @@ Features
 <hr>
 
 
+Pre-requisites
+--------------
+
+This project relies on `bower` for front-end dependencies, which in turn requires [npm](https://www.npmjs.com/). `npm` is now bundled with `NodeJS`, which you can download and install [here](https://nodejs.org/download/).
+
+For Python-specific libraries, this project relies on [pip](https://pypi.python.org/pypi/pip). The easiest way to install `pip` can be [found here](https://pip.pypa.io/en/latest/installing.html).
+
 Getting Started
 ---------------
 To get up and running, simply do the following:
@@ -64,13 +72,13 @@ To get up and running, simply do the following:
     # Install bower
     $ npm install -g bower
     $ bower install
-    $ mv bower_components/ hackathon_starter/hackathon/static
     
     # Perform database migrations
     $ python manage.py makemigrations
     $ python manage.py migrate
 
-**NOTE**: We highly recommend creating a [Virtual Environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/). Python Virtual Environments allow developers to work in isolated sandboxes and to create separation between python packages installed via pip.
+
+**NOTE**: We highly recommend creating a [Virtual Environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/). Python Virtual Environments allow developers to work in isolated sandboxes and to create separation between python packages installed via [pip](https://pypi.python.org/pypi/pip).
 
 **NOTE**: To get you up and running quickly, we have provided dummy API keys for use. We highly recommend setting up your own keys and replacing them within `settings.py`. 
 
