@@ -1,0 +1,12 @@
+.DS_Store
+db.sqlite3
+*.pyc
+hackathon_starter/hackathon/static/bower_components/
+migrations/
+Thumbs.db
+*/vendor
+ionic/platforms
+hackathon_starter/_build
+hackathon_starter/_static
+hackathon_starter/_templates
+.coverage
