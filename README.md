@@ -7,20 +7,28 @@ If you've attented hackathons, you already know how much time can be wasted figu
 
 Even if you are not using this for a hackathon, Django Hackathon Starter is sure to save any developer hours or even days of development time and can serve as a learning guide.
 
-# Basic Authentication / OAuth Signin
+<h4 align="center">Basic Authentication / OAuth Signin </h4>
 
 ![Login](https://github.com/DrkSephy/drksephy.github.io/blob/master/img/login.png)
 
-# API Examples  
+<h4 align="center">API Examples </h4>
 
 ![API Examples](https://github.com/DrkSephy/drksephy.github.io/blob/master/img/api_examples.png)
 
-# Twitter Example 
+<h4 align="center">Twitter Example </h4>
 
-![Twitter Tweets](https://github.com/DrkSephy/drksephy.github.io/blob/master/img/twitter.png)
+![Twitter Tweets](http://i.imgur.com/tHZrgoK.png)
+
+Table of Contents
+-----------------
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Obtaining API Keys](#getting-api-keys)
 
 Features
 --------
+* User Registration
 * Basic Authentication with username and password
 * **OAuth 2.0 Authentication** for Github, LinkedIn and Instagram
 * **OAuth 1.0a Authentication** for Twitter and Tumblr.
@@ -61,56 +69,56 @@ To get up and running, simply do the following:
     
 Getting API Keys
 ----------------
-# YELP #
+# Yelp #
 
-1. Register an account on [Yelp.com](http://www.yelp.com/).
+1. Register an account on [Yelp.com](http://www.yelp.com/)
 2. Visit the [Yelp for developers page](https://www.yelp.com/developers/manage_api_keys).
-3. You will obtain the following: `CONSUMER KEY`, `CONSUMER SECRET`, `TOKEN`, `TOKEN_SECRET`. 
+3. You will obtain the following: `CONSUMER KEY`, `CONSUMER SECRET`, `TOKEN`, `TOKEN_SECRET`
 4. Within `settings.py`, add the following:
     * `YELP_CONSUMER_KEY` = `Yelp Consumer Key`
     * `YELP_CONSUMER_SECRET` = `Yelp Consumer Secret`
     * `YELP_TOKEN` = `Yelp Token`
     * `YELP_TOKEN_SECRET` = `Yelp Token Secret`
 
-# MEETUP #
+# Meetup #
 
-1. Register an account on [Meetup.com](http://www.meetup.com/).
-2. Visit [Meetup OAuth Consumers page](https://secure.meetup.com/meetup_api/oauth_consumers/).
+1. Register an account on [Meetup.com](http://www.meetup.com/)
+2. Visit [Meetup OAuth Consumers page](https://secure.meetup.com/meetup_api/oauth_consumers/)
     * Enter a project name for the `consumer name` field.
-    * For `redirect url` field, enter: `http://127.0.0.1:8000/hackathon/`.
+    * For `redirect url` field, enter: `http://127.0.0.1:8000/hackathon/`
 3. Within `settings.py`, add the following:
     * `MEETUP_CONSUMER_KEY` = `Meetup key`
     * `MEETUP_CONSUMER_SECRET` = `Meetup secret key` 
 
-# TWILIO 
+# Twilio 
 
-1. Register an account on [Twilio.com](https://www.twilio.com/).
-2. Get your [Twilio Number](https://www.twilio.com/user/account/phone-numbers/incoming).
-3. [Setup the numbers](https://www.twilio.com/user/account/phone-numbers/incoming) you want to be able to send messages to. 
-4. Grab your `account_sid` and `auth_token` [here](https://www.twilio.com/user/account/voice-messaging).
+1. Register an account on [Twilio.com](https://www.twilio.com/)
+2. Get your [Twilio Number](https://www.twilio.com/user/account/phone-numbers/incoming)
+3. [Setup the numbers](https://www.twilio.com/user/account/phone-numbers/incoming) you want to be able to send messages to 
+4. Grab your `account_sid` and `auth_token` [here](https://www.twilio.com/user/account/voice-messaging)
 5. Within `scripts/twilioapi.py`:
-    * Replace `account_sid` with your own Twilio `account_sid`.
-    * Replace `auth_token` with your own Twilio `auth_token`. 
+    * Replace `account_sid` with your own Twilio `account_sid`
+    * Replace `auth_token` with your own Twilio `auth_token`
 
-# GITHUB #
+# Github #
 
 1. Register an account on [Github.com](http://www.github.com/).
-2. Visit [Github developer applications page](https://github.com/settings/developers).
+2. Visit [Github developer applications page](https://github.com/settings/developers)
 3. Click on **Register new application**.
-    * Enter `Application name` and `Homepage URL` field.
-    * For `redirect url` field, enter: `http://127.0.0.1:8000/hackathon/`.
+    * Enter `Application name` and `Homepage URL` field
+    * For `redirect url` field, enter: `http://127.0.0.1:8000/hackathon/`
 4. Click **Register application**.
 5. Within `settings.py`, add the following:
     * `GITHUB_CLIENT_ID` = `Github-client-id`
     * `GITHUB_CLIENT_SECRET` = `Github-client-secret`
 
-# TWITTER #
+# Twitter #
 
 1. Register an account on [Twitter.com](http://www.twitter.com/).
-2. Visit [Twitter application management page](https://apps.twitter.com/).
+2. Visit [Twitter application management page](https://apps.twitter.com/)
 3. Click on **Create New App**.
     * Enter `Application name`, `Description`, and `Website` field.
-    * For `Callback URL` field, enter: `http://127.0.0.1:8000/hackathon/`.
+    * For `Callback URL` field, enter: `http://127.0.0.1:8000/hackathon/`
 4. Click **Create your Twitter application**.
 5. Go to the **Permissions** tab.
 6. Under *Access*, select **Read and Write* type.
@@ -122,7 +130,7 @@ Getting API Keys
     * `TWITTER_ACCESS_TOKEN` = `Twitter-access-token`
     * `TWITTER_ACCESS_TOKEN_SECRET` = `Twitter-access-token-secret`
 
-# INSTAGRAM #
+# Instagram #
 
 1. Register an account on [Instagram.com](http://www.instagram.com/).
 2. Visit [Instagram manage clients page](https://instagram.com/developer/clients/manage/).
@@ -133,7 +141,7 @@ Getting API Keys
     * `INSTAGRAM_CLIENT_ID` = `Instagram-client-id`
     * `INSTAGRAM_CLIENT_SECRET` = `Instagram-client-secret`
 
-# LINKEDIN #
+# LinkedIn #
 
 1. Register an account on [Linkedin.com](http://www.linkedin.com/).
 2. Visit [Linkedin developer Network page](https://www.linkedin.com/secure/developer).
@@ -146,7 +154,7 @@ Getting API Keys
     * `LINKEDIN_CLIENT_ID` = `Linkedin-client-id`
     * `LINKEDIN_CLIENT_SECRET` = `Linkedin-client-secret`
 
-# FACEBOOK #
+# Facebook #
 
 1. Register an account on [Facebook.com](http://www.facebook.com.com/).
 2. Visit [Facebook Developer Network page](https://developers.facebook.com/).
@@ -154,28 +162,29 @@ Getting API Keys
     * Choose Website as the platform and add the **name** for your project.
     * Click on **Create New Facebook APP ID** and choose the **Category** of your application
     * Click **Create App ID**
-4. After the captcha, scroll down past the quick start and add http://localhost:8000/'.
+4. After the captcha, scroll down past the quick start and add `http://localhost:8000/`.
 5. Within your `views.py` add the **App ID** in `yourappid` underneath the view for your facebook application.
 
-# STEAM #
+# Steam #
 
 1. Register an account on [Steam](https://store.steampowered.com/join/).
 2. Visit [Steam Community developers page](https://steamcommunity.com/login/home/?goto=%2Fdev%2Fapikey).
 3. After logging in, add the **Domain Name** as the name of your application and **key** is shown.
 4. Within your `views.py` add the **Key** in `key` underneath the view for your steam application.
 
-# NY TIMES #
+# NY Times #
 
 1. Register an account on [NY Times Developer Network](http://developer.nytimes.com/docs).
-2. Click on [Register](https://myaccount.nytimes.com/register).
-3. After logging in, click on **APIs** (http://developer.nytimes.com/apps/register) 
-    *Write in the **Name** of your application and click each **sub-API** that you will use.
+2. Click on [Register](https://myaccount.nytimes.com/register)
+3. After logging in, click on **APIs** (http://developer.nytimes.com/apps/register).
+    Write in the **Name** of your application and click each **sub-API** that you will use
     * Agree to the **Terms of Service** and click on **Register Application**
 4. Within your `settings.py` add the following:
     * `POPAPIKEY` = `Most Popular API`
     * `TOPAPIKEY` = `Top Stories API`
 
-# QUANDL #
+# Quandl #
+
 1. Register an account on [Quandl](https://www.quandl.com/)
-2. After logging in, click on **Me** and then **Account settings** to find the API key. 
+2. After logging in, click on **Me** and then **Account settings** to find the API key 
 3. Within your `settings.py`add `QUANDLAPIKEY` = `Key` 
