@@ -172,7 +172,6 @@ Getting API Keys
     * `INSTAGRAM_CLIENT_ID` = `Instagram-client-id`
     * `INSTAGRAM_CLIENT_SECRET` = `Instagram-client-secret`
 
-
 <hr>
 
 <img src="http://blogs.kenan-flagler.unc.edu/wp-content/uploads/2013/10/LinkedIn-Logo-2C.png" width="200">
