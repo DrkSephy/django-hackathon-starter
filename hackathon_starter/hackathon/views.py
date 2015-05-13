@@ -11,6 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
+import requests
+import pdb
+
 # Scripts
 from scripts.steam import gamespulling, steamidpulling 
 from scripts.github import *
@@ -24,6 +27,7 @@ from scripts.nytimes import *
 from scripts.meetup import *
 from scripts.linkedin import LinkedinOauthClient
 from scripts.yelp import requestData
+from scripts.facebook import *
 
 # Python
 import oauth2 as oauth
@@ -32,7 +36,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -43,6 +47,7 @@ getInstagram = InstagramOauthClient(settings.INSTAGRAM_CLIENT_ID, settings.INSTA
 getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
 getGithub = GithubOauthClient('2a11ce63ea7952d21f02', '7e20f82a34698fb33fc837186e96b12aaca2618d')
 getLinkedIn = LinkedinOauthClient(settings.LINKEDIN_CLIENT_ID, settings.LINKEDIN_CLIENT_SECRET)
+getFacebook = FacebookOauthClient(settings.FACEBOOK_APP_ID, settings.FACEBOOK_APP_SECRET)
 
 def index(request):
     print "index: " + str(request.user)
@@ -117,6 +122,35 @@ def index(request):
                     profile.save()
                 user = authenticate(username=getLinkedIn.user_id+'_linkedin', password='password')
                 login(request, user)
+            
+            elif profile_track == 'facebook':
+                code = request.GET['code']
+                getFacebook.get_access_token(code)
+                userInfo = getFacebook.get_user_info()
+                username = userInfo['first_name'] + userInfo['last_name']
+                
+                try:
+                    user = User.objects.get(username=username+'_facebook')
+                except User.DoesNotExist:
+                    new_user = User.objects.create_user(username+'_facebook', username+'@madewithfacbook', 'password')
+                    new_user.save()
+
+                    try:
+                        profile = FacebookProfile.objects.get(user=new_user.id)
+                        profile.access_token = getFacebook.access_token
+                    except:
+                        profile = FacebookProfile()
+                        profile.user = new_user
+                        profile.fb_user_id = userInfo['id']
+                        profile.profile_url = userInfo['link']
+                        profile.access_token = getFacebook.access_token
+                    profile.save()
+                user = authenticate(username=username+'_facebook', password='password')
+                login(request, user)
+
+
+
+                
     else:
         if request.GET.items():
             user = User.objects.get(username = request.user.username)
@@ -158,6 +192,8 @@ def index(request):
                 except LinkedinProfile.DoesNotExist:
                     profile = LinkedinProfile(user = user, access_token = getLinkedIn.access_token, linkedin_user=getLinkedIn.user_id)
                     profile.save()
+
+            
 
     context = {'hello': 'world'}
     return render(request, 'hackathon/index.html', context)
@@ -644,3 +680,9 @@ def linkedin_login(request):
     profile_track = 'linkedin'
     linkedin_url = getLinkedIn.get_authorize_url()
     return HttpResponseRedirect(linkedin_url)
+
+def facebook_login(request):
+    global profile_track
+    profile_track = 'facebook'
+    facebook_url = getFacebook.get_authorize_url()
+    return HttpResponseRedirect(facebook_url)

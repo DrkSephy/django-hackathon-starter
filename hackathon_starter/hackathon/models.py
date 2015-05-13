@@ -67,3 +67,11 @@ class MeetupToken(models.Model):
 
     def __unicode__(self):
         return unicode(self.access_token)
+
+class FacebookProfile(models.Model):
+    user = models.ForeignKey(User)
+    fb_user_id = models.CharField(max_length=100)
+    time_created = models.DateTimeField(auto_now_add=True)
+    profile_url = models.CharField(max_length=50)
+    access_token = models.CharField(max_length=100)
+    
