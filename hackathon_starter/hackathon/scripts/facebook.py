@@ -83,3 +83,4 @@ class FacebookOauthClient(object):
 			raise(Exception('Invalid response,response code: {c}'.format(c=response.status_code)))
 
 		return response.json()
+		
