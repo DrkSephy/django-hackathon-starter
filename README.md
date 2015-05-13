@@ -203,6 +203,21 @@ Getting API Keys
 
 <hr>
 
+<img src="https://secure.assets.tumblr.com/images/logo_page/img_logotype_34465d_2x.png" width="200">
+
+1. Register an account on Tumblr.com.
+2. Visit Tumblr applications page.
+3. Click on Register Application.
+    * Enter your application information.
+    * For Default callback URL field, enter: http://127.0.0.1:8000/hackathon/.
+4. Click Register.
+5. Within settings.py, add the following:
+    * TUMBLR_CONSUMER_KEY = <Tumblr-consumer-key>
+    * TUMBLR_CONSUMER_SECRET = <Tumblr-consumer-secret>
+
+<hr>
+
+
 <img src="http://games.overpress.it/wp-content/uploads/sites/7/2014/10/steam-logo-10.jpg" width="200">
 
 1. Register an account on [Steam](https://store.steampowered.com/join/)
