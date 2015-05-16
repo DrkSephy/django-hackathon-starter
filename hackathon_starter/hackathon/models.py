@@ -27,6 +27,15 @@ class GithubProfile(models.Model):
     def __unicode__(self):
         return unicode(self.user)
 
+class TumblrProfile(models.Model):
+    user = models.ForeignKey(User)
+    tumblr_user = models.CharField(max_length=200)
+    access_token = models.CharField(max_length=200)
+    access_token_secret = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return unicode(self.user)
+
 class InstagramProfile(models.Model):
     user = models.ForeignKey(User)
     instagram_user = models.CharField(max_length=200)
