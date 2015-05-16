@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		{% include 'hackathon/base.html' %}
+	    <style>
+	    
+	    </style>
+	    
+	    <div class="container">
+		    <h1>Facebook API Usage Example</h1>
+		    <hr>
+		    <h2> Basic User Info</h2>
+		    <table class="table table-bordered table-hover table-striped tablesorter">
+			    <tr>			    	
+			    	<th class="header">User ID<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{userInfo.id}}
+			    	</td>
+				</tr>
+				<tr>
+			    	<th class="header">First Name<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{userInfo.first_name}}
+			    	</td>
+			    </tr>
+				<tr>
+			    	<th class="header">Last Name<i class="icon-sort"></i></th>	
+			    	<td>
+				    	{{userInfo.last_name}}
+			    	</td>
+		    	</tr>
+				<tr>
+			    	<th class="header">Gender<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{userInfo.gender}}
+			    	</td>
+			    </tr>
+				<tr>
+			    	<th class="header">Time Zone<i class="icon-sort"></i></th>
+			    	<td>
+				    	GMT{{userInfo.timezone}}
+			    	</td>
+			    </tr>
+				<tr>
+			    	<th class="header">Profile<i class="icon-sort"></i></th>
+			    	<td>
+				    	<a href="{{element.link}}">{{userInfo.link}}</a>
+			    	</td>
+		    	</tr>
+	    	</table>
+	    	<hr>
+	    	Every Facebook account basic information is available for all apps by default. In order to get more information about a user
+	    	(such as likes, photos, status updates, etc.) you must submit a request to facebook which you will find in the Facebook app page.
+	    	After gaining the desired permissions, you can call <em> check_permissions(self, perm)</em> to check if you gained permission from the user and <em>request_permissions</em> to request the permission from the user.
+	    	</div>
+        </div>
+    </body>
+</html>

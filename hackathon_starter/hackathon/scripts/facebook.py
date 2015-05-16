@@ -1,7 +1,6 @@
 import requests
 import urllib
 import simplejson as json
-import pdb
 
 ##########################
 # FACEBOOK API CONSTANTS #
@@ -9,6 +8,8 @@ import pdb
 
 AUTHORIZE_URL = 'https://graph.facebook.com/oauth/authorize'
 ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token'
+API_URL = 'https://graph.facebook.com/v2.3/'
+REQUEST_PERMISSIONS_URL = "https://www.facebook.com/dialog/oauth?"
 
 class FacebookOauthClient(object):
 	'''
@@ -16,6 +17,7 @@ class FacebookOauthClient(object):
 	'''
 
 	access_token = None
+	permission_request_url = None
 
 	def __init__(self, client_id, client_secret):
 		'''
@@ -83,4 +85,69 @@ class FacebookOauthClient(object):
 			raise(Exception('Invalid response,response code: {c}'.format(c=response.status_code)))
 
 		return response.json()
+
+
+	
+
+	def get_user_likes(self):
+		'''
+		Obtains a list of all the user likes. Require a special permission
+		via Facebook.
+
+		Returns:
+			content: dicionay
+				-A dictionary containing user likes.
+		'''
+		#Check if permission exists or ask for it
+		if not self.check_permissions('user_likes'):
+			requestedPermissionUrl = self.request_permissions('user_likes')
+
+		#Get likes
+		response = requests.get(API_URL + 'me/likes?access_token={at}'.format(at=self.access_token))
+		return response.json()['data']
+			
+
+
+	def check_permissions(self, perm):
+		'''
+		Checks if the app has the specified permission.
+
+		Parameters:
+		    perm: String
+		    	- The desired permission (such as user_likes)
+
+		Returns:
+			bool
+				- True if the permission granted or false otherwise.
+		'''
+
+		permDict = {'status': 'granted', 'permission':perm}
+		response = requests.get(API_URL + 'me/permissions?access_token={at}'.format(at=self.access_token))
+		if response.status_code != 200:
+			raise(Exception('Invalid response,response code: {c}'.format(c=response.status_code)))
+
+		currentPermissions = response.json()['data']
+		if permDict in currentPermissions:
+			return True
+		return False
+
+
+	def request_permissions(self, perm):
+		'''
+			Requests a permission from the user.
+
+			Parameters:
+				perm: String
+					- The permission we would like to get.
+
+			Returns: String
+				- The URL to redirect the user in order to get the permission.
+		'''
+		authSettings = {'client_id' : self.client_id, 
+		                'redirect_uri' : 'http://localhost:8000/hackathon/', 
+		                'auth_type' : 'rerequest', 
+		                'scope' : perm,
+		                'access_token' : access_token}
+		params = urllib.urlencode(authSettings)
+		self.permission_request_url = REQUEST_PERMISSIONS_URL + '?' + params
 		
