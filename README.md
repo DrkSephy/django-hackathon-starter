@@ -212,8 +212,8 @@ Getting API Keys
     * For Default callback URL field, enter: http://127.0.0.1:8000/hackathon/.
 4. Click Register.
 5. Within settings.py, add the following:
-    * TUMBLR_CONSUMER_KEY = <Tumblr-consumer-key>
-    * TUMBLR_CONSUMER_SECRET = <Tumblr-consumer-secret>
+    * TUMBLR_CONSUMER_KEY = `Tumblr-consumer-key`
+    * TUMBLR_CONSUMER_SECRET = `Tumblr-consumer-secret`
 
 <hr>
 
