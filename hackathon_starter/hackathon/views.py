@@ -36,7 +36,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -51,7 +51,7 @@ getFacebook = FacebookOauthClient(settings.FACEBOOK_APP_ID, settings.FACEBOOK_AP
 
 def index(request):
     print "index: " + str(request.user)
-
+    
     if not request.user.is_active:
         if request.GET.items():
             if profile_track == 'github':
@@ -147,10 +147,27 @@ def index(request):
                     profile.save()
                 user = authenticate(username=username+'_facebook', password='password')
                 login(request, user)
+            elif profile_track == 'tumblr':
+                if not getTumblr.is_authorized:
+                    oauth_verifier = request.GET['oauth_verifier']
+                    getTumblr.access_token_url(oauth_verifier) 
+                    getTumblr.getUserInfo()
 
-
-
-                
+                    try:
+                        user = User.objects.get(username = getTumblr.username + '_tumblr')
+                    except User.DoesNotExist:
+                        username = getTumblr.username + '_tumblr'
+                        new_user = User.objects.create_user(username, username+'@madewithtumblr.com', 'password')
+                        new_user.save()
+                        try:
+                            profile =TumblrProfile.objects.get(user = new_user.id)
+                            profile.access_token = getTumblr.access_token['oauth_token']
+                            profile.access_token_secret = getTumblr.access_token['oauth_token_secret']
+                        except TumblrProfile.DoesNotExist:
+                            profile = TumblrProfile(user=new_user, access_token=getTumblr.access_token['oauth_token'], access_token_secret= getTumblr.access_token['oauth_token_secret'], tumblr_user=getTumblr.username)
+                        profile.save()
+                user = authenticate(username=getTumblr.username+'_tumblr', password='password')
+                login(request, user)                
     else:
         if request.GET.items():
             user = User.objects.get(username = request.user.username)
@@ -192,7 +209,17 @@ def index(request):
                 except LinkedinProfile.DoesNotExist:
                     profile = LinkedinProfile(user = user, access_token = getLinkedIn.access_token, linkedin_user=getLinkedIn.user_id)
                     profile.save()
+            elif profile_track == 'tumblr':
+                if not getTumblr.is_authorized:
+                    oauth_verifier = request.GET['oauth_verifier']
+                    getTumblr.access_token_url(oauth_verifier) 
+                    getTumblr.getUserInfo()
 
+                    try:
+                        tumblrUser = TumblrProfile.objects.get(user=user.id)
+                    except TumblrProfile.DoesNotExist:
+                        profile = TumblrProfile(user=user, access_token=getTumblr.access_token['oauth_token'], access_token_secret= getTumblr.access_token['oauth_token_secret'], tumblr_user=getTumblr.username)
+                        profile.save()
             
 
     context = {'hello': 'world'}
@@ -413,34 +440,19 @@ def githubResume(request):
 
 def tumblr(request):
     ''' Tumblr api calls '''
-    if not getTumblr.accessed:
-        oauth_verifier = request.GET.get('oauth_verifier')
-        getTumblr.access_token_url(oauth_verifier)
-    if request.user not in User.objects.all():
-        try:
-            user_info, total_blog = getTumblr.getUserInfo()
-            username = str(user_info['name'])+ "2"
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            user_info, total_blog = getTumblr.getUserInfo()
-            username = str(user_info['name'])+ "2"
-            new_user = User.objects.create_user(username, username+'@tumblr.com','password')
-            new_user.save()
-            profile =Profile()
-            profile.user = new_user
-            profile.oauth_token = getTumblr.oauth_token
-            profile.oauth_secret = getTumblr.oauth_token_secret
-            profile.save()
-
-        user = authenticate(username=username, password='password')
-        login(request, user)
-
-    #get blogger twitterthecomic's blog information
-    blog = getTumblr.getBlogInfo('twitterthecomic')
-    #get tags that was tagged along starbucks
-    tagged_blog = getTumblr.getTaggedInfo("starbucks")
-    #get blog information tagged with starbucks
-    blogontag = getTumblr.getTaggedBlog("starbucks")
+    if getTumblr.is_authorized:
+        #get blogger twitterthecomic's blog information
+        blog = getTumblr.getBlogInfo('twitterthecomic')
+        #get tags that was tagged along starbucks
+        tagged_blog = getTumblr.getTaggedInfo("starbucks")
+        #get blog information tagged with starbucks
+        blogontag = getTumblr.getTaggedBlog("starbucks")
+    else:
+        blog, tagged_blog, blogontag = '', '',''
+        global profile_track
+        profile_track = 'tumblr'
+        tumblr_url = getTumblr.authorize_url()
+        return HttpResponseRedirect(tumblr_url)
 
     context = {'title': "What's up Starbucks?", 'blogData': blog, 'blogTag': tagged_blog, 'blogontag': blogontag}
     return render(request, 'hackathon/tumblr.html', context)
