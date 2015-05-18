@@ -192,24 +192,49 @@ Getting API Keys
 <img src="http://www.freelargeimages.com/wp-content/uploads/2014/11/Facebook_logo-6.jpg" width="200">
 
 1. Register an account on [Facebook.com](http://www.facebook.com.com/)
-2. Visit [Facebook Developer Network page](https://developers.facebook.com/)
-3. After logging in, Click on **My Apps** and then on **Add a New App+**
-    * Choose Website as the platform and add the **name** for your project
+2. Visit [Facebook Developers page](https://developers.facebook.com/)
+3. After logging in, Click on **My Apps** and then on **Add a New App**
+    * Choose W**ebsite** as the platform and add the **name** for your project
     * Give your app a name.
     * Choose the category your app falls into.
     * Click **Create App ID**
     * Skip the quickstart process and you will be redirected to the app dashboard.
-4. Copy that app ID and the app secret.
-5. From the left menu choose the settings option.
-6. Click on add platform and choose website once again.
-7. On the site URL, specify the url you want the user to be redirected after authentication.
+4. Copy the **app ID** and the **app secret**.
+5. From the left menu choose the **Settings** option.
+6. Click on **Add Platform** and choose **Website** once again.
+7. Under **site URL**, specift the URL to be redirected after authentication is complete.
 8. Click save.
-9. In ```Settings.py``` change the following values:
+9. In ```settings.py``` change the following values:
     * ```FACEBOOK_APP_ID = your_app_id```
     * ```FACEBOOK_APP_SECRET = your_app_secret```
 
 
 <hr>
+
+<img src="https://travelblogsuccess.com/wp-content/uploads/2013/09/how-to-use-google-plus-for-business.jpg" width="200" />
+
+1. Register an account on [Google.com](https://accounts.google.com/signup).
+2. Navigate to [Google Developer Console](https://console.developers.google.com/project).
+3. Click on **Create Project**, give your app a name and click **Create** (this might take a few sceonds).
+4. You will be redirected to the project dashboard. From the left menu choose **APIs & auth** and then choose **APIs**.
+5. Choose the API you would like to use (the built in example uses **Google+ API**).
+6. Click on **Enable API**.
+7. From the side menu, under **APIs & auth** select **consent screen**.
+    * Fill your app name under **Product Name**.
+    * Hit **save** button on the bottom.
+8. From the side menu, under **APIs & auth** select credentials:
+    * Click on **Create new Client ID**.
+    * Under **Authorized JavaScript origins** specify you app base address (e.g ```http://localhost:8000```).
+    * Under **Authorized redirect URIs** specify the URL to be redirected after authentication is complete.
+    * Hit **Create Client ID** button (this might also take a few seconds).
+9. Copy your new generated ```client_id``` and ```client_secret```:
+10. Under ```settings.py``` change the following values:
+    * ```GOOGLE_PLUS_APP_ID = your_client_id```
+    * ```GOOGLE_PLUS_APP_SECRET = your_client_secret```
+
+<hr>
+
+
 
 <img src="https://secure.assets.tumblr.com/images/logo_page/img_logotype_34465d_2x.png" width="200">
 
