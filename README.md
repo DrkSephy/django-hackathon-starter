@@ -195,10 +195,18 @@ Getting API Keys
 2. Visit [Facebook Developer Network page](https://developers.facebook.com/)
 3. After logging in, Click on **My Apps** and then on **Add a New App+**
     * Choose Website as the platform and add the **name** for your project
-    * Click on **Create New Facebook APP ID** and choose the **Category** of your application
+    * Give your app a name.
+    * Choose the category your app falls into.
     * Click **Create App ID**
-4. After the captcha, scroll down past the quick start and add `http://localhost:8000/`
-5. Within your `views.py` add the **App ID** in `yourappid` underneath the view for your facebook application.
+    * Skip the quickstart process and you will be redirected to the app dashboard.
+4. Copy that app ID and the app secret.
+5. From the left menu choose the settings option.
+6. Click on add platform and choose website once again.
+7. On the site URL, specify the url you want the user to be redirected after authentication.
+8. Click save.
+9. In ```Settings.py``` change the following values:
+    * ```FACEBOOK_APP_ID = your_app_id```
+    * ```FACEBOOK_APP_SECRET = your_app_secret```
 
 
 <hr>
