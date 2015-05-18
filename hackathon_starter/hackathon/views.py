@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 import requests
-import pdb
+
 
 # Scripts
 from scripts.steam import gamespulling, steamidpulling 
@@ -28,6 +28,7 @@ from scripts.meetup import *
 from scripts.linkedin import LinkedinOauthClient
 from scripts.yelp import requestData
 from scripts.facebook import *
+from scripts.googlePlus import *
 
 # Python
 import oauth2 as oauth
@@ -36,7 +37,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile, GoogleProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -48,6 +49,7 @@ getTwitter = TwitterOauthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_
 getGithub = GithubOauthClient('2a11ce63ea7952d21f02', '7e20f82a34698fb33fc837186e96b12aaca2618d')
 getLinkedIn = LinkedinOauthClient(settings.LINKEDIN_CLIENT_ID, settings.LINKEDIN_CLIENT_SECRET)
 getFacebook = FacebookOauthClient(settings.FACEBOOK_APP_ID, settings.FACEBOOK_APP_SECRET)
+getGoogle = GooglePlus(settings.GOOGLE_PLUS_APP_ID, settings.GOOGLE_PLUS_APP_SECRET)
 
 def index(request):
     print "index: " + str(request.user)
@@ -152,7 +154,6 @@ def index(request):
                     oauth_verifier = request.GET['oauth_verifier']
                     getTumblr.access_token_url(oauth_verifier) 
                     getTumblr.getUserInfo()
-
                     try:
                         user = User.objects.get(username = getTumblr.username + '_tumblr')
                     except User.DoesNotExist:
@@ -167,7 +168,36 @@ def index(request):
                             profile = TumblrProfile(user=new_user, access_token=getTumblr.access_token['oauth_token'], access_token_secret= getTumblr.access_token['oauth_token_secret'], tumblr_user=getTumblr.username)
                         profile.save()
                 user = authenticate(username=getTumblr.username+'_tumblr', password='password')
-                login(request, user)                
+                login(request, user)   
+
+
+            elif profile_track == 'google':
+                code = request.GET['code']
+                state = request.GET['state']
+                getGoogle.get_access_token(code, state)
+                userInfo = getGoogle.get_user_info()
+                username = userInfo['given_name'] + userInfo['family_name']
+
+                try:
+                    user = User.objects.get(username=username+'_google')
+                except User.DoesNotExist:
+                    new_user = User.objects.create_user(username+'_google', username+'@madewithgoogleplus', 'password')
+                    new_user.save()
+
+                    try:
+                        profle = GoogleProfile.objects.get(user = new_user.id)
+                        profile.access_token = getGoogle.access_token
+                    except:
+                        profile = GoogleProfile()
+                        profile.user = new_user
+                        profile.google_user_id = userInfo['id']
+                        profile.access_token = getGoogle.access_token
+                        profile.profile_url = userInfo['link']
+                    profile.save()
+                user = authenticate(username=username+'_google', password='password')
+                login(request, user)
+
+
     else:
         if request.GET.items():
             user = User.objects.get(username = request.user.username)
@@ -260,6 +290,14 @@ def facebook(request):
     '''
     userInfo = getFacebook.get_user_info()
     return render(request, 'hackathon/facebookAPIExample.html', { 'userInfo' : userInfo})
+
+#################
+#  GOOGLE API  #
+#################
+def googlePlus(request):
+
+    userInfo = getGoogle.get_user_info()
+    return render(request, 'hackathon/googlePlus.html', {'userInfo' : userInfo})
 
 
 #################
@@ -700,3 +738,10 @@ def facebook_login(request):
     profile_track = 'facebook'
     facebook_url = getFacebook.get_authorize_url()
     return HttpResponseRedirect(facebook_url)
+
+
+def google_login(request):
+    global profile_track
+    profile_track = 'google'
+    google_url = getGoogle.get_authorize_url()
+    return HttpResponseRedirect(google_url)

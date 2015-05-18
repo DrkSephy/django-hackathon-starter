@@ -84,3 +84,9 @@ class FacebookProfile(models.Model):
     profile_url = models.CharField(max_length=50)
     access_token = models.CharField(max_length=100)
     
+class GoogleProfile(models.Model):
+    user = models.ForeignKey(User)
+    google_user_id = models.CharField(max_length=100)
+    time_created = models.DateTimeField(auto_now_add=True)
+    access_token = models.CharField(max_length=100)
+    profile_url = models.CharField(max_length=100)

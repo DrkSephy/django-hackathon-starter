@@ -95,7 +95,7 @@ class FacebookOauthClient(object):
 		via Facebook.
 
 		Returns:
-			content: dicionay
+			content: dictionary
 				-A dictionary containing user likes.
 		'''
 		#Check if permission exists or ask for it
