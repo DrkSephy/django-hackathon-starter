@@ -21,7 +21,7 @@ class LinkedinOauthClient(object):
                         'client_secret' : self.client_secret,
                         'redirect_uri' : 'http://127.0.0.1:8000/hackathon/',
                         'state' : 'DCEeFWf45A53sdfKef424',
-                        'scope': 'r_fullprofile'}
+                        'scope': 'r_basicprofile'}
 
         params = urllib.urlencode(auth_setting)
         authURL = AUTHORIZATION_URL + '?' + params

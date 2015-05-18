@@ -32,7 +32,8 @@ class TumblrOauthClient(object):
     oauth_verifier = None
     oauth_token = None
     oauth_token_secret = None
-    accessed = False
+    is_authorized = False
+    access_token = None
 
     def __init__(self, consumer_key, consumer_secret):
         self.consumer_key = consumer_key
@@ -59,16 +60,16 @@ class TumblrOauthClient(object):
         '''
         Returns an access token to the user.
         '''
-        self.accessed = True
+        self.is_authorized = True
         token = oauth2.Token(self.oauth_token, self.oauth_token_secret)
         self.oauth_verifier = oauth_verifier
         print self.oauth_verifier
         token.set_verifier(self.oauth_verifier)
         client = oauth2.Client(self.consumer, token)
         resp, content = client.request(access_token_url, "POST")
-        access_token = dict(urlparse.parse_qsl(content))
+        self.access_token = dict(urlparse.parse_qsl(content))
         #set verified token
-        self.token = oauth2.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
+        self.token = oauth2.Token(self.access_token['oauth_token'], self.access_token['oauth_token_secret'])
 
     def getUserInfo(self):
         ''' Returns users information. '''
@@ -81,6 +82,7 @@ class TumblrOauthClient(object):
         #return content in json format
         jsonlist = json.loads(content)
         response = jsonlist['response']
+        self.username = str(response['user']['name'])
         user_info = response['user']
         total_blogs = len(user_info['blogs'])
         #print user_info
