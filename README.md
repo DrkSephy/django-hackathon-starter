@@ -51,6 +51,7 @@ Features
     * New York Times API
     * LinkedIn API
     * Facebook API
+    * Google+ API
 
 <hr>
 
