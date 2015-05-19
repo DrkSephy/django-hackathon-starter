@@ -9,15 +9,11 @@ Even if you are not using this for a hackathon, Django Hackathon Starter is sure
 
 <h4 align="center">Basic Authentication / OAuth Signin </h4>
 
-![Login](https://github.com/DrkSephy/drksephy.github.io/blob/master/img/login.png)
+![Login](http://imgur.com/Keqy7e1)
 
 <h4 align="center">API Examples </h4>
 
-![API Examples](https://github.com/DrkSephy/drksephy.github.io/blob/master/img/api_examples.png)
-
-<h4 align="center">Twitter Example </h4>
-
-![Twitter Tweets](http://i.imgur.com/tHZrgoK.png)
+![API Examples](http://imgur.com/9mU3er2)
 
 Table of Contents
 -----------------
