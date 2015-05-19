@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		{% include 'hackathon/base.html' %}
+	    
+	    <div class="container">
+	    <h1> Google Plus API Example</h1>
+	    <h2>Basic User Info</h2>
+
+	    <img src="{{userInfo.picture}}" style="width:15%; height:15%" />
+
+	    <table class="table table-bordered table-hover table-striped tablesorter">
+		    <tr>
+			    <th class="header">User ID<i class="icon-sort"></i></th>
+		    	<td>
+			    	{{userInfo.id}}
+		    	</td>
+		    </tr>
+
+		    <tr>
+			    <th class="header">First Name<i class="icon-sort"></i></th>
+		    	<td>
+			    	{{userInfo.given_name}}
+		    	</td>
+		    </tr>
+
+		    <tr>
+			    <th class="header">Last Name<i class="icon-sort"></i></th>
+		    	<td>
+			    	{{userInfo.family_name}}
+		    	</td>
+		    </tr>
+
+		    <tr>
+			    <th class="header">Gender<i class="icon-sort"></i></th>
+		    	<td>
+			    	{{userInfo.gender}}
+		    	</td>
+		    </tr>
+
+		    <tr>
+			    <th class="header">Profile<i class="icon-sort"></i></th>
+		    	<td>
+			    	<a href="{{userInfo.link}}">{{userInfo.link}}</a>
+		    	</td>
+		    </tr>
+
+	    </table>
+	    
+	    </div>
+    </body>
+</html>
