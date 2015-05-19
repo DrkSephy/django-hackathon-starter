@@ -34,7 +34,7 @@ Features
 --------
 * User Registration
 * Sphinx Documentation
-* Django Nosetests 
+* Django Nosetests
 * Basic Authentication with username and password
 * **OAuth 2.0 Authentication** for Github, LinkedIn, Instagram and Facebook
 * **OAuth 1.0a Authentication** for Twitter and Tumblr
@@ -45,13 +45,14 @@ Features
     * Tumblr API
     * Twitter API
     * Twilio API
-    * Meetup API 
+    * Meetup API
     * Steam API
     * Quandl Stock API
     * New York Times API
     * LinkedIn API
     * Facebook API
     * Google+ API
+    * Dropbox API
 
 <hr>
 
@@ -69,14 +70,14 @@ To get up and running, simply do the following:
 
     $ git clone https://github.com/DrkSephy/django-hackathon-starter.git
     $ cd django-hackathon-starter
-    
+
     # Install the requirements
     $ pip install -r requirements.txt
-    
+
     # Install bower
     $ npm install -g bower
     $ bower install
-    
+
     # Perform database migrations
     $ python manage.py makemigrations
     $ python manage.py migrate
@@ -84,11 +85,11 @@ To get up and running, simply do the following:
 
 **NOTE**: We highly recommend creating a [Virtual Environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/). Python Virtual Environments allow developers to work in isolated sandboxes and to create separation between python packages installed via [pip](https://pypi.python.org/pypi/pip).
 
-**NOTE**: To get you up and running quickly, we have provided dummy API keys for use. We highly recommend setting up your own keys and replacing them within `settings.py`. 
+**NOTE**: To get you up and running quickly, we have provided dummy API keys for use. We highly recommend setting up your own keys and replacing them within `settings.py`.
 
 
 <hr>
-    
+
 Getting API Keys
 ----------------
 
@@ -113,7 +114,7 @@ Getting API Keys
     * For `redirect url` field, enter: `http://127.0.0.1:8000/hackathon/`
 3. Within `settings.py`, add the following:
     * `MEETUP_CONSUMER_KEY` = `Meetup key`
-    * `MEETUP_CONSUMER_SECRET` = `Meetup secret key` 
+    * `MEETUP_CONSUMER_SECRET` = `Meetup secret key`
 
 <hr>
 
@@ -121,7 +122,7 @@ Getting API Keys
 
 1. Register an account on [Twilio.com](https://www.twilio.com/)
 2. Get your [Twilio Number](https://www.twilio.com/user/account/phone-numbers/incoming)
-3. [Setup the numbers](https://www.twilio.com/user/account/phone-numbers/incoming) you want to be able to send messages to 
+3. [Setup the numbers](https://www.twilio.com/user/account/phone-numbers/incoming) you want to be able to send messages to
 4. Grab your `account_sid` and `auth_token` [here](https://www.twilio.com/user/account/voice-messaging)
 5. Within `scripts/twilioapi.py`:
     * Replace `account_sid` with your own Twilio `account_sid`
@@ -236,6 +237,24 @@ Getting API Keys
 
 <hr>
 
+<img src="https://cf.dropboxstatic.com/static/images/brand/logotype-vflFbF9pY.png" width="200">
+
+1. Register an account on [Dropbox.com](http://www.dropbox.com).
+2. Navigate to [Dropbox Developers](https://www.dropbox.com/developers).
+3. From the side menu, select **App Console** and click on **Create app**.
+4. Configure the app permissions. This example uses the following configuration:
+    * App type- Dropbox API app
+    * My app needs access to files already on Dropbox.
+    * My app needs access to a user's full Dropbox.
+    * **Note:** This kind of configuration will require you to submit your app for approval.
+5. Give your app a name and click the **Create app button**.
+6. You will be redirected to the app console:
+    * Under **Redirect URIs** specify the URL to be redirected after authentication is complete (e.g ```http://locahost:8000/home```) and click **add**.
+    * Copy you ```App key``` and ```App secret```.
+7. Under ```settings.py``` change the following values:
+    * ```DROPBOX_APP_ID = your_app_id```
+    * ```DROPBOX_APP_SECRET = your_app_secret```
+<hr>
 
 
 <img src="https://secure.assets.tumblr.com/images/logo_page/img_logotype_34465d_2x.png" width="200">
@@ -279,8 +298,8 @@ Getting API Keys
 <img src="http://planetcassandra.org/blogs/Upload/Postddfdbb6f-16ed-4e1c-8e29-ff2cf0cb43a1/quandl.png" width="200">
 
 1. Register an account on [Quandl](https://www.quandl.com/)
-2. After logging in, click on **Me** and then **Account settings** to find the API key 
-3. Within your `settings.py`add `QUANDLAPIKEY` = `Key` 
+2. After logging in, click on **Me** and then **Account settings** to find the API key
+3. Within your `settings.py`add `QUANDLAPIKEY` = `Key`
 
 <hr>
 
@@ -318,7 +337,7 @@ Project Structure
 Contributing
 ------------
 
-We welcome contributions of all kinds. If you would like to know what work is needed to be done, check the [issue tracker](https://github.com/DrkSephy/django-hackathon-starter/issues). Before sending a pull request, please open an issue. This project follows the [pep-0008](https://www.python.org/dev/peps/pep-0008/) style guide. 
+We welcome contributions of all kinds. If you would like to know what work is needed to be done, check the [issue tracker](https://github.com/DrkSephy/django-hackathon-starter/issues). Before sending a pull request, please open an issue. This project follows the [pep-0008](https://www.python.org/dev/peps/pep-0008/) style guide.
 
 
 LICENSE
@@ -345,5 +364,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
