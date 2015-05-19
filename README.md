@@ -32,7 +32,7 @@ Features
 * Sphinx Documentation
 * Django Nosetests
 * Basic Authentication with username and password
-* **OAuth 2.0 Authentication** for Github, LinkedIn, Instagram and Facebook
+* **OAuth 2.0 Authentication** for Github, LinkedIn, Instagram, Facebook, Google+ and Dropbox
 * **OAuth 1.0a Authentication** for Twitter and Tumblr
 * **API Examples**
     * Yelp API
