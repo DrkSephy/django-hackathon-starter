@@ -150,3 +150,6 @@ FACEBOOK_APP_SECRET = '9a81d5797b87885ef608463086a5c4ac'
 
 GOOGLE_PLUS_APP_ID = '52433353167-5hvsos5pvd2i2dt62trivbqvfk4qc2pv.apps.googleusercontent.com'
 GOOGLE_PLUS_APP_SECRET = 'mv1ZcpHqMF6uX7NRTLDC2jXR'
+
+DROPBOX_APP_ID = '8et85bx2ur6b1fb'
+DROPBOX_APP_SECRET = 'xx0virsvtghxlui'

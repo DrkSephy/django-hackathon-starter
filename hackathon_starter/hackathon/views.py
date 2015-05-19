@@ -12,10 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 import requests
-
+import pdb
 
 # Scripts
-from scripts.steam import gamespulling, steamidpulling 
+from scripts.steam import gamespulling, steamidpulling
 from scripts.github import *
 from scripts.tumblr import TumblrOauthClient
 from scripts.twilioapi import *
@@ -29,6 +29,7 @@ from scripts.linkedin import LinkedinOauthClient
 from scripts.yelp import requestData
 from scripts.facebook import *
 from scripts.googlePlus import *
+from scripts.dropbox import *
 
 # Python
 import oauth2 as oauth
@@ -37,7 +38,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile, GoogleProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile, GoogleProfile, DropboxProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -50,10 +51,11 @@ getGithub = GithubOauthClient('2a11ce63ea7952d21f02', '7e20f82a34698fb33fc837186
 getLinkedIn = LinkedinOauthClient(settings.LINKEDIN_CLIENT_ID, settings.LINKEDIN_CLIENT_SECRET)
 getFacebook = FacebookOauthClient(settings.FACEBOOK_APP_ID, settings.FACEBOOK_APP_SECRET)
 getGoogle = GooglePlus(settings.GOOGLE_PLUS_APP_ID, settings.GOOGLE_PLUS_APP_SECRET)
+getDropbox = DropboxOauthClient(settings.DROPBOX_APP_ID, settings.DROPBOX_APP_SECRET)
 
 def index(request):
     print "index: " + str(request.user)
-    
+
     if not request.user.is_active:
         if request.GET.items():
             if profile_track == 'github':
@@ -79,7 +81,7 @@ def index(request):
                 login(request, user)
             elif profile_track == 'twitter':
                 oauth_verifier = request.GET['oauth_verifier']
-                getTwitter.get_access_token_url(oauth_verifier) 
+                getTwitter.get_access_token_url(oauth_verifier)
 
                 try:
                     user = User.objects.get(username = getTwitter.username + '_twitter')#(username=getTwitter.username)
@@ -95,7 +97,7 @@ def index(request):
                 code = request.GET['code']
                 getInstagram.get_access_token(code)
 
-                try: 
+                try:
                     user = User.objects.get(username=getInstagram.user_data['username']+'_instagram')
                 except User.DoesNotExist:
                     username = getInstagram.user_data['username']+'_instagram'
@@ -124,13 +126,13 @@ def index(request):
                     profile.save()
                 user = authenticate(username=getLinkedIn.user_id+'_linkedin', password='password')
                 login(request, user)
-            
+
             elif profile_track == 'facebook':
                 code = request.GET['code']
                 getFacebook.get_access_token(code)
                 userInfo = getFacebook.get_user_info()
                 username = userInfo['first_name'] + userInfo['last_name']
-                
+
                 try:
                     user = User.objects.get(username=username+'_facebook')
                 except User.DoesNotExist:
@@ -152,7 +154,7 @@ def index(request):
             elif profile_track == 'tumblr':
                 if not getTumblr.is_authorized:
                     oauth_verifier = request.GET['oauth_verifier']
-                    getTumblr.access_token_url(oauth_verifier) 
+                    getTumblr.access_token_url(oauth_verifier)
                     getTumblr.getUserInfo()
                     try:
                         user = User.objects.get(username = getTumblr.username + '_tumblr')
@@ -168,7 +170,7 @@ def index(request):
                             profile = TumblrProfile(user=new_user, access_token=getTumblr.access_token['oauth_token'], access_token_secret= getTumblr.access_token['oauth_token_secret'], tumblr_user=getTumblr.username)
                         profile.save()
                 user = authenticate(username=getTumblr.username+'_tumblr', password='password')
-                login(request, user)   
+                login(request, user)
 
 
             elif profile_track == 'google':
@@ -197,6 +199,32 @@ def index(request):
                 user = authenticate(username=username+'_google', password='password')
                 login(request, user)
 
+            elif profile_track == 'dropbox':
+                code = request.GET['code']
+                state = request.GET['state']
+                getDropbox.get_access_token(code, state)
+                userInfo = getDropbox.get_user_info()
+                username = userInfo['name_details']['given_name'] + userInfo['name_details']['surname']
+
+                try:
+                    user = User.objects.get(username=username+'_dropbox')
+                except User.DoesNotExist:
+                    new_user = User.objects.create_user(username+'_dropbox', username+'@madewithdropbox', 'password')
+                    new_user.save()
+
+                    try:
+                        profile = DropboxProfile.objects.get(user=new_user.id)
+                        profile.access_token = getDropbox.access_token
+                    except:
+                        profile = DropboxProfile()
+                        profile.user = new_user
+                        profile.access_token = getDropbox.access_token
+                        profile.dropbox_user_id = userInfo['uid']
+                    profile.save()
+                user = authenticate(username=username+'_dropbox', password='password')
+                login(request, user)
+
+
 
     else:
         if request.GET.items():
@@ -224,7 +252,7 @@ def index(request):
                 code = request.GET['code']
                 getInstagram.get_access_token(code)
 
-                try: 
+                try:
                     instagramUser = InstagramProfile.objects.get(user= user.id)
                 except InstagramProfile.DoesNotExist:
                     profile = InstagramProfile(user = user, access_token = getInstagram.access_token, instagram_user=getInstagram.user_data['username'])
@@ -242,7 +270,7 @@ def index(request):
             elif profile_track == 'tumblr':
                 if not getTumblr.is_authorized:
                     oauth_verifier = request.GET['oauth_verifier']
-                    getTumblr.access_token_url(oauth_verifier) 
+                    getTumblr.access_token_url(oauth_verifier)
                     getTumblr.getUserInfo()
 
                     try:
@@ -250,7 +278,7 @@ def index(request):
                     except TumblrProfile.DoesNotExist:
                         profile = TumblrProfile(user=user, access_token=getTumblr.access_token['oauth_token'], access_token_secret= getTumblr.access_token['oauth_token_secret'], tumblr_user=getTumblr.username)
                         profile.save()
-            
+
 
     context = {'hello': 'world'}
     return render(request, 'hackathon/index.html', context)
@@ -292,12 +320,33 @@ def facebook(request):
     return render(request, 'hackathon/facebookAPIExample.html', { 'userInfo' : userInfo})
 
 #################
-#  GOOGLE API  #
+#  GOOGLE API   #
 #################
 def googlePlus(request):
 
     userInfo = getGoogle.get_user_info()
     return render(request, 'hackathon/googlePlus.html', {'userInfo' : userInfo})
+
+#################
+#  DROPBOX API  #
+#################
+def dropbox(request):
+    userInfo = getDropbox.get_user_info()
+    return render(request, 'hackathon/dropbox.html', {'userInfo' : userInfo})
+
+def dropboxSearchFile(request):
+    if request.method == 'POST':
+        SEARCH_FILE_URL = 'https://api.dropbox.com/1/search/auto/'
+        requestParams = {'query': request.POST['filename'],
+                         'file_limit': '1000',
+                         'include_deleted': True,
+                         'access_token': getDropbox.access_token}
+        response = requests.post(SEARCH_FILE_URL, data=requestParams)
+
+        if response.status_code!=200:
+            raise(Exception('Invalid response, response code {c}'.format(c=response.status_code)))
+
+        return render(request, 'hackathon/dropboxSearchFile.html', {'data': response.json()})
 
 
 #################
@@ -338,7 +387,7 @@ def meetupToken(request):
         MeetupToken.objects.all()[0] = meetupToken
     return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/meetupUser/')
 
-def meetupUser(request): 
+def meetupUser(request):
     if not MeetupToken.objects.all().exists():
         return HttpResponseRedirect('http://127.0.0.1:8000/hackathon/meetup')
     access_token = MeetupToken.objects.all()[0]
@@ -458,7 +507,7 @@ def githubTopRepositories(request):
 
 def githubResume(request):
     '''A sample application which pulls various Github data to form a Resume of sorts'''
-    
+
     allData = {}
     userData = getUserData('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     repositories = getUserRepositories('DrkSephy', settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
@@ -518,7 +567,7 @@ def instagram(request):
         profile_track = 'instagram'
         instagram_url =getInstagram.get_authorize_url()
         return HttpResponseRedirect(instagram_url)
-    
+
     context = {'title': 'Instagram', 'tagged_media': tagged_media, 'search_tag': instagram_tag}
     return render(request, 'hackathon/instagram.html', context)
 
@@ -608,7 +657,7 @@ def linkedin(request):
     if getLinkedIn.is_authorized:
         content = getLinkedIn.getUserInfo()
     else:
-        global profile_track 
+        global profile_track
         profile_track = 'linkedin'
         linkedin_url = getLinkedIn.get_authorize_url()
         return HttpResponseRedirect(linkedin_url)
@@ -673,7 +722,7 @@ def register(request):
     else:
         user_form = UserForm()
 
-    
+
     return render(request,
             'hackathon/register.html',
             {'user_form': user_form, 'registered': registered} )
@@ -718,7 +767,7 @@ def tumblr_login(request):
 def twitter_login(request):
     global profile_track
     profile_track = 'twitter'
-    twitter_url = getTwitter.get_authorize_url()     
+    twitter_url = getTwitter.get_authorize_url()
     return HttpResponseRedirect(twitter_url)
 
 def github_login(request):
@@ -745,3 +794,9 @@ def google_login(request):
     profile_track = 'google'
     google_url = getGoogle.get_authorize_url()
     return HttpResponseRedirect(google_url)
+
+def dropbox_login(request):
+    global profile_track
+    profile_track = 'dropbox'
+    dropbox_url = getDropbox.get_authorize_url()
+    return HttpResponseRedirect(dropbox_url)
