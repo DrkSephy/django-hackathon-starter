@@ -90,3 +90,9 @@ class GoogleProfile(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     access_token = models.CharField(max_length=100)
     profile_url = models.CharField(max_length=100)
+
+class DropboxProfile(models.Model):
+    user = models.ForeignKey(User)
+    dropbox_user_id = models.CharField(max_length=100)
+    time_created = models.DateTimeField(auto_now_add=True)
+    access_token = models.CharField(max_length=100)

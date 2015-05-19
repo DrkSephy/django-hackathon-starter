@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		{% include 'hackathon/base.html' %}
+
+
+        <div class="container">
+            <h4><a href="{% url 'dropbox' %}">Back to Search</a><h4>
+            <h2>Search Results:</h2>
+            <hr>
+            
+            {% if data %}
+                <table class="table table-bordered table-hover table-striped tablesorter">
+                    <thead>
+                        <tr>
+                            <th class="header"> Type <i class="icon-sort"></i></th>
+                            <th class="header" style="width:60%"> Path <i class="icon-sort"></i></th>
+                            <th class="header"> Size <i class="icon-sort"></i></th>
+                            <th class="header" style="width:24%"> Modified <i class="icon-sort"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for element in data %}
+                        <tr>
+                            <td>
+                                {% if element.is_dir %}
+                                    <img src="http://icons.iconarchive.com/icons/media-design/hydropro-v2/512/Folder-icon.png" alt="Folder" width="40" />
+                                {% else %}
+                                    <img src="http://www.veryicon.com/icon/png/File%20Type/Slika%201.0%20Location%20Icons/Location%20%20%20FILE.png" alt="File" width="40" />
+                                {% endif %}
+                            </td>
+                            <td> {{ element.path }} </td>
+                            <td> {{ element.size }} </td>
+                            <td> {{ element.modified }} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+                <h4> No files were found</h4>
+            {% endif %}
+        </div>
+    </body>
+</html>

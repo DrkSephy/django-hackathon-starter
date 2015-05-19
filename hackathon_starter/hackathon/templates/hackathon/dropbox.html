@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		{% include 'hackathon/base.html' %}
+	    
+	    <style>
+	    	form{
+	    		width:80%;
+	    		text-align: center;
+	    		left:0px;
+	    		right:0px;
+	    		margin:auto;
+	    		margin-top:2%;
+	    	}
+	    </style>
+	    
+	    <div class="container">
+		    <h1>Dropbox API Usage Example</h1>
+		    <hr>
+		    <h2> Basic User Info</h2>
+		    <table class="table table-bordered table-hover table-striped tablesorter">
+			    <tr>			    	
+			    	<th class="header">User ID<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{userInfo.uid}}
+			    	</td>
+				</tr>
+
+				<tr>			    	
+			    	<th class="header">Name<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{userInfo.display_name}}
+			    	</td>
+				</tr>
+
+				<tr>			    	
+			    	<th class="header">Email<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{userInfo.email}}
+			    	</td>
+				</tr>
+
+				<tr>			    	
+			    	<th class="header">Country<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{userInfo.country}}
+			    	</td>
+				</tr>
+			</table>
+			
+			<hr>
+
+			<h2>Search Files Example</h2>
+			
+			<form method="POST" action="/hackathon/dropboxSearchFile/">
+				{% csrf_token %}
+				{% load bootstrap %}
+				<input type="text" name="filename" class="form-control" placeholder="Filename to search" value="" required autofocus>
+				<br>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+				<input type="hidden" name="submit" value="submit" />
+			</form>
+		</div>
+	</body>
+</html>
