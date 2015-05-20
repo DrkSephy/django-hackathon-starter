@@ -49,6 +49,7 @@ Features
     * Facebook API
     * Google+ API
     * Dropbox API
+    * Foursquare API
 
 <hr>
 
@@ -246,10 +247,26 @@ Getting API Keys
 5. Give your app a name and click the **Create app button**.
 6. You will be redirected to the app console:
     * Under **Redirect URIs** specify the URL to be redirected after authentication is complete (e.g ```http://locahost:8000/home```) and click **add**.
-    * Copy you ```App key``` and ```App secret```.
+    * Copy your ```App key``` and ```App secret```.
 7. Under ```settings.py``` change the following values:
     * ```DROPBOX_APP_ID = your_app_id```
     * ```DROPBOX_APP_SECRET = your_app_secret```
+<hr>
+
+<img src='http://www.atlantamusicguide.com/wp-content/uploads/foursquare-logo.png' width="200">
+
+1. Register and account on [Foursquare.com](https://foursquare.com).
+2. Navigate to [Foursquare For Developers](https://developer.foursquare.com).
+3. From the top menu bar select **My Apps** and you will be redirected to the app dashboard.
+4. Hit **Create a New App**:
+    * Give your app a name.
+    * Under **Download / welcome page url**, specify your app main url (e.g ```http://www.localhost:8000```).
+    * Under **Redirect URI**, specify the URL to be redirected after authentication is complete (e.g ```http://locahost:8000/home```) and click **add**.
+    * Scroll all the way to the botttom and hit **Save Changes**.
+5. From the App page you were redirected to, copy your ```App key``` and ```App secret```.
+6. Under ```settings.py``` change to following values:
+    * ```FOURSQUARE_APP_ID = your_client_id```
+    * ```FOURSQUARE_APP_SECRET = your_app_secret```
 <hr>
 
 
