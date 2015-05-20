@@ -30,6 +30,7 @@ from scripts.yelp import requestData
 from scripts.facebook import *
 from scripts.googlePlus import *
 from scripts.dropbox import *
+from scripts.foursquare import *
 
 # Python
 import oauth2 as oauth
@@ -38,7 +39,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile, GoogleProfile, DropboxProfile
+from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile, GoogleProfile, DropboxProfile, FoursquareProfile
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -52,6 +53,7 @@ getLinkedIn = LinkedinOauthClient(settings.LINKEDIN_CLIENT_ID, settings.LINKEDIN
 getFacebook = FacebookOauthClient(settings.FACEBOOK_APP_ID, settings.FACEBOOK_APP_SECRET)
 getGoogle = GooglePlus(settings.GOOGLE_PLUS_APP_ID, settings.GOOGLE_PLUS_APP_SECRET)
 getDropbox = DropboxOauthClient(settings.DROPBOX_APP_ID, settings.DROPBOX_APP_SECRET)
+getFoursquare = FoursquareOauthClient(settings.FOURSQUARE_APP_ID, settings.FOURSQUARE_APP_SECRET)
 
 def index(request):
     print "index: " + str(request.user)
@@ -224,6 +226,34 @@ def index(request):
                 user = authenticate(username=username+'_dropbox', password='password')
                 login(request, user)
 
+            elif profile_track == 'foursquare':
+                code = request.GET['code']
+                getFoursquare.get_access_token(code)
+                userInfo = getFoursquare.get_user_info()
+                username = userInfo['firstName'] + userInfo['lastName']
+
+                try:
+                    user = User.objects.get(username=username+'_foursquare')
+                except User.DoesNotExist:
+                    new_user = User.objects.create_user(username+'_foursquare', username+'@madewithfoursquare', 'password')
+                    new_user.save()
+
+                    try:
+                        profile = FoursquareProfile.object.get(user=new_user.id)
+                        profile.access_token = getFoursquare.access_token
+
+                    except:
+                        profile = FoursquareProfile()
+                        profile.user = new_user
+                        profile.foursquare_id = userInfo['id']
+                        profile.access_token = getFoursquare.access_token
+                    profile.save()
+
+                user = authenticate(username=username+'_foursquare', password='password')
+                login(request, user)
+
+
+
 
 
     else:
@@ -347,6 +377,13 @@ def dropboxSearchFile(request):
             raise(Exception('Invalid response, response code {c}'.format(c=response.status_code)))
 
         return render(request, 'hackathon/dropboxSearchFile.html', {'data': response.json()})
+#######################
+#    FOURSQUARE API   #
+#######################
+
+def foursquare(request):
+    userInfo = getFoursquare.get_user_info()
+    return render(request, 'hackathon/foursquare.html', {'data' : userInfo})
 
 
 #################
@@ -800,3 +837,9 @@ def dropbox_login(request):
     profile_track = 'dropbox'
     dropbox_url = getDropbox.get_authorize_url()
     return HttpResponseRedirect(dropbox_url)
+
+def foursquare_login(request):
+    global profile_track
+    profile_track = 'foursquare'
+    forsquare_url = getFoursquare.get_authorize_url()
+    return HttpResponseRedirect(forsquare_url)

@@ -83,7 +83,7 @@ class FacebookProfile(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     profile_url = models.CharField(max_length=50)
     access_token = models.CharField(max_length=100)
-    
+
 class GoogleProfile(models.Model):
     user = models.ForeignKey(User)
     google_user_id = models.CharField(max_length=100)
@@ -94,5 +94,12 @@ class GoogleProfile(models.Model):
 class DropboxProfile(models.Model):
     user = models.ForeignKey(User)
     dropbox_user_id = models.CharField(max_length=100)
+    time_created = models.DateTimeField(auto_now_add=True)
+    access_token = models.CharField(max_length=100)
+
+
+class FoursquareProfile(models.Model):
+    user = models.ForeignKey(User)
+    foursquare_id = models.CharField(max_length=100)
     time_created = models.DateTimeField(auto_now_add=True)
     access_token = models.CharField(max_length=100)

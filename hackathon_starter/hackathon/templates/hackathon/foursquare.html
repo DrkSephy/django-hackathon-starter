@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		{% include 'hackathon/base.html' %}
+	    <style>
+
+	    </style>
+
+	    <div class="container">
+            <h1> Foursqure API Example</h1>
+            <h2> Get Basic User Info </h2>
+            <table class="table table-bordered table-hover table-striped tablesorter">
+			    <tr>
+			    	<th class="header">User ID<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{data.id}}
+			    	</td>
+				</tr>
+
+                <tr>
+			    	<th class="header">First Name<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{data.firstName}}
+			    	</td>
+				</tr>
+
+                <tr>
+			    	<th class="header">Last Name ID<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{data.lastName}}
+			    	</td>
+				</tr>
+
+                <tr>
+			    	<th class="header">Gender<i class="icon-sort"></i></th>
+			    	<td>
+				    	{% if data.gender == 'none' %}
+                            Not Specified
+                        {% else %}
+                            {{data.gender}}
+                        {% endif %}
+			    	</td>
+				</tr>
+
+                <tr>
+			    	<th class="header">Email<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{data.contact.email}}
+			    	</td>
+				</tr>
+
+                <tr>
+			    	<th class="header">Num. of Friends<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{data.friends.count}}
+			    	</td>
+				</tr>
+
+                <tr>
+			    	<th class="header">Num. of Check Ins<i class="icon-sort"></i></th>
+			    	<td>
+				    	{{data.checkins.count}}
+			    	</td>
+				</tr>
+            </table>
+
+
+
+        </div>
+    </body>
+</html>
