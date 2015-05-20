@@ -9,11 +9,11 @@ Even if you are not using this for a hackathon, Django Hackathon Starter is sure
 
 <h4 align="center">Basic Authentication / OAuth Signin </h4>
 
-![Login](http://i.imgur.com/Keqy7e1.png)
+![Login](http://i.imgur.com/sEIHsIS.png)
 
 <h4 align="center">API Examples </h4>
 
-![API Examples](http://i.imgur.com/9mU3er2.png)
+![API Examples](http://i.imgur.com/zFqKcVa.png)
 
 Table of Contents
 -----------------
@@ -32,8 +32,17 @@ Features
 * Sphinx Documentation
 * Django Nosetests
 * Basic Authentication with username and password
-* **OAuth 2.0 Authentication** for Github, LinkedIn, Instagram, Facebook, Google+ and Dropbox
-* **OAuth 1.0a Authentication** for Twitter and Tumblr
+* **OAuth 2.0 Authentication**
+    * Github
+    * LinkedIn
+    * Instagram
+    * Facebook
+    * Google+
+    * Dropbox
+    * Foursquare
+* **OAuth 1.0a Authentication** 
+    * Twitter
+    * Tumblr
 * **API Examples**
     * Yelp API
     * Github API
@@ -322,31 +331,36 @@ Project Structure
 
 | Name                               | Description                                                 |
 | ---------------------------------- |:-----------------------------------------------------------:|
-| **hackathon_starter**/settings.py | Django settings module containing database and API keys/tokens.|
-| **hackathon**/admin.py            | Registered models for Django's admin page.|
-| **hackathon**/models.py           | Django models and profiles for user login.|
-| **hackathon**/tests.py            | Integration tests.|
-| **hackathon**/urls.py             | Django Hackathon Starter URL dispatcher.|
-| **hackathon**/views.py            | Django views file.|
-| **hackathon**/serializers.py      | Allows JSON representation for Django Model fields.|
-| **hackathon**/forms.py            | Basic form fields.|
-| **hackathon/static/**             | Front-end JavaScript / CSS files.|
-| **hackathon/unittests**           | Unit tests.|
-| **hackathon/scripts/**            | API Example scripts.|
-| **hackathon/scripts/**github.py   | Script for interacting with Github API.   |
-| **hackathon/scripts/**instagram.py| Script for interacting with Instagram API.|
-| **hackathon/scripts/**linkedin.py | Script for interacting with LinkedIn API. |
-| **hackathon/scripts/**meetup.py   | Script for interacting with Meetup API. |
-| **hackathon/scripts/**nytimes.py  | Script for interacting with New York Times API. |
-| **hackathon/scripts/**quandl.py   | Script for interacting with Quandl API. |
-| **hackathon/scripts/**scraper.py  | Basic web scraper for getting sales from Steam.            |
-| **hackathon/scripts/**steam.py                      | Script for interacting with Steam API.   |
-| **hackathon/scripts/**tumblr.py                     | Script for interacting with Tumblr API.  |
-| **hackathon/scripts/**twilioapi.py                  | Script for interacting with Twilio API.  |
-| **hackathon/scripts/**twitter.py                    | Script for interacting with Twitter API. |
-| **hackathon/scripts/**yelp.py                       | Script for interacting with Yelp API. |
-| **hackathon/templates/**hackathon/                  | Templates for API examples. |
-| **hackathon/templates/**hackathon/base.html         | Base template, contains navbar. |
+| **hackathon_starter**/settings.py | Django settings module containing database and API keys/tokens|
+| **hackathon**/admin.py            | Registered models for Django's admin page|
+| **hackathon**/models.py           | Django models and profiles for user login|
+| **hackathon**/tests.py            | Integration tests|
+| **hackathon**/urls.py             | Django Hackathon Starter URL dispatcher|
+| **hackathon**/views.py            | Django views file|
+| **hackathon**/serializers.py      | Allows JSON representation for Django Model fields|
+| **hackathon**/forms.py            | Basic form fields|
+| **hackathon/static/**             | Front-end JavaScript / CSS files|
+| **hackathon/unittests**           | Unit tests|
+| **hackathon/scripts/**            | API Example scripts|
+| **hackathon/scripts/**github.py   | Script for interacting with Github API   |
+| **hackathon/scripts/**instagram.py| Script for interacting with Instagram API|
+| **hackathon/scripts/**linkedin.py | Script for interacting with LinkedIn API |
+| **hackathon/scripts/**meetup.py   | Script for interacting with Meetup API |
+| **hackathon/scripts/**nytimes.py  | Script for interacting with New York Times API |
+| **hackathon/scripts/**quandl.py   | Script for interacting with Quandl API |
+| **hackathon/scripts/**scraper.py  | Basic web scraper for getting sales from Steam            |
+| **hackathon/scripts/**facebook.py | Script for interacting with Facebook API |
+| **hackathon/scripts/**dropbox.py  | Script for interacting with Dropbox API |
+| **hackathon/scripts/**foursquare.py | Script for interacting with Foursquare API |
+| **hackathon/scripts/**googlePlus.py | Script for interacting with Google+ API |
+| **hackathon/scripts/**steam.py                      | Script for interacting with Steam API   |
+| **hackathon/scripts/**tumblr.py                     | Script for interacting with Tumblr API  |
+| **hackathon/scripts/**twilioapi.py                  | Script for interacting with Twilio API  |
+| **hackathon/scripts/**twitter.py                    | Script for interacting with Twitter API |
+| **hackathon/scripts/**yelp.py                       | Script for interacting with Yelp API |
+| **hackathon/templates/**hackathon/                  | Templates for API examples |
+| **hackathon/templates/**hackathon/base.html         | Base template, contains navbar |
+
 Contributing
 ------------
 
