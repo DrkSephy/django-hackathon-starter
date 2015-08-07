@@ -220,7 +220,7 @@ Getting API Keys
 
 <hr>
 
-<img src="https://travelblogsuccess.com/wp-content/uploads/2013/09/how-to-use-google-plus-for-business.jpg" width="200" />
+<img src="http://icons.iconarchive.com/icons/marcus-roberto/google-play/512/Google-plus-icon.png" width="200" />
 
 1. Register an account on [Google.com](https://accounts.google.com/signup).
 2. Navigate to [Google Developer Console](https://console.developers.google.com/project).
@@ -317,7 +317,7 @@ Getting API Keys
 
 <hr>
 
-<img src="http://planetcassandra.org/blogs/Upload/Postddfdbb6f-16ed-4e1c-8e29-ff2cf0cb43a1/quandl.png" width="200">
+<img src="http://qph.is.quoracdn.net/main-qimg-45312af6930eb01c3c68db9bb30bcad8?convert_to_webp=true" width="200">
 
 1. Register an account on [Quandl](https://www.quandl.com/)
 2. After logging in, click on **Me** and then **Account settings** to find the API key
