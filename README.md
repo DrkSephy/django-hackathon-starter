@@ -31,6 +31,7 @@ Features
 * User Registration
 * Sphinx Documentation
 * Django Nosetests
+* Integration with Django Rest Framework
 * Basic Authentication with username and password
 * **OAuth 2.0 Authentication**
     * Github
