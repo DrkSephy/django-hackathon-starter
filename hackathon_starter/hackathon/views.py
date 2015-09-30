@@ -11,6 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
+# Django REST Framework
+from rest_framework import viewsets, mixins
+
 import requests
 import pdb
 
@@ -35,8 +38,6 @@ from scripts.foursquare import *
 # Python
 import oauth2 as oauth
 import simplejson as json
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
 
 # Models
 from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile, GoogleProfile, DropboxProfile, FoursquareProfile
@@ -707,24 +708,17 @@ def linkedin(request):
 # Snippet RESTful Model #
 #########################
 
-class JSONResponse(HttpResponse):
-    """
-    An HttpResponse that renders its content into JSON.
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
+class CRUDBaseView(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  viewsets.GenericViewSet):
+    pass
 
-@csrf_exempt
-def snippet_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        snippets = Snippet.objects.all()
-        serializer = SnippetSerializer(snippets, many=True)
-        return JSONResponse(serializer.data)
+class SnippetView(CRUDBaseView):
+    serializer_class = SnippetSerializer
+    queryset = Snippet.objects.all()
 
 
 ##################
