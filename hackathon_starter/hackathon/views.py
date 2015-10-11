@@ -14,9 +14,6 @@ from django.http import JsonResponse
 # Django REST Framework
 from rest_framework import viewsets, mixins
 
-import requests
-import pdb
-
 # Scripts
 from scripts.steam import gamespulling, steamidpulling
 from scripts.github import *
@@ -38,9 +35,10 @@ from scripts.foursquare import *
 # Python
 import oauth2 as oauth
 import simplejson as json
+import requests
 
 # Models
-from hackathon.models import Snippet, Profile, InstagramProfile, TwitterProfile, MeetupToken, GithubProfile, LinkedinProfile, FacebookProfile, TumblrProfile, GoogleProfile, DropboxProfile, FoursquareProfile
+from hackathon.models import *
 from hackathon.serializers import SnippetSerializer
 from hackathon.forms import UserForm
 
@@ -78,8 +76,6 @@ def index(request):
                     except GithubProfile.DoesNotExist:
                         profile = GithubProfile(user=new_user, access_token=getGithub.access_token, scopes=getGithub.scopes ,github_user=getGithub.username)
                     profile.save()
-                    #profile = GithubProfile(user=new_user, access_token=getGithub.access_token, scopes=getGithub.scopes ,github_user=getGithub.username)
-                    #profile.save()
                 user = authenticate(username=getGithub.username+'_github', password='password')
                 login(request, user)
             elif profile_track == 'twitter':
@@ -328,7 +324,6 @@ def api_examples(request):
 #################
 
 def steam(request):
-    #Should link to test of Steam API example.
     key = '231E98D442E52B87110816C3D5114A1D'
     SteamUN = "Marorin"
     steamID = steamidpulling(SteamUN, key)
@@ -378,6 +373,7 @@ def dropboxSearchFile(request):
             raise(Exception('Invalid response, response code {c}'.format(c=response.status_code)))
 
         return render(request, 'hackathon/dropboxSearchFile.html', {'data': response.json()})
+
 #######################
 #    FOURSQUARE API   #
 #######################
@@ -408,15 +404,13 @@ def meetup(request):
     return HttpResponseRedirect(AUTHORIZE_URL)
 
 def meetupToken(request):
-    # print request.GET.get('code')
     access_token_url = 'https://secure.meetup.com/oauth2/access?'
     REDIRECT_URI = 'http://127.0.0.1:8000/hackathon/meetupToken'
     url = access_token_url + 'client_id=' +  settings.MEETUP_CONSUMER_KEY + '&client_secret=' + settings.MEETUP_CONSUMER_SECRET + '&grant_type=authorization_code' + '&redirect_uri=' + REDIRECT_URI + '&code=' +  request.GET.get('code')
 
     response = requests.post(url)
     access_token = json.loads(response.content)['access_token']
-    # print access_token
-    #if not MeetupToken.objects.all()[0]:
+ 
     if not MeetupToken.objects.all().exists():
         meetupToken = MeetupToken(access_token = access_token)
         meetupToken.save()
@@ -527,7 +521,6 @@ def githubUser(request):
         user = request.POST.get('user')
         parsedData['userData'] = getUserData(user, settings.GITHUB_CLIENT_ID, settings.GITHUB_CLIENT_SECRET)
     return render(request, 'hackathon/github.html', {'data': parsedData})
-    # return JsonResponse({ 'data': parsedData })
 
 def githubTopRepositories(request):
     '''Returns Top Commited Repositories for a specific Github User'''
@@ -541,7 +534,6 @@ def githubTopRepositories(request):
         parsedData['committed'] = filtered
         print parsedData
     return render(request, 'hackathon/githubTopRepositories.html', {'data': parsedData})
-    # return JsonResponse({ 'data': parsedData })
 
 def githubResume(request):
     '''A sample application which pulls various Github data to form a Resume of sorts'''
@@ -670,7 +662,6 @@ def twitter(request):
 def twitterTweets(request):
     print getTwitter.is_authorized
     if getTwitter.is_authorized:
-        #content = getTwitter.get_tweets()
         if request.method == 'GET':
             if request.GET.items():
                 tweets = request.GET.get('tweets')
