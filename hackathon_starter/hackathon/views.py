@@ -739,6 +739,7 @@ def register(request):
             user.set_password(user.password)
             user.save()
             registered = True
+            return HttpResponseRedirect('/hackathon/login/')
         else:
             print user_form.errors
     else:
@@ -759,7 +760,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/hackathon/')
+                return HttpResponseRedirect('/hackathon/api/')
             else:
                 return HttpResponse("Your Django Hackathon account is disabled.")
         else:
@@ -771,7 +772,7 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/hackathon/')
+    return HttpResponseRedirect('/hackathon/login/')
 
 
 def instagram_login(request):
